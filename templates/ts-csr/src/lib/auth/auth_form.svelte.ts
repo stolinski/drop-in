@@ -13,10 +13,10 @@ export function auth_form_state() {
 		error_message = e_message
 	}
 
-	function success() {
+	function success(route = true) {
 		error_message = undefined
 		status = 'SUCCESS'
-		goto(settings.app_route);
+		if (route) goto(settings.app_route);
 	}
 
 	return {

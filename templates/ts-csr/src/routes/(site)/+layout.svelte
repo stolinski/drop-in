@@ -11,14 +11,13 @@
 </script>
 
 
-
 {#if !PUBLIC_PB_URL}
 <p>!IMPORTANT: You need to set the PUBLIC_PB_URL environment variable</p>
 {/if}
 
 <Header />
 
-<p>This is the (site) route group, routes in here will be SSR'd and is great for landing/marketing/info pages, blog ect.</p>
+<p>"This is the (site) route group, routes in here will be SSR'd and is great for landing/marketing/info pages, blog ect."  - (site)/+layout.svelte</p>
 
 <main>
 	{@render children()}
