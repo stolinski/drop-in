@@ -11,6 +11,7 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$: 'src',
+			$settings: 'src/settings',
 			$routes: 'src/routes',
 			$state: 'src/lib/state',
 			$types: 'src/types',

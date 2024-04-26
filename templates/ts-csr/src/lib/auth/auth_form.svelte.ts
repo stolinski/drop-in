@@ -1,3 +1,4 @@
+import { settings } from "$settings";
 import { goto } from "$app/navigation";
 
 export function auth_form_state() {
@@ -15,7 +16,7 @@ export function auth_form_state() {
 	function success() {
 		error_message = undefined
 		status = 'SUCCESS'
-		goto('/');
+		goto(settings.app_route);
 	}
 
 	return {

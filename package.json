@@ -1,39 +1,22 @@
 {
-	"name": "bboy-tools",
-	"version": "0.0.1",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"package": "svelte-kit package",
-		"preview": "svelte-kit preview",
-		"prepare": "svelte-kit sync",
-		"check": "svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
-		"format": "prettier --write --plugin-search-dir=. .",
-		"typegen": "pocketbase-typegen --env --out ./src/types/pocketbase.ts"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.2.0",
-		"@sveltejs/kit": "^2.5.6",
-		"@sveltejs/vite-plugin-svelte": "^3.1.0",
-		"@typescript-eslint/eslint-plugin": "^7.7.0",
-		"@typescript-eslint/parser": "^7.7.0",
-		"pocketbase-typegen": "^1.2.1",
-		"prettier": "^3.2.5",
-		"prettier-plugin-svelte": "^3.2.3",
-		"svelte": "^5.0.0-next.108",
-		"svelte-check": "^3.6.9",
-		"svelte-preprocess": "^5.1.4",
-		"tslib": "^2.6.2",
-		"typescript": "^5.4.5",
-		"vite": "^5.2.9"
-	},
-	"engines": {
-		"node": "<20.11.1"
-	},
-	"type": "module",
-	"dependencies": {
-		"pocketbase": "^0.21.1"
-	}
+  "name": "sickit",
+  "version": "0.0.2",
+  "description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
+  "bin": "bin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "keywords": [
+    "Svelte",
+    "Svelte Kit",
+    "PocketBase",
+    "Starter Kit"
+  ],
+  "author": "Scott Tolinski",
+  "license": "ISC",
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "kleur": "^4.1.5"
+  }
 }

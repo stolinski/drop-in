@@ -1,8 +1,8 @@
-# SvelteKit / Svelte 5 / PocketBase Starter Kit
+# Sickit - SvelteKit / Svelte 5 / PocketBase Starter Kit
 
 ## About The Codebase
 
-This is a CSR or Static starter kit for PocketBase. It uses the latest versions of Svelte and SvelteKit to quickly and easily get up and running with auth for a SvelteKit and Pocketbase site. Just BYO Pocketbase URL.
+This is a bare starter kit for PocketBase / Svelte 5 / SvelteKit with lots of extras.
 
 - Svelte 5
 - Svelte Kit 2
@@ -10,10 +10,11 @@ This is a CSR or Static starter kit for PocketBase. It uses the latest versions 
 
 ## Getting Started
 
-1. Clone Repo
-2. cp example.env .env
-3. Add ENV creds for type gen
-4.
+1. `npx sickit your_app_name`
+2. `cd ./your_app_name`
+3. `npm install` `pnpm install` `yarn install`
+4. Set ENV credentials
+   5 (optional). `npm run typegen` must have all env credentials set to work
 
 ### Extras
 
@@ -21,13 +22,15 @@ This is a CSR or Static starter kit for PocketBase. It uses the latest versions 
 - Type generation via pocketbase-typegen
 - Auth guard function
 - Aliases and folders
+- App guard to redirect to app when logged in
 
 ```
-$: 'src',
-$routes: 'src/routes',
-$state: 'src/lib/state',
-$types: 'src/types',
-$utils: 'src/utilities',
+$: 'src'
+$settings: 'src/settings'
+$routes: 'src/routes'
+$state: 'src/lib/state'
+$types: 'src/types'
+$utils: 'src/utilities'
 ```
 
 syntax.fm
@@ -40,4 +43,8 @@ I'll be making a 2nd starter for SSR specifically, however there are enough majo
 
 #### Why no Tailwind or base CSS?
 
-It's pretty trivial to add those classes yourself, get TS configured in Svelte Kit. I wanted to keep this as bare as possible deps wise while also making it super functional. Many projects have their own CSS needs and I want to respect that.
+It's pretty trivial to add those classes yourself, get TS configured in Svelte Kit. I wanted to keep this as bare as possible deps wise while also making it super functional. Many projects have their own CSS needs and I want to respect that. I'd like to add a cli with alternate builds of this with more baked in UI if anyone is interested in helping.
+
+### Special Thanks
+
+CLI code borrowed from Svelte Kit
