@@ -4,10 +4,6 @@
 
 This is a bare starter kit for PocketBase / Svelte 5 / SvelteKit with lots of extras.
 
-- Svelte 5
-- Svelte Kit 2
-- Pocketbase
-
 ## Getting Started
 
 1. `npx sickit your_app_name`

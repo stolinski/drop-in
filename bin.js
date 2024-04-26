@@ -100,7 +100,9 @@ function write_template_files(template, types, name, cwd) {
 	const dir = dist(`templates/${template}`);
 
 	copy(dir, cwd, to_valid_package_name(name));
-	copy(dir + "example.env", cwd, ".env");
+	copy(dir + "/example.env", cwd + "/.env");
+	console.log('cwd', cwd);
+	console.log('dir', dir + "/example.env");
 	replacePackageName(cwd, to_valid_package_name(name));
 }
 
@@ -113,17 +115,19 @@ export function mkdirp(dir) {
 	}
 }
 
-function copy(from, to, rename) {
-
+function copy(from, to, rename, replace = false) {
+	
+	console.log('fs.existsSync(from)', fs.existsSync(from));
 	if (!fs.existsSync(from)) return;
 
 	const stats = fs.statSync(from);
 
-	if ( stats.isDirectory()) {
+	if (stats.isDirectory()) {
 		fs.readdirSync(from).forEach((file) => {
 			copy(path.join(from, file), path.join(to, file));
 		});
 	} else {
+		console.log('replacing', from, to)
 		mkdirp(path.dirname(to));
 		fs.copyFileSync(from, to);
 	}
