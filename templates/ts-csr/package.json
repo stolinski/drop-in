@@ -1,22 +1,22 @@
 {
 	"dependencies": {
-		"pocketbase": "^0.21.1"
+		"pocketbase": "^0.21.2"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.2.0",
-		"@sveltejs/kit": "^2.5.6",
+		"@sveltejs/kit": "^2.5.7",
 		"@sveltejs/vite-plugin-svelte": "^3.1.0",
-		"@typescript-eslint/eslint-plugin": "^7.7.0",
-		"@typescript-eslint/parser": "^7.7.0",
+		"@typescript-eslint/eslint-plugin": "^7.7.1",
+		"@typescript-eslint/parser": "^7.7.1",
 		"pocketbase-typegen": "^1.2.1",
 		"prettier": "^3.2.5",
 		"prettier-plugin-svelte": "^3.2.3",
-		"svelte": "^5.0.0-next.108",
-		"svelte-check": "^3.6.9",
+		"svelte": "5.0.0-next.115",
+		"svelte-check": "^3.7.0",
 		"svelte-preprocess": "^5.1.4",
 		"tslib": "^2.6.2",
 		"typescript": "^5.4.5",
-		"vite": "^5.2.9"
+		"vite": "^5.2.10"
 	},
 	"engines": {
 		"node": "<20.11.1"

@@ -36,7 +36,7 @@
 	</div>
 	<div>
 		<label for="password">Password</label>
-		<input type="password" name="password" id="password" /><br />
+		<input required type="password" name="password" id="password" /><br />
 	</div>
 	<button type="submit" disabled={loading}
 		>{#if loading}Signing up...{:else}

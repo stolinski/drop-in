@@ -6,7 +6,7 @@
 	import { PUBLIC_PB_URL } from '$env/static/public';
 	import Toast from '$lib/toast/SickToast.svelte'
 	let { children } = $props()
-
+ 
 	// Everything in the app route tree is protected behind user accounts.
 	$effect.pre(app_guard);
 </script>
@@ -34,7 +34,5 @@ SickToast -> just use any of these methods
 <button onclick={() => toast.info('Test Toast')}>Test Toast</button>
 -->
 <Toast position={{ inline: 'end', block: 'end' }} offset={{ inline: "20px", block: "20px" }} />
-
-
 
 <Footer />

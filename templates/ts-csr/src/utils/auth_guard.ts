@@ -11,6 +11,6 @@ export function auth_guard() {
 	}
 
 	if (!user) {
-		goto('/login')
+		goto('/auth/login')
 	}
 }

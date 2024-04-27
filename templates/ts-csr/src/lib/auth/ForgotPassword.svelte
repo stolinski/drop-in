@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { users } from '$/pocketbase';
+	import { toast } from '../toast/toast.svelte';
 	import { auth_form_state } from './auth_form.svelte';
 	const auth = auth_form_state();
 	const loading = $derived(auth.status === 'LOADING');
@@ -15,7 +16,8 @@
 
 		users
 			.requestPasswordReset(email)
-			.then((data) => {
+			.then(() => {
+				toast.success('Password reset email sent');
 				auth.success(false);
 			})
 			.catch((e) => {
@@ -27,20 +29,24 @@
 </script>
 
 <h1>Forgot Password</h1>
-<form method="post" {onsubmit}>
-	<div>
-		<label for="email">Email</label>
-		<input name="email" id="email" /><br />
-	</div>
-	<button type="submit" disabled={loading}>
-		{#if loading}Sending...{:else}
-			Request Password Reset
-		{/if}
-	</button>
-</form>
+{#if auth.status === 'SUCCESS'}
+	<p>Please check your email for password reset instructions</p>
+{:else}
+	<form method="post" {onsubmit}>
+		<div>
+			<label for="email">Email</label>
+			<input required name="email" id="email" type="email" /><br />
+		</div>
+		<button type="submit" disabled={loading}>
+			{#if loading}Sending...{:else}
+				Request Password Reset
+			{/if}
+		</button>
+	</form>
 
-{#if auth.error_message}
-	<p class="error">{auth.error_message}</p>
+	{#if auth.error_message}
+		<p class="error">{auth.error_message}</p>
+	{/if}
 {/if}
 
 <p>
