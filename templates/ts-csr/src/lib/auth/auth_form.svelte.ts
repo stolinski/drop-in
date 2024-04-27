@@ -1,5 +1,6 @@
 import { settings } from "$settings";
 import { goto } from "$app/navigation";
+import { toast } from "../toast/toast.svelte";
 
 export function auth_form_state() {
 	let status: 'LOADING' | 'SUCCESS' | 'ERROR' | 'INITIAL' = $state('INITIAL');
@@ -9,14 +10,16 @@ export function auth_form_state() {
 		status = 'LOADING'
 	}
 	function error(e_message: string) {
+		toast.error('e_message');
 		status = 'ERROR'
 		error_message = e_message
+
 	}
 
-	function success() {
+	function success(route:string | boolean  = settings.app_route ) {
 		error_message = undefined
 		status = 'SUCCESS'
-		goto(settings.app_route);
+		if (route && typeof route === 'string') goto(route);
 	}
 
 	return {

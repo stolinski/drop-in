@@ -36,7 +36,7 @@
 	</div>
 	<div>
 		<label for="password">Password</label>
-		<input type="password" name="password" id="password" /><br />
+		<input required type="password" name="password" id="password" /><br />
 	</div>
 	<button type="submit" disabled={loading}
 		>{#if loading}Signing up...{:else}
@@ -50,4 +50,4 @@
 {/if}
 
 <p>Already have an account?</p>
-<a href="/login">Sign in</a>
+<a href="/auth/login">Sign in</a>

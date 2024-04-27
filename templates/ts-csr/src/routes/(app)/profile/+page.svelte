@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
-	import { pb } from '$/pocketbase'
-	import { auth_guard } from '$/utils/auth_guard'
+	import { goto } from '$app/navigation';
+	import { pb } from '$/pocketbase';
+	import { auth_guard } from '$/utils/auth_guard';
 
-	$effect.pre(auth_guard)
+	$effect.pre(auth_guard);
 
 	function onclick() {
-		pb.authStore.clear()
-		goto('/login')
+		pb.authStore.clear();
+		goto('/');
 	}
 </script>
 

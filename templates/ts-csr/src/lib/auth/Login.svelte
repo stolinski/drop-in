@@ -32,11 +32,11 @@
 <form method="post" {onsubmit}>
 	<div>
 		<label for="email">Email</label>
-		<input name="email" id="email" /><br />
+		<input required type="email" name="email" id="email" /><br />
 	</div>
 	<div>
 		<label for="password">Password</label>
-		<input type="password" name="password" id="password" /><br />
+		<input required type="password" name="password" id="password" /><br />
 	</div>
 	<button type="submit" disabled={loading}>
 		{#if loading}Logging in...{:else}
@@ -51,9 +51,9 @@
 
 <p>
 	Need an account?
-	<a href="/signup">Sign Up</a>
+	<a href="/auth/signup">Sign Up</a>
 </p>
 
 <p>
-	<a href="/forgot-password">Forgot your password?</a>
+	<a href="/auth/forgot-password">Forgot your password?</a>
 </p>
