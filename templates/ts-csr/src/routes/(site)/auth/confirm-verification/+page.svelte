@@ -1,4 +1,3 @@
-<!-- 
-await pb.collection('users').confirmVerification('TOKEN'); -->
-
 <!-- TODO -->
+<!-- CONTRIBUTIONS WELCOME -->
+<!-- await users.confirmVerification('TOKEN'); -->

@@ -1,4 +1,3 @@
-<!-- await pb.collection('users').confirmEmailChange('TOKEN', 'YOUR_PASSWORD');
- -->
-
 <!-- TODO -->
+<!-- CONTRIBUTIONS WELCOME -->
+<!-- await users.confirmEmailChange('TOKEN', 'YOUR_PASSWORD');-->
