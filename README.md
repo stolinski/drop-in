@@ -19,6 +19,7 @@ This is a bare starter kit for PocketBase / Svelte 5 / SvelteKit with lots of ex
 - Auth guard function
 - Aliases and folders
 - App guard to redirect to app when logged in
+- Standards based simple toast system
 
 ```
 $: 'src'
