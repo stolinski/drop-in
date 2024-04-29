@@ -11,6 +11,9 @@ importers:
       '@slick-kit/toast':
         specifier: workspace:^
         version: link:src/packages/@slick-kit/toast
+      '@stuff/test':
+        specifier: workspace:^
+        version: link:src/packages/@stuff/test
       pocketbase:
         specifier: ^0.21.2
         version: 0.21.2
@@ -72,6 +75,12 @@ importers:
       kleur:
         specifier: ^4.1.5
         version: 4.1.5
+
+  src/packages/@stuff/test:
+    dependencies:
+      svelte:
+        specifier: ^5.0.0-next.115
+        version: 5.0.0-next.115
 
 packages:
 

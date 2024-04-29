@@ -3,6 +3,10 @@ import { fileURLToPath } from 'node:url';
 import * as p from '@clack/prompts';
 import path from 'node:path';
 import fs from 'node:fs';
+import { exec } from 'child_process';
+
+// TODO
+// - should add package to root package.json file if it's not there and run pnpm install
 
 const cwd = process.argv[2] || '.';
 
@@ -11,7 +15,6 @@ export function dist(path) {
 }
 
 function to_valid_package_name(name) {
-  console.log('name', name);
   return name
     .trim()
     .toLowerCase()
@@ -78,7 +81,6 @@ function copy(from, to) {
 }
 
 async function create(orgName, packageName) {
-  console.log('packageName', packageName);
   const kebabCasePackageName = to_valid_package_name(packageName);
   const validOrgName = orgName ? orgName.replace(/^@/, '') : null;
   const packageDir = validOrgName
@@ -92,27 +94,63 @@ async function create(orgName, packageName) {
   createSvelteFile(packageDir, kebabCasePackageName);
 }
 
+
+async function addPackageToRootPackageJson(orgName, packageName) {
+  const rootPackageJsonPath = path.join(cwd, 'package.json');
+  try {
+    const rootPackageJson = fs.readFileSync(rootPackageJsonPath, 'utf8');
+    const rootPackageData = JSON.parse(rootPackageJson);
+    const dependencyName = orgName ? `@${orgName}/${packageName}` : packageName;
+    if (!rootPackageData.dependencies) {
+      rootPackageData.dependencies = {};
+    }
+    rootPackageData.dependencies[dependencyName] = 'workspace:^';
+    const updatedRootPackageJson = JSON.stringify(rootPackageData, null, 2);
+    fs.writeFileSync(rootPackageJsonPath, updatedRootPackageJson, 'utf8');
+  } catch (error) {
+    console.error(`Error updating root package.json: ${error.message}`);
+    throw error;
+  }
+}
+
+function runPnpmInstall() {
+  return new Promise((resolve, reject) => {
+    exec('pnpm install', { cwd }, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error running pnpm install: ${error.message}`);
+        reject(error);
+      } else {
+        console.log(stdout);
+        console.error(stderr);
+        resolve();
+      }
+    });
+  });
+}
+
 async function main() {
-  p.intro('Welcome to Node.js Package Scaffolding');
-
-  const orgName = await p.text({
-    message: 'Enter the organization name (leave blank for none):',
-  });
-
-  const packageName = await p.text({
-		message: 'Enter the package name:',
-    // validate: (value) => value.trim() !== '',
-  });
-	console.log('packageName', packageName);
-
-  await create(orgName?.trim() || null, packageName);
-
-  console.log(`\nPackage created successfully!`);
-  console.log(`Package name: ${orgName ? `@${orgName.replace(/^@/, '')}/` : ''}${to_valid_package_name(packageName)}`);
-  console.log('Files created:');
-  console.log('  - package.json');
-  console.log('  - index.js');
-  console.log(`  - ${to_camel_case(packageName)}.svelte`);
+  try {
+    p.intro('Welcome to Node.js Package Scaffolding');
+    const orgName = await p.text({
+      message: 'Enter the organization name (leave blank for none):',
+    });
+    const packageName = await p.text({
+      message: 'Enter the package name:',
+      // validate: (value) => value.trim() !== '',
+    });
+    await create(orgName.trim() || null, packageName);
+    await addPackageToRootPackageJson(orgName.trim() || null, to_valid_package_name(packageName));
+    await runPnpmInstall();
+    console.log(`\nPackage created successfully!`);
+    console.log(`Package name: ${orgName ? `@${orgName.replace(/^@/, '')}/` : ''}${to_valid_package_name(packageName)}`);
+    console.log('Files created:');
+    console.log(' - package.json');
+    console.log(' - index.js');
+    console.log(` - ${to_camel_case(packageName)}.svelte`);
+  } catch (error) {
+    console.error('An error occurred:', error);
+    process.exit(1);
+  }
 }
 
 main().catch((error) => {

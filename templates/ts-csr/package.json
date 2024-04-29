@@ -1,6 +1,7 @@
 {
 	"dependencies": {
 		"@slick-kit/toast": "workspace:^",
+		"@stuff/test": "workspace:^",
 		"pocketbase": "^0.21.2"
 	},
 	"devDependencies": {
