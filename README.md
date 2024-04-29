@@ -8,9 +8,9 @@ This is a bare starter kit for PocketBase / Svelte 5 / SvelteKit with lots of ex
 
 1. `npx slick-kit your-app-name`
 2. `cd ./your-app-name`
-3. `npm install` `pnpm install` `yarn install`
+3. `pnpm install` or `npm install`
 4. Set ENV credentials
-   5 (optional). `npm run typegen` must have all env credentials set to work
+   5 (optional). `pnpm typegen` must have all env credentials set to work
 
 ### Extras
 
