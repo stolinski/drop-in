@@ -7,8 +7,7 @@ import { exec } from 'child_process';
 
 // TODO
 // - should add package to root package.json file if it's not there and run pnpm install
-// THIS IS WORKING BUT
-//  IS ADDING A DOUBLE @ to the package name
+
 
 const cwd = process.argv[2] || '.';
 
