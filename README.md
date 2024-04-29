@@ -1,4 +1,4 @@
-# Sickit - SvelteKit / Svelte 5 / PocketBase Starter Kit
+# Skick Kit - SvelteKit / Svelte 5 / PocketBase Starter Kit
 
 ## About The Codebase
 
@@ -6,8 +6,8 @@ This is a bare starter kit for PocketBase / Svelte 5 / SvelteKit with lots of ex
 
 ## Getting Started
 
-1. `npx sickit your_app_name`
-2. `cd ./your_app_name`
+1. `npx slick-kit your-app-name`
+2. `cd ./your-app-name`
 3. `npm install` `pnpm install` `yarn install`
 4. Set ENV credentials
    5 (optional). `npm run typegen` must have all env credentials set to work
@@ -20,6 +20,7 @@ This is a bare starter kit for PocketBase / Svelte 5 / SvelteKit with lots of ex
 - Aliases and folders
 - App guard to redirect to app when logged in
 - Standards based simple toast system
+- Packages dir & scaffolding cli for easy internal packages
 
 ```
 $: 'src'

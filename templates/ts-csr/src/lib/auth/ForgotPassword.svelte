@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { users } from '$/pocketbase';
-	import { toast } from '../toast/toast.svelte';
+	import { toast } from '../../packages/@slick-kit/toast/toast.svelte';
 	import { auth_form_state } from './auth_form.svelte';
 	const auth = auth_form_state();
 	const loading = $derived(auth.status === 'LOADING');

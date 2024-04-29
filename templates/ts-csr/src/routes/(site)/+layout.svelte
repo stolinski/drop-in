@@ -4,7 +4,7 @@
 	import Footer from '$routes/(app)/Footer.svelte';
 	import { app_guard } from '$/utils/app_guard';
 	import { PUBLIC_PB_URL } from '$env/static/public';
-	import Toast from '$lib/toast/SickToast.svelte'
+	import {Toast, toast} from '@slick-kit/toast';
 	let { children } = $props()
  
 	// Everything in the app route tree is protected behind user accounts.
@@ -26,7 +26,7 @@
 
 
 <!--  
-SickToast -> just use any of these methods
+	SickToast -> just use any of these methods
 <button onclick={() => toast.send('Test Toast')}>Test Toast</button>
 <button onclick={() => toast.warning('Test Toast')}>Test Toast</button>
 <button onclick={() => toast.error('Test Toast')}>Test Toast</button>
