@@ -7,6 +7,8 @@ import { exec } from 'child_process';
 
 // TODO
 // - should add package to root package.json file if it's not there and run pnpm install
+// THIS IS WORKING BUT
+//  IS ADDING A DOUBLE @ to the package name
 
 const cwd = process.argv[2] || '.';
 
@@ -98,9 +100,10 @@ async function create(orgName, packageName) {
 async function addPackageToRootPackageJson(orgName, packageName) {
   const rootPackageJsonPath = path.join(cwd, 'package.json');
   try {
+		const validOrgName = orgName ? orgName.replace(/^@/, '') : null;
     const rootPackageJson = fs.readFileSync(rootPackageJsonPath, 'utf8');
     const rootPackageData = JSON.parse(rootPackageJson);
-    const dependencyName = orgName ? `@${orgName}/${packageName}` : packageName;
+    const dependencyName = validOrgName ? `@${validOrgName}/${packageName}` : packageName;
     if (!rootPackageData.dependencies) {
       rootPackageData.dependencies = {};
     }
