@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"@slick-kit/toast": "workspace:^",
 		"pocketbase": "^0.21.2"
 	},
 	"devDependencies": {
@@ -29,11 +30,15 @@
 		"dev": "vite dev",
 		"format": "prettier --write --plugin-search-dir=. .",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+		"make-package": "node ./src/packages/@slick-kit/tools/package.js",
 		"package": "svelte-kit package",
 		"prepare": "svelte-kit sync",
 		"preview": "svelte-kit preview",
 		"typegen": "pocketbase-typegen --env --out ./src/types/pocketbase.ts"
 	},
 	"type": "module",
-	"version": "0.0.1"
+	"version": "0.0.1",
+	"workspaces": [
+		"src/packages/**"
+	]
 }

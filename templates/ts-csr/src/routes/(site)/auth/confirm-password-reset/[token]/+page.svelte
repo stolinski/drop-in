@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { users } from '$/pocketbase';
 	import { auth_form_state } from '$lib/auth/auth_form.svelte';
-	import { toast } from '$/lib/toast/toast.svelte';
+	import { toast } from '$/packages/@slick-kit/toast/toast.svelte';
 	const auth = auth_form_state();
 	const loading = $derived(auth.status === 'LOADING');
 

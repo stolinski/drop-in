@@ -1,22 +1,22 @@
 {
-  "name": "sickit",
-  "version": "0.0.5",
-  "description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
-  "bin": "bin.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "type": "module",
-  "keywords": [
-    "Svelte",
-    "Svelte Kit",
-    "PocketBase",
-    "Starter Kit"
-  ],
-  "author": "Scott Tolinski",
-  "license": "ISC",
-  "dependencies": {
-    "@clack/prompts": "^0.7.0",
-    "kleur": "^4.1.5"
-  }
+	"name": "slick-kit",
+	"version": "0.0.7",
+	"description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
+	"bin": "bin.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"type": "module",
+	"keywords": [
+		"Svelte",
+		"Svelte Kit",
+		"PocketBase",
+		"Starter Kit"
+	],
+	"author": "Scott Tolinski",
+	"license": "ISC",
+	"dependencies": {
+		"@clack/prompts": "^0.7.0",
+		"kleur": "^4.1.5"
+	}
 }
