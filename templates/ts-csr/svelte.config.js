@@ -13,7 +13,7 @@ const config = {
 			$: 'src',
 			$settings: 'src/settings',
 			$routes: 'src/routes',
-			$state: 'src/lib/state',
+			$state: 'src/state',
 			$types: 'src/types',
 			$utils: 'src/utilities',
 		}

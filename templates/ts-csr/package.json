@@ -34,10 +34,10 @@
 		"package": "svelte-kit package",
 		"prepare": "svelte-kit sync",
 		"preview": "svelte-kit preview",
-		"typegen": "pocketbase-typegen --env --out ./src/types/pocketbase.ts"
+		"types": "pocketbase-typegen --env --out ./src/types/pocketbase.ts"
 	},
 	"type": "module",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"workspaces": [
 		"src/packages/**"
 	]

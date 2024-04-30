@@ -184,7 +184,7 @@ function run_pnpm_install() {
  */
 async function main() {
   try {
-    p.intro('Welcome to Node.js Package Scaffolding');
+    p.intro('~ Slick Package ~');
     const orgName = await p.text({
       message: 'Enter the organization name (leave blank for none):',
     });
