@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"@slick-kit/theme": "workspace:^",
 		"@slick-kit/toast": "workspace:^",
 		"pocketbase": "^0.21.2"
 	},

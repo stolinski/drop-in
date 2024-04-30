@@ -1,6 +1,7 @@
 /* Typeography */
 :root {
-	--font-sans: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial,
+		sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
 
 	--text-size-xs: clamp(0.6rem, 0.17vw + 0.76rem, 0.7rem);
 	--text-size-s: clamp(0.8rem, 0.17vw + 0.76rem, 0.89rem);
@@ -28,34 +29,63 @@ body {
 	margin: 0;
 }
 
-
-h1, .h1, .hxl, h2, .h2, .hl, h3, .h3, .hm, h4, .h4, .hs, h5, .h5, .hxs, h6, .h6 {
+h1,
+.h1,
+.hxl,
+h2,
+.h2,
+.hl,
+h3,
+.h3,
+.hm,
+h4,
+.h4,
+.hs,
+h5,
+.h5,
+.hxs,
+h6,
+.h6 {
 	margin-block: 0.2em;
 	line-height: 1.4;
 	text-wrap: balance;
 }
 
-h1, .h1, .hxl {
+h1,
+.h1,
+.hxl {
 	font-size: var(--text-size-heading-xl);
 }
 
-h2, .h2, .hl {
+h2,
+.h2,
+.hl {
 	font-size: var(--text-size-heading-l);
 }
 
-h3, .h3, .hm {
+h3,
+.h3,
+.hm {
 	font-size: var(--text-size-heading-m);
 }
 
-h4, .h4, .hs {
+h4,
+.h4,
+.hs {
 	font-size: var(--text-size-heading-s);
 }
 
-h5, .h5, .hxs {
+h5,
+.h5,
+.hxs {
 	font-size: var(--text-size-heading-xs);
 }
 
-h6, .h6, p, .p, li {
+h6,
+.h6,
+p,
+.p,
+li {
 	font-size: var(--text-size-p);
 }
 

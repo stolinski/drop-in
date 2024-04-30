@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '$lib/style.css';
 	import Header from '$/routes/(app)/Header.svelte';
 	import Footer from '$routes/(app)/Footer.svelte';
 	import { auth_guard } from '$/utils/auth_guard';
