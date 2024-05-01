@@ -3,6 +3,7 @@
 	import { Toast, toast } from '@slick-kit/toast';
 	let { children } = $props()
 
+const modules = import.meta.glob('$routes/**', { eager: true });
 
 </script>
 
@@ -10,8 +11,8 @@
 {@render children()}
 
 <!--  
-	SickToast -> just use any of these methods
-	<button onclick={() => toast.send('Test Toast', {duration: 5000})}>Test Toast</button>
+SickToast -> just use any of these methods
+<button onclick={() => toast.send('Test Toast', {duration: 5000})}>Test Toast</button>
 <button onclick={() => toast.warning('Test Toast')}>Test Toast</button>
 <button onclick={() => toast.error('Test Toast')}>Test Toast</button>
 <button onclick={() => toast.success('Test Toast')}>Test Toast</button>
