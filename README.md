@@ -1,4 +1,4 @@
-# Slick Kit
+# Slick Kit 😎
 
 SvelteKit / Svelte 5 / PocketBase starter with lots of extras.
 
@@ -19,6 +19,7 @@ SvelteKit / Svelte 5 / PocketBase starter with lots of extras.
 - Standards based simple toast system
 - Packages dir & scaffolding cli for easy internal packages
 - Extendable local package system
+- Basic typography system
 
 ### Included Aliases
 
