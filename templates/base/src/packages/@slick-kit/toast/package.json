@@ -1,5 +1,8 @@
 {
 	"author": "Scott Tolinski",
+	"dependencies": {
+		"svelte": "^5.0.0-next.115"
+	},
 	"description": "A simple standards based toast.",
 	"license": "ISC",
 	"main": "index.js",
@@ -9,8 +12,5 @@
 	},
 	"svelte": "./index.js",
 	"type": "module",
-	"version": "1.0.0",
-	"dependencies": {
-		"svelte": "^5.0.0-next.115"
-	}
+	"version": "1.0.0"
 }

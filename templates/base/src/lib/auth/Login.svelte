@@ -10,6 +10,7 @@
 		e.preventDefault();
 		auth.loading();
 		const form = e.target as HTMLFormElement;
+		console.log('form', form);
 		if (!form) return;
 
 		const email = form.email.value;
@@ -18,11 +19,12 @@
 		users
 			.authWithPassword(email, password)
 			.then((data) => {
+				console.log('data', data);
 				auth.success();
 			})
 			.catch((e) => {
 				console.error(e);
-				auth.error(e.data.data.password.message);
+				auth.error(e.message);
 				// Write your own messages here if you want to change the error message
 			});
 	}

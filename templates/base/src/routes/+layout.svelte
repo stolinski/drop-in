@@ -3,8 +3,6 @@
 	import { Toast, toast } from '@slick-kit/toast';
 	let { children } = $props()
 
-const modules = import.meta.glob('$routes/**', { eager: true });
-
 </script>
 
 <!-- If you would like to use the same layout in app and site, use this file -->
