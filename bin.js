@@ -95,6 +95,17 @@ function replacePackageName(cwd, newName) {
     fs.writeFileSync(cwd + '/package.json', updatedPackageJson, 'utf8');
 }
 
+function replaceAppName(cwd, newName) {
+  const settingsFile = cwd + '/src/settings.ts';
+  
+  if (fs.existsSync(settingsFile)) {
+    const settingsContent = fs.readFileSync(settingsFile, 'utf8');
+    const updatedSettingsContent = settingsContent.replace(/"app_name":\s*".*?"/, `"app_name": "${newName}"`);
+    fs.writeFileSync(settingsFile, updatedSettingsContent, 'utf8');
+  }
+}
+
+
 
 function write_template_files(template, types, name, cwd) {
 	const dir = dist(`templates/${template}`);
@@ -103,6 +114,7 @@ function write_template_files(template, types, name, cwd) {
 	copy(dir + "/example.env", cwd + "/.env");
 
 	replacePackageName(cwd, to_valid_package_name(name));
+	replaceAppName(cwd, name);
 }
 
 export function mkdirp(dir) {

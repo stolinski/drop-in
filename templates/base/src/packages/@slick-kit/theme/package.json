@@ -5,7 +5,8 @@
 	},
 	"description": "A slick package to ___",
 	"exports": {
-		".": "./theme.css"
+		".": "./theme.css",
+		"./Typography": "./Typography.svelte"
 	},
 	"license": "ISC",
 	"main": "index.js",
@@ -13,7 +14,6 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"svelte": "./index.js",
 	"type": "module",
-	"version": "0.0.1"
+	"version": "0.0.3"
 }

@@ -1,6 +1,6 @@
 {
 	"name": "slick-kit",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
 	"bin": "bin.js",
 	"scripts": {

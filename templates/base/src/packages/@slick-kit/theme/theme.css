@@ -27,6 +27,7 @@ body {
 	font-family: var(--font-sans);
 	line-height: 1.5;
 	margin: 0;
+	min-height: 100vh;
 }
 
 h1,
@@ -51,44 +52,43 @@ h6,
 	text-wrap: balance;
 }
 
-h1,
-.h1,
 .hxl {
 	font-size: var(--text-size-heading-xl);
 }
 
-h2,
-.h2,
+h1,
+.h1,
 .hl {
 	font-size: var(--text-size-heading-l);
 }
 
-h3,
-.h3,
+h2,
+.h2,
 .hm {
 	font-size: var(--text-size-heading-m);
 }
 
-h4,
-.h4,
+h3,
+.h3,
 .hs {
 	font-size: var(--text-size-heading-s);
 }
 
-h5,
-.h5,
+h4,
+.h4,
 .hxs {
 	font-size: var(--text-size-heading-xs);
 }
 
-h6,
-.h6,
+h5,
+.h5,
 p,
 .p,
 li {
 	font-size: var(--text-size-p);
 }
 
+h6,
 .s {
 	font-size: var(--text-size-s);
 }
@@ -111,4 +111,32 @@ button,
 textarea,
 select {
 	font: inherit;
+}
+
+/* Utils */
+
+.readable {
+	max-width: 900px;
+	width: 100%;
+}
+
+.flex {
+	display: flex;
+	gap: 10px;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+	grid-gap: 20px;
+}
+
+.layout {
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: [start] 2.5vw [content] 95vw [content] 2.5vw [end];
+}
+
+.layout > * {
+	grid-column: content/content;
 }
