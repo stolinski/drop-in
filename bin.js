@@ -9,10 +9,9 @@ const { version } = JSON.parse(fs.readFileSync(new URL('package.json', import.me
 let cwd = process.argv[2] || '.';
 
 console.log(`
-${grey(`sick-kit version ${version}`)}
-`);
+${grey(`@drop-in/new version ${version}`)}`);
 
-p.intro('Welcome to Sick Kit 😎');
+p.intro('Welcome to 🛹 Drop In 🛹');
 
 
 if (fs.existsSync(cwd)) {
@@ -52,7 +51,7 @@ const options = await p.group(
 	{
 		template: () =>
 			p.select({
-				message: 'Which Sick template?',
+				message: 'Which template?',
 				options: fs.readdirSync(dist('templates')).map((dir) => {
 					const meta_file = dist(`templates/${dir}/.meta.json`);
 					const { title, description } = JSON.parse(fs.readFileSync(meta_file, 'utf8'));
