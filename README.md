@@ -1,6 +1,6 @@
-# Drop In 😎
+# Drop In 🛹
 
-SvelteKit / Svelte 5 / PocketBase starter with lots of extras.
+Drop into your new app with a SvelteKit / Svelte 5 / PocketBase starter with lots of extras.
 
 ## Getting Started
 
@@ -38,7 +38,7 @@ $utils: 'src/utilities'
 
 Usage: `npm run make-package`
 
-Follow the wizard to create a new package. This will add a new package starter to the local pacakges folder /src/packages. This will also add "@org-name/your-package-name": "workspace:^", to your package.json file
+Follow the wizard to create a new package. This will add a new package starter to the local packages folder /src/packages. This will also add "@org-name/your-package-name": "workspace:^", to your package.json file
 
 #### types
 
