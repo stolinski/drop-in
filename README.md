@@ -1,10 +1,10 @@
-# Slick Kit 😎
+# Drop In 😎
 
 SvelteKit / Svelte 5 / PocketBase starter with lots of extras.
 
 ## Getting Started
 
-1. `npx slick-kit your-app-name` || `pnpx slick-kit your-app-name`
+1. `npx drop-in your-app-name` || `pnpx drop-in your-app-name`
 2. `cd ./your-app-name`
 3. `pnpm install` || `npm install`
 4. Set ENV credentials

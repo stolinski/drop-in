@@ -1,6 +1,6 @@
 import { settings } from "$settings";
 import { goto } from "$app/navigation";
-import { toast } from "../../packages/@slick-kit/toast/toast.svelte";
+import { toast } from "../../packages/@drop-in/toast/toast.svelte";
 
 export function auth_form_state() {
 	let status: 'LOADING' | 'SUCCESS' | 'ERROR' | 'INITIAL' = $state('INITIAL');

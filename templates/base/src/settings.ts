@@ -1,4 +1,4 @@
 export const settings = {
-	"app_name": "Slick Kit",
+	"app_name": "Drop In",
 	"app_route": "/dashboard",
 }
