@@ -137,6 +137,40 @@ select {
 	grid-template-columns: [start] 2.5vw [content] 95vw [content] 2.5vw [end];
 }
 
-.layout > * {
+.layout-sidebar {
+	--side-bar-width: 300px;
+	grid-template-columns: [start] 2.5vw [main sidebar] var(--side-bar-width) [sidebar content] auto [content main] 2.5vw [end];
+	display: grid;
+}
+
+:is(.layout, .layout-sidebar) > * {
 	grid-column: content/content;
+}
+
+.full {
+	width: 100%;
+	grid-column: start / end;
+}
+
+.content {
+	width: 100%;
+	grid-column: content / content;
+}
+
+.l-margin {
+	width: 100%;
+	grid-column: l-margin / l-margin;
+}
+
+.r-margin {
+	width: 100%;
+	grid-column: r-margin / r-margin;
+}
+.sidebar {
+	width: 100%;
+	grid-column: sidebar / sidebar;
+}
+.main {
+	width: 100%;
+	grid-column: main / main;
 }

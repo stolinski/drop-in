@@ -6,19 +6,27 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 const { version } = JSON.parse(fs.readFileSync(new URL('package.json', import.meta.url), 'utf-8'));
-let cwd = process.argv[2] || '.';
+let app_name = process.argv[2] || null;
 
 console.log(`
 ${grey(`@drop-in/new version ${version}`)}`);
 
 p.intro('Welcome to 🛹 Drop In 🛹');
 
+// If the app name wasn't provided, prompt the user for it
+if (!app_name) {
+	const inputCwd = await p.text({
+		message: 'Enter project name:',
+	});
+	app_name = to_valid_package_name(inputCwd);
+}
 
-if (fs.existsSync(cwd)) {
-	if (fs.readdirSync(cwd).length > 0) {
+// Check if the folder already exists and is empty 
+if (fs.existsSync(app_name)) {
+	if (fs.readdirSync(app_name).length > 0) {
 		const force = await p.confirm({
 			message: 'Directory not empty. Continue?',
-			initialValue: false
+			initialValue: false,
 		});
 
 		// bail if `force` is `false` or the user cancelled with Ctrl-C
@@ -34,7 +42,6 @@ export function dist(path) {
 
 export const package_manager = get_package_manager() || 'npm';
 
-
 function get_package_manager() {
 	if (!process.env.npm_config_user_agent) {
 		return undefined;
@@ -45,7 +52,6 @@ function get_package_manager() {
 	const name = pm_spec.substring(0, separator_pos);
 	return name === 'npminstall' ? 'cnpm' : name;
 }
-
 
 const options = await p.group(
 	{
@@ -59,14 +65,13 @@ const options = await p.group(
 					return {
 						label: title,
 						hint: description,
-						value: dir
+						value: dir,
 					};
-				})
+				}),
 			}),
-
 	},
 	{ onCancel: () => process.exit(1) }
-)
+);
 
 function to_valid_package_name(name) {
 	return name
@@ -78,39 +83,40 @@ function to_valid_package_name(name) {
 }
 
 function replacePackageName(cwd, newName) {
-    // Read the package.json file
-    const packageJson = fs.readFileSync(cwd + '/package.json', 'utf8');
+	// Read the package.json file
+	const packageJson = fs.readFileSync(cwd + '/package.json', 'utf8');
 
-    // Parse the JSON content
-    const packageData = JSON.parse(packageJson);
+	// Parse the JSON content
+	const packageData = JSON.parse(packageJson);
 
-    // Replace the name property with the provided variable
-    packageData.name = newName;
+	// Replace the name property with the provided variable
+	packageData.name = newName;
 
-    // Convert the updated data back to JSON
-    const updatedPackageJson = JSON.stringify(packageData, null, 2);
+	// Convert the updated data back to JSON
+	const updatedPackageJson = JSON.stringify(packageData, null, 2);
 
-    // Write the updated content back to the package.json file
-    fs.writeFileSync(cwd + '/package.json', updatedPackageJson, 'utf8');
+	// Write the updated content back to the package.json file
+	fs.writeFileSync(cwd + '/package.json', updatedPackageJson, 'utf8');
 }
 
 function replaceAppName(cwd, newName) {
-  const settingsFile = cwd + '/src/settings.ts';
-  
-  if (fs.existsSync(settingsFile)) {
-    const settingsContent = fs.readFileSync(settingsFile, 'utf8');
-    const updatedSettingsContent = settingsContent.replace(/"app_name":\s*".*?"/, `"app_name": "${newName}"`);
-    fs.writeFileSync(settingsFile, updatedSettingsContent, 'utf8');
-  }
+	const settingsFile = cwd + '/src/settings.ts';
+
+	if (fs.existsSync(settingsFile)) {
+		const settingsContent = fs.readFileSync(settingsFile, 'utf8');
+		const updatedSettingsContent = settingsContent.replace(
+			/"app_name":\s*".*?"/,
+			`"app_name": "${newName}"`
+		);
+		fs.writeFileSync(settingsFile, updatedSettingsContent, 'utf8');
+	}
 }
-
-
 
 function write_template_files(template, types, name, cwd) {
 	const dir = dist(`templates/${template}`);
 
 	copy(dir, cwd, to_valid_package_name(name));
-	copy(dir + "/example.env", cwd + "/.env");
+	copy(dir + '/example.env', cwd + '/.env');
 
 	replacePackageName(cwd, to_valid_package_name(name));
 	replaceAppName(cwd, name);
@@ -126,41 +132,33 @@ export function mkdirp(dir) {
 }
 
 function copy(from, to, rename, replace = false) {
-	
-
-
 	const stats = fs.statSync(from);
 
 	if (stats.isDirectory()) {
 		fs.readdirSync(from).forEach((file) => {
-			copy(path.join(from, file), path.join(to, file));
+			if (file !== 'node_modules') copy(path.join(from, file), path.join(to, file));
 		});
 	} else {
-
 		mkdirp(path.dirname(to));
 		fs.copyFileSync(from, to);
 	}
 }
 
-
 async function create(cwd, options) {
 	mkdirp(cwd);
 	write_template_files(options.template, null, options.name, cwd);
-
 }
 
-
-
-await create(cwd, {
-	name: path.basename(path.resolve(cwd)),
+await create(app_name, {
+	name: path.basename(path.resolve(app_name)),
 	template: options.template,
-})
+});
 
-p.outro("Sick, T2D - time to dev.");
+p.outro('Sick, T2D - time to dev.');
 
 let i = 1;
 
-const relative = path.relative(process.cwd(), cwd);
+const relative = path.relative(process.cwd(), app_name);
 if (relative !== '') {
 	console.log(`  ${i++}: ${bold(cyan(`cd ${relative}`))}`);
 }

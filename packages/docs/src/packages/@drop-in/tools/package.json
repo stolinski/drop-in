@@ -1,0 +1,22 @@
+{
+	"author": "Scott Tolinski",
+	"bin": "bin.js",
+	"dependencies": {
+		"@clack/prompts": "^0.7.0",
+		"kleur": "^4.1.5"
+	},
+	"description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
+	"keywords": [
+		"Svelte",
+		"Svelte Kit",
+		"PocketBase",
+		"Starter Kit"
+	],
+	"license": "ISC",
+	"name": "@drop-in/tools",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"type": "module",
+	"version": "0.0.5"
+}
