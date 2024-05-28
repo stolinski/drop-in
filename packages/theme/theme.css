@@ -1,0 +1,268 @@
+/* Typeography */
+:root {
+	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial,
+		sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+
+	/* Small view breakpoint */
+	--min-vw: 360;
+	--max-vw: 800;
+
+--fs-xs: clamp(0.8rem, 0.941176vi + 0.56rem, 1.2rem);
+--fs-base: clamp(1rem, 1.176471vi + 0.71rem, 1.5rem);
+--fs-s: clamp(1.25rem, 1.482353vi + 0.88rem, 1.88rem);
+--fs-m: clamp(1.56rem, 1.835294vi + 1.1rem, 2.34rem);
+--fs-l: clamp(1.95rem, 2.305882vi + 1.37rem, 2.93rem);
+--fs-xl: clamp(2.44rem, 2.870588vi + 1.72rem, 3.66rem);
+--fs-xxl: clamp(3.05rem, 3.6vi + 2.15rem, 4.58rem);
+--fs-xxxl: clamp(3.81rem, 4.494118vi + 2.69rem, 5.72rem);
+
+--line-height: calc(2px + 2ex + 2px));
+
+}
+
+html {
+	box-sizing: border-box;
+}
+
+html,
+body,
+body > div {
+	height: 100%;
+	margin: 0;
+}
+
+body > div {
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex: 1;
+}
+
+header,
+main,
+footer {
+	width: 100%;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+body {
+	font-family: var(--font-sans);
+	line-height: 1.5;
+	margin: 0;
+	min-height: 100vh;
+}
+
+h1,
+.h1,
+.hxl,
+h2,
+.h2,
+.hl,
+h3,
+.h3,
+.hm,
+h4,
+.h4,
+.hs,
+h5,
+.h5,
+.hxs,
+h6,
+.h6 {
+	margin-block: 0.8em;
+	line-height: var(--line-height);
+	text-wrap: balance;
+}
+
+.hxl {
+	font-size: var(--fs-xl);
+}
+
+h1,
+.h1,
+.hl {
+	font-size: var(--fs-l);
+}
+
+h2,
+.h2,
+.hm {
+	font-size: var(--fs-m);
+}
+
+h3,
+.h3,
+.hs {
+	font-size: var(--fs-s);
+}
+
+h4,
+.h4,
+.hxs {
+	font-size: var(--fs-xs);
+}
+
+h5,
+.h5,
+p,
+.p,
+li {
+	font-size: var(--fs-base);
+}
+
+h6,
+.s {
+	font-size: var(--fs-s);
+}
+
+.xs {
+	font-size: var(--fs-xs);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+/* Utils */
+
+.readable {
+	max-width: 900px;
+	width: 100%;
+}
+
+.flex {
+	display: flex;
+	gap: 10px;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+	grid-gap: 20px;
+}
+
+.layout {
+	margin-inline: auto;
+	display: grid;
+	grid-template-rows: auto;
+	max-width: var(--max-width);
+	grid-template-columns: [start] 2.5vw [content] 95% [content] 2.5vw [end];
+}
+
+.layout-sidebar {
+	--side-bar-width: 300px;
+	--layout-margin: 2.5vw;
+	margin-inline: auto;
+	max-width: var(--max-width);
+	grid-template-columns:
+		[start] var(--layout-margin) [main sidebar] var(--side-bar-width)
+		[sidebar gap]
+		var(--layout-margin)
+		[gap content] auto [content main] var(--layout-margin)
+		[end];
+	display: grid;
+}
+
+:is(.layout, .layout-sidebar, .layout-sidebar-inverse) > * {
+	grid-column: content / content;
+}
+
+.layout-sidebar-inverse {
+	--side-bar-width: var(--side-bar-width, 300px);
+	--layout-margin: 2.5vw;
+	max-width: var(--max-width);
+	margin-inline: auto;
+	grid-template-columns:
+		[start main l-margin] var(--layout-margin) [l-margin main content] auto
+		[content gap]
+		var(--layout-margin)
+		[gap sidebar] var(--side-bar-width) [sidebar main r-margin] var(--layout-margin)
+		[r-margin end];
+	display: grid;
+}
+
+.full {
+	width: 100%;
+	grid-column: start / end;
+}
+
+.content {
+	width: 100%;
+	grid-column: content / content;
+}
+
+.l-margin {
+	width: 100%;
+	grid-column: l-margin / l-margin;
+}
+
+.r-margin {
+	width: 100%;
+	grid-column: r-margin / r-margin;
+}
+.sidebar {
+	width: 100%;
+	grid-column: sidebar / sidebar;
+}
+.main {
+	width: 100%;
+	grid-column: main / main;
+}
+
+.visually-hidden {
+	position: absolute;
+	overflow: hidden;
+	clip: rect(0px, 0px, 0px, 0px);
+	height: 1px;
+	width: 1px;
+	margin: -1px;
+	padding: 0px;
+	border: 0px;
+}
+
+.no-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	li {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+span.icon.icon-link::after {
+	content: '#';
+	position: absolute;
+	translate: -100%;
+	opacity: 0;
+	color: var(--fg);
+	transition: 0.2s ease opacity;
+	padding-right: 20px;
+}
+
+:where(h1, h2, h3, h4, h5, h6):hover span.icon.icon-link::after {
+	opacity: 1;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+	view-transition-name: var(--transition-name);
+}

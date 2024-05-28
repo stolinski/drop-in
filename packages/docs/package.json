@@ -1,0 +1,49 @@
+{
+	"dependencies": {
+		"@drop-in/documents": "workspace:^",
+		"@drop-in/theme": "workspace:^",
+		"@drop-in/toast": "workspace:^",
+		"@drop-in/tools": "workspace:^",
+		"@shikijs/markdown-it": "^1.6.0",
+		"markdown-it": "^14.1.0",
+		"shiki": "^1.6.0"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^3.2.1",
+		"@sveltejs/kit": "^2.5.10",
+		"@sveltejs/vite-plugin-svelte": "^3.1.0",
+		"@typescript-eslint/eslint-plugin": "^7.10.0",
+		"@typescript-eslint/parser": "^7.10.0",
+		"pocketbase-typegen": "^1.2.1",
+		"prettier": "^3.2.5",
+		"prettier-plugin-svelte": "^3.2.3",
+		"svelte": "5.0.0-next.132",
+		"svelte-check": "^3.7.1",
+		"svelte-preprocess": "^5.1.4",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.5",
+		"vite": "^5.2.11"
+	},
+	"engines": {
+		"node": "<20.11.1"
+	},
+	"name": "@drop-in/docs",
+	"scripts": {
+		"build": "vite build",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+		"dev": "vite dev",
+		"format": "prettier --write --plugin-search-dir=. .",
+		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+		"make-package": "node @drop-in/tools/package",
+		"package": "svelte-kit package",
+		"prepare": "svelte-kit sync",
+		"preview": "svelte-kit preview",
+		"types": "pocketbase-typegen --env --out ./src/types/pocketbase.ts"
+	},
+	"type": "module",
+	"version": "0.0.3",
+	"workspaces": [
+		"src/packages/**"
+	]
+}

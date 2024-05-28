@@ -10,7 +10,6 @@
 		e.preventDefault();
 		auth.loading();
 		const form = e.target as HTMLFormElement;
-		console.log('form', form);
 		if (!form) return;
 
 		const email = form.email.value;
@@ -18,8 +17,7 @@
 
 		users
 			.authWithPassword(email, password)
-			.then((data) => {
-				console.log('data', data);
+			.then(() => {
 				auth.success();
 			})
 			.catch((e) => {

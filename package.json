@@ -4,7 +4,11 @@
 	"description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
 	"bin": "bin.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"all:update": "pnpm -r update -L -i",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"clean": "find ./ -name .svelte-kit -type d -exec rm -rf {} +; find ./ -name node_modules -type d -exec rm -rf {} +; find ./ -name pnpm-lock.yaml -type f -exec rm {} +;",
+		"docs:dev": "pnpm -F @drop-in/docs run dev",
+		"template:blog:dev": "pnpm -F blog run dev"
 	},
 	"type": "module",
 	"keywords": [
@@ -17,6 +21,16 @@
 	"license": "ISC",
 	"dependencies": {
 		"@clack/prompts": "^0.7.0",
+		"@drop-in/theme": "workspace:^",
+		"@sentry/node": "^8.4.0",
+		"@sentry/profiling-node": "^8.4.0",
 		"kleur": "^4.1.5"
+	},
+	"devDependencies": {
+		"eslint": "^9.3.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.39.0",
+		"svelte": "5.0.0-next.132",
+		"typescript": "^5.4.5"
 	}
 }

@@ -1,6 +1,10 @@
 # Drop In 🛹
 
-Drop into your new app with a SvelteKit / Svelte 5 / PocketBase starter with lots of extras.
+Drop into your new app with a SvelteKit / Svelte 5 starter with lots of extras.
+
+## NOTE
+
+This is a WIP. bot of the templates base and blog are usable but under construction.
 
 ## Getting Started
 
@@ -9,6 +13,11 @@ Drop into your new app with a SvelteKit / Svelte 5 / PocketBase starter with lot
 3. `pnpm install` || `npm install`
 4. Set ENV credentials
 5. (optional). `npm run typegen` || `pnpm typegen` must have all env credentials set to work
+
+## Templates
+
+- Base -> SvelteKit / Svelte 5 / PocketBase. CSR for app code, SSR for Site code
+- Blog -> A Markdown based blog with super powers
 
 ### Extras
 
@@ -20,16 +29,19 @@ Drop into your new app with a SvelteKit / Svelte 5 / PocketBase starter with lot
 - Packages dir & scaffolding cli for easy internal packages
 - Extendable local package system
 - Basic typography system
+- Custom excerpt remark plugin
+- +page.html routes
+- +page.md routes
 
 ### Included Aliases
 
-```
-$: 'src'
-$settings: 'src/settings'
-$routes: 'src/routes'
-$state: 'src/state'
-$types: 'src/types'
-$utils: 'src/utilities'
+```js
+$: 'src';
+$settings: 'src/settings';
+$routes: 'src/routes';
+$state: 'src/state';
+$types: 'src/types';
+$utils: 'src/utilities';
 ```
 
 ### Commands
