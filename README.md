@@ -29,6 +29,9 @@ This is a WIP. bot of the templates base and blog are usable but under construct
 - Packages dir & scaffolding cli for easy internal packages
 - Extendable local package system
 - Basic typography system
+- Custom excerpt remark plugin
+- +page.html routes
+- +page.md routes
 
 ### Included Aliases
 
