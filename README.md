@@ -23,13 +23,13 @@ Drop into your new app with a SvelteKit / Svelte 5 / PocketBase starter with lot
 
 ### Included Aliases
 
-```
-$: 'src'
-$settings: 'src/settings'
-$routes: 'src/routes'
-$state: 'src/state'
-$types: 'src/types'
-$utils: 'src/utilities'
+```js
+$: 'src';
+$settings: 'src/settings';
+$routes: 'src/routes';
+$state: 'src/state';
+$types: 'src/types';
+$utils: 'src/utilities';
 ```
 
 ### Commands

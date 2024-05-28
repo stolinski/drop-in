@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Header from '$routes/(app)/Header.svelte';
 	import Footer from '$routes/(app)/Footer.svelte';
-	import { app_guard } from '$/utils/app_guard';
+	import { app_guard } from '$utils/app_guard';
 	import { PUBLIC_PB_URL } from '$env/static/public';
 	let { children } = $props()
  
