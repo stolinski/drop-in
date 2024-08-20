@@ -4,4 +4,4 @@
 
 <h1>{settings.app_name}</h1>
 
-<a href="/auth/signup"> Sign Up </a>
+<a href="/auth/signup">Sign Up</a>

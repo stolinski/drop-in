@@ -1,7 +1,7 @@
 {
 	"author": "",
 	"dependencies": {
-		"svelte": "5.0.0-next.132"
+		"svelte": "5.0.0-next.191"
 	},
 	"description": "A dope package to help Drop In development",
 	"exports": {

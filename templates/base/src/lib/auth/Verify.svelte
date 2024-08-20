@@ -1,22 +1,25 @@
-<!-- TODO -->
-<!-- If you would like to contribute below is the method to request verification -->
 <script lang="ts">
-	import { users } from '$/pocketbase';
-	// TODO
-	// NOT COMPLETE
+	import type { UsersResponse } from '$/pocket-types'
+	import { users } from '$/pocketbase'
+	const { user }: { user: UsersResponse } = $props()
+
+	let verified_sent = $state(false)
+
 	async function onclick() {
-		// TODO Email from user email
-		await users.requestVerification('test@example.com');
-		// Success State
-		// Hide if already verified
+		await users.requestVerification(user.email)
+		verified_sent = true
 	}
 </script>
 
 <div>
-	<p>
-		Your email is not verified.
-		<button {onclick}> Send Verification </button>
-	</p>
+	{#if !verified_sent}
+		<p>
+			Your email is not verified.
+			<button class="btn-small" {onclick}> Send Verification </button>
+		</p>
+	{:else}
+		<p>Verification email sent to {user.email}. Please check your email.</p>
+	{/if}
 </div>
 
 <style>
@@ -26,5 +29,8 @@
 	p {
 		margin: 0;
 		text-align: center;
+	}
+	button {
+		display: inline-block;
 	}
 </style>

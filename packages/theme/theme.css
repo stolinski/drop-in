@@ -7,6 +7,7 @@
 	--min-vw: 360;
 	--max-vw: 800;
 
+--fs-xxs: clamp(0.64rem, 0.752941vi + 0.45rem, 0.96rem);
 --fs-xs: clamp(0.8rem, 0.941176vi + 0.56rem, 1.2rem);
 --fs-base: clamp(1rem, 1.176471vi + 0.71rem, 1.5rem);
 --fs-s: clamp(1.25rem, 1.482353vi + 0.88rem, 1.88rem);
@@ -15,6 +16,7 @@
 --fs-xl: clamp(2.44rem, 2.870588vi + 1.72rem, 3.66rem);
 --fs-xxl: clamp(3.05rem, 3.6vi + 2.15rem, 4.58rem);
 --fs-xxxl: clamp(3.81rem, 4.494118vi + 2.69rem, 5.72rem);
+--fs-xxxxl: clamp(4.77rem, 5.6vi + 3.37rem, 7.15rem);
 
 --line-height: calc(2px + 2ex + 2px));
 
@@ -29,6 +31,10 @@ body,
 body > div {
 	height: 100%;
 	margin: 0;
+}
+
+body {
+	font-size: var(--fs-base);
 }
 
 body > div {
@@ -164,6 +170,7 @@ select {
 	margin-inline: auto;
 	display: grid;
 	grid-template-rows: auto;
+	flex: 0;
 	max-width: var(--max-width);
 	grid-template-columns: [start] 2.5vw [content] 95% [content] 2.5vw [end];
 }
