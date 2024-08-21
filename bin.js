@@ -202,8 +202,21 @@ function copy(from, to) {
 	const stats = fs.statSync(from);
 
 	if (stats.isDirectory()) {
-		fs.readdirSync(from).forEach((file) => {
-			if (file !== 'node_modules') copy(path.join(from, file), path.join(to, file));
+		fs.readdirSync(from, { withFileTypes: true }).forEach((dirent) => {
+			if (dirent.name !== 'node_modules') {
+				const sourcePath = path.join(from, dirent.name);
+				let destPath = path.join(to, dirent.name);
+
+				// Special handling for .gitignore.txt
+				if (dirent.name === '.gitignore.txt') {
+					destPath = path.join(to, '.gitignore');
+					console.log('Renaming .gitignore.txt to .gitignore');
+				} else {
+					console.log(`Copying: ${dirent.name}`);
+				}
+
+				copy(sourcePath, destPath);
+			}
 		});
 	} else {
 		mkdirp(path.dirname(to));
