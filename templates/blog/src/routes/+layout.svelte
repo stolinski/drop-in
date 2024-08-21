@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './app.css';
-	import "@drop-in/theme";
+	import "@drop-in/graffiti";
 	import Header from '$routes/Header.svelte';
 	import Footer from '$routes/Footer.svelte';
 	import { onNavigate } from '$app/navigation'

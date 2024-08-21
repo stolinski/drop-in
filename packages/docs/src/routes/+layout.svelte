@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './app.css';
-	import "@drop-in/theme";
+	import "@drop-in/graffiti";
 	import { SideNav } from '@drop-in/documents';
 	import Header from '$routes/Header.svelte';
 	import Footer from '$routes/Footer.svelte';

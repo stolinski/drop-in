@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"@drop-in/theme": "workspace:^",
+		"@drop-in/graffiti": "workspace:^",
 		"@drop-in/toast": "workspace:^",
 		"pocketbase": "^0.21.3"
 	},

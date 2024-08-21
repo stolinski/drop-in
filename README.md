@@ -44,6 +44,11 @@ $types: 'src/types';
 $utils: 'src/utilities';
 ```
 
+### Packages
+
+- Decks: A library of dependency free unstyled Svelte 5 components
+- Graffiti: A base CSS framework
+
 ### Commands
 
 #### make-package

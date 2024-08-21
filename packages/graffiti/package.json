@@ -1,0 +1,16 @@
+{
+	"author": "Scott Tolinski",
+	"bin": "bin.js",
+	"description": "A dope package to theme Drop In",
+	"exports": {
+		".": "./theme.css"
+	},
+	"license": "ISC",
+	"main": "index.js",
+	"name": "@drop-in/graffiti",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"type": "module",
+	"version": "0.1.1"
+}
