@@ -210,9 +210,6 @@ function copy(from, to) {
 				// Special handling for .gitignore.txt
 				if (dirent.name === '.gitignore.txt') {
 					destPath = path.join(to, '.gitignore');
-					console.log('Renaming .gitignore.txt to .gitignore');
-				} else {
-					console.log(`Copying: ${dirent.name}`);
 				}
 
 				copy(sourcePath, destPath);
