@@ -3,7 +3,7 @@
 	"bin": "bin.js",
 	"description": "A dope package to theme Drop In",
 	"exports": {
-		".": "./theme.css"
+		".": "./drop-in.css"
 	},
 	"license": "ISC",
 	"main": "index.js",
