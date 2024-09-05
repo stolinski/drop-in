@@ -174,7 +174,17 @@ importers:
         specifier: 5.0.0-next.191
         version: 5.0.0-next.191
 
-  packages/graffiti: {}
+  packages/graffiti:
+    dependencies:
+      '@drop-in/decks':
+        specifier: ^0.0.7
+        version: 0.0.7(svelte@5.0.0-next.244)
+      '@drop-in/graffiti':
+        specifier: ^0.1.2
+        version: 0.1.2
+      '@drop-in/toast':
+        specifier: ^1.0.1
+        version: 1.0.1
 
   packages/toast:
     dependencies:
@@ -365,6 +375,19 @@ packages:
     resolution: {integrity: sha512-0MhX9/B4iL6Re04jPrttDm+BsP8y6mS7byuv0BvXgdXhbV5PdlsHt55dvNsuBCPZ7xq1oTAOOuotR9NFbQyMSA==}
     bundledDependencies:
       - is-unicode-supported
+
+  '@drop-in/decks@0.0.7':
+    resolution: {integrity: sha512-weZSjglBolovpIRdVumH23VLEKcmjjsmRv3Onx3XIly/ZHRBsA9pnY1wjpU+GHknYIgx+PdGaAOR2qr6KbfL+w==}
+    engines: {node: '>20.11.1'}
+    peerDependencies:
+      svelte: 5.0.0-next.244
+
+  '@drop-in/graffiti@0.1.2':
+    resolution: {integrity: sha512-w2cPDHyzqVKqEB92OS7Jlyufxi+kHhuVaWi3fsIaGUZcQLKBLcCILhyzS9ZEVJ49AEqEYR5R2/82AaQTitv5Fw==}
+    hasBin: true
+
+  '@drop-in/toast@1.0.1':
+    resolution: {integrity: sha512-gd46eSqaQWYwDCd95t1MXArPAOaGX1I5IU5wm/mdlQklf0z16kp83oRbFIGNfWDBX6OBycZF2Oo8j0XoaXs8UQ==}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -2722,6 +2745,17 @@ snapshots:
       '@clack/core': 0.3.4
       picocolors: 1.0.1
       sisteransi: 1.0.5
+
+  '@drop-in/decks@0.0.7(svelte@5.0.0-next.244)':
+    dependencies:
+      '@oddbird/popover-polyfill': 0.4.4
+      svelte: 5.0.0-next.244
+
+  '@drop-in/graffiti@0.1.2': {}
+
+  '@drop-in/toast@1.0.1':
+    dependencies:
+      svelte: 5.0.0-next.191
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
