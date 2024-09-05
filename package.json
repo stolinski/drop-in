@@ -8,7 +8,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"clean": "find ./ -name .svelte-kit -type d -exec rm -rf {} +; find ./ -name node_modules -type d -exec rm -rf {} +; find ./ -name pnpm-lock.yaml -type f -exec rm {} +;",
 		"docs:dev": "pnpm -F @drop-in/docs run dev",
-		"docs:build": "pnpm -F @drop-in/docs run build",
+		"docs:build": "pnpm -F @drop-in/decks pacakge && pnpm -F @drop-in/docs run build",
 		"template:blog:dev": "pnpm -F blog run dev",
 		"template:base:dev": "pnpm -F base run dev"
 	},
