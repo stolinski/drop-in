@@ -6,16 +6,17 @@
 	--min-vw: 360;
 	--max-vw: 800;
 
-	--fs-xxs: clamp(0.64rem, 0.752941vi + 0.45rem, 0.96rem);
-	--fs-xs: clamp(0.8rem, 0.941176vi + 0.56rem, 1.2rem);
-	--fs-base: clamp(1rem, 1.176471vi + 0.71rem, 1.5rem);
-	--fs-s: clamp(1.25rem, 1.482353vi + 0.88rem, 1.88rem);
-	--fs-m: clamp(1.56rem, 1.835294vi + 1.1rem, 2.34rem);
-	--fs-l: clamp(1.95rem, 2.305882vi + 1.37rem, 2.93rem);
-	--fs-xl: clamp(2.44rem, 2.870588vi + 1.72rem, 3.66rem);
-	--fs-xxl: clamp(3.05rem, 3.6vi + 2.15rem, 4.58rem);
-	--fs-xxxl: clamp(3.81rem, 4.494118vi + 2.69rem, 5.72rem);
-	--fs-xxxxl: clamp(4.77rem, 5.6vi + 3.37rem, 7.15rem);
+	--fs-xxxs: clamp(0.45rem, 0.305882vi + 0.37rem, 0.58rem);
+	--fs-xxs: clamp(0.56rem, 0.376471vi + 0.47rem, 0.72rem);
+	--fs-xs: clamp(0.7rem, 0.470588vi + 0.58rem, 0.9rem);
+	--fs-base: clamp(0.88rem, 0.588235vi + 0.73rem, 1.13rem);
+	--fs-s: clamp(1.09rem, 0.752941vi + 0.9rem, 1.41rem);
+	--fs-m: clamp(1.37rem, 0.917647vi + 1.14rem, 1.76rem);
+	--fs-l: clamp(1.71rem, 1.152941vi + 1.42rem, 2.2rem);
+	--fs-xl: clamp(2.14rem, 1.435294vi + 1.78rem, 2.75rem);
+	--fs-xxl: clamp(2.67rem, 1.788235vi + 2.22rem, 3.43rem);
+	--fs-xxxl: clamp(3.34rem, 2.235294vi + 2.78rem, 4.29rem);
+	--fs-xxxxl: clamp(4.17rem, 2.8vi + 3.47rem, 5.36rem);
 
 	--line-height: calc(2px + 2ex + 2px);
 
@@ -190,15 +191,16 @@ select {
 }
 
 .layout-sidebar {
-	--side-bar-width: 300px;
+	--side-bar-width: 200px;
 	--layout-margin: 2.5vw;
 	margin-inline: auto;
 	max-width: var(--max-width);
 	grid-template-columns:
 		[start] var(--layout-margin) [main sidebar] var(--side-bar-width)
-		[sidebar gap]
+		[sidebar gap] var(--layout-margin)
+		[gap content] calc(100vw - var(--side-bar-width) - var(--layout-margin) * 3)
+		[content main]
 		var(--layout-margin)
-		[gap content] auto [content main] var(--layout-margin)
 		[end];
 	display: grid;
 }

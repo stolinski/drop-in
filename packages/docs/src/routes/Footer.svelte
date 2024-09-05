@@ -2,7 +2,6 @@
 	<p>&copy; {new Date().getFullYear()} YOUR NAME HERE 😜</p>
 	<ul>
 		<li><a href="/">Home</a></li>
-		<li><a href="/">Home</a></li>
 	</ul>
 </footer>
 

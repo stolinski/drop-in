@@ -1,58 +1,19 @@
-# create-svelte
+# @drop-in/decks
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Decks is a ui component library that doesn't depend on dependencies or css frameworks to function. They are also deeply committed to using browser standards and APIs before custom JavaScript. Add your own theme, or use `@drop-in/graffiti` to style your decks.
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+Disclaimer: These are under active development. I encourage you to try them and submit pr's to improve them. I'd like to keep them as opinionated, drop-in style elements, rather than a deep customizable framework.
 
-## Creating a project
+`npm install @drop-in/decks`
 
-If you're seeing this, you've probably already done this step. Congrats!
+`import { Share } from '@drop-in/decks'`
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+If you would like css, you can install and import `@drop-in/graffiti`. See https://github.com/stolinski/drop-in/tree/main/packages/graffiti
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## Current Elements
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
-
-## Building
-
-To build your library:
-
-```bash
-npm run package
-```
-
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
+- Menu (Popover based)
+- Pills
+- Share
+- Are You Sure - Confirm Button
+- Accordion (Details based)

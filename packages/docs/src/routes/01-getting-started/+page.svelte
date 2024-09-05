@@ -20,10 +20,10 @@ ${bundler} install`);
 <button onclick={() => (bundler = 'npm')} class:active={bundler === 'npm'}>npm</button>
 <button onclick={() => (bundler = 'pnpm')} class:active={bundler === 'pnpm'}>pnpm</button>
 
-<h2>Install</h2>
+<h2>Installation and Quickstart</h2>
 <p>To use Drop In just run the new command.</p>
 
-<h3>1</h3>
+<h3>1 Install</h3>
 
 <button onclick={() => copy(step_1)}>Copy</button>
 <pre class="shiki shiki-themes night-owl night-owl"><code class="language-bash">{step_1}</code
@@ -46,8 +46,8 @@ ${bundler} install`);
 <pre class="shiki shiki-themes night-owl night-owl"><code class="language-bash">{step_3}</code
 	></pre>
 
-<h1>Aliases and Structure</h1>
-<h2>Aliases</h2>
+<h2>Aliases and Structure</h2>
+<h3>Aliases</h3>
 <p>
 	These exist to make your life easier. Stop worrying about relative paths and moving files with
 	smart defaults for additional aliases beyond the classic <code> $lib</code>.

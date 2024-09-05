@@ -15,6 +15,8 @@ body {
 	--shiki-dark-bg: #011627;
 	color: #d6deeb;
 	--shiki-dark: #d6deeb;
+	overflow: auto;
+	font-size: var(--fs-xs);
 }
 
 aside nav {

@@ -5,11 +5,6 @@
 <header class="layout">
 	<div>
 		<p><a href="/">{settings.app_name}</a></p>
-		<nav>
-			<ul>
-				<li><a href="/about">About</a></li>
-			</ul>
-		</nav>
 	</div>
 </header>
 
