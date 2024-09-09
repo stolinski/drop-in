@@ -49,7 +49,7 @@
 	});
 </script>
 
-<div style="position: relative;">
+<div style="position: relative; ">
 	<div bind:this={trigger}>
 		<button class={button_class} popovertarget={name}>
 			{@render button()}
@@ -59,17 +59,17 @@
 		popover="auto"
 		bind:this={menu}
 		id={name}
-		class="select-menu-menu-wrapper"
+		class="di-menu"
 		onclick={(e) => menu.hidePopover()}
 	>
-		<div class="menu-inner">
+		<div class="di-menu-inner">
 			{@render children()}
 		</div>
 	</div>
 </div>
 
 <style>
-	.select-menu-menu-wrapper {
+	.di-menu {
 		translate: 0 10px;
 		transition-timing-function: ease-in;
 		/* opacity: 0; */

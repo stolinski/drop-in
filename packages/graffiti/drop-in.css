@@ -20,6 +20,21 @@
 
 	--line-height: calc(2px + 2ex + 2px);
 
+	--vs-s: 0.5em;
+	--vs-base: 1em;
+	--vs-m: 1.5em;
+	--vs-l: 2em;
+
+	--rad-xs: 2px;
+	--rad-s: 4px;
+	--rad-m: 8px;
+	--rad-l: 16px;
+
+	--pad-xs: 2px;
+	--pad-s: 10px;
+	--pad-m: 20px;
+	--pad-l: 25px;
+
 	/* Default Palette */
 	--yellow: #ffd817;
 	--orange: #ff9e02;
@@ -110,11 +125,13 @@ h1,
 .h1,
 .hl {
 	font-size: var(--fs-l);
+	margin-block: 0 var(--vs-base);
 }
 
 h2,
 .h2,
 .hm {
+	margin-block: 0 var(--vs-base);
 	font-size: var(--fs-m);
 }
 
@@ -122,11 +139,13 @@ h3,
 .h3,
 .hs {
 	font-size: var(--fs-s);
+	margin-block: 0 var(--vs-base);
 }
 
 h4,
 .h4,
 .hxs {
+	margin-block: 0 var(--vs-base);
 	font-size: var(--fs-xs);
 }
 
@@ -135,15 +154,18 @@ h5,
 p,
 .p,
 li {
+	margin-block: 0 var(--vs-base);
 	font-size: var(--fs-base);
 }
 
 h6,
 .s {
+	margin-block: 0 var(--vs-base);
 	font-size: var(--fs-s);
 }
 
 .xs {
+	margin-block: 0 var(--vs-base);
 	font-size: var(--fs-xs);
 }
 
@@ -288,4 +310,74 @@ span.icon.icon-link::after {
 
 :where(h1, h2, h3, h4, h5, h6) {
 	view-transition-name: var(--transition-name);
+}
+
+.di-accordion {
+	margin-block: 0 var(--vs-base);
+	summary {
+		font-size: var(--base);
+		padding: 2rem 1rem;
+		border-block-end: solid 1px var(--tint-or-shade);
+	}
+	border-block-end: solid 1px var(--tint-or-shade);
+}
+
+.di-share {
+	border-radius: var(--rad-m);
+	min-width: 50vi;
+	border: none;
+	box-shadow: 1px 1px 5px rgb(0 0 0 / 0.5);
+	padding: var(--pad-m);
+	position: relative;
+	&::backdrop {
+		background-color: rgb(0 0 0 / 0.5);
+		backdrop-filter: blur(5px);
+	}
+	> *:first-child {
+		margin-top: 0;
+	}
+}
+
+.di-share-close {
+	position: absolute;
+	border: none;
+	right: 10px;
+	top: 10px;
+	line-height: var(--fs-s);
+	font-size: var(--fs-s);
+	cursor: pointer;
+}
+
+.di-menu {
+	background: var(--bg);
+	box-shadow: 1px 1px 5px rgb(0 0 0 / 0.5);
+	border-radius: var(--rad-m);
+	padding: var(--pad-base);
+	padding: 10px;
+	flex-direction: column;
+	border: solid 1px var(--tint);
+	width: 150px;
+	z-index: 10;
+	.di-menu-inner {
+		gap: 10px;
+		display: flex;
+		flex-direction: column;
+	}
+	button,
+	a {
+		line-height: 1;
+		background: transparent;
+		color: var(--fg);
+		gap: 10px;
+		padding: var(--pad-s);
+		align-items: center;
+		border-radius: var(--rad-s);
+		border: none;
+		width: 100%;
+		display: flex;
+		&:hover,
+		&:active {
+			background: var(--tint-or-shade);
+		}
+	}
 }

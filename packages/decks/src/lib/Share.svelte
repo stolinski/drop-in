@@ -58,8 +58,8 @@
 <button class="share" onclick={share}>Share</button>
 
 <dialog bind:this={modal} class="di-share" aria-labelledby="share-header">
-	<button onclick={close} class="di-share-close">×</button>
 	<h3>Share</h3>
+	<button onclick={close} class="di-share-close">×</button>
 	<section aria-label="Share Window" class="share-window">
 		<button class="button di-share-button" onclick={copy}>Link</button>
 		<a
