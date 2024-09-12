@@ -1,6 +1,8 @@
 <script lang="ts">
 	import './app.css';
-	import "@drop-in/graffiti";
+	import '@drop-in/graffiti/drop-in.css';
+
+
 	import { SideNav } from '@drop-in/documents';
 	import Header from '$routes/Header.svelte';
 	import Footer from '$routes/Footer.svelte';
@@ -25,11 +27,11 @@
 
 <Header />
 
-<div class="layout-sidebar">
+<div class="layout">
 	<aside class="sidebar">
 		<SideNav {routes} />
 	</aside>
-	<section class="content">
+	<section class="main">
 		{@render children()}
 	</section>
 </div>

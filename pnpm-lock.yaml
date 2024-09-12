@@ -182,9 +182,6 @@ importers:
       '@drop-in/decks':
         specifier: ^0.0.7
         version: 0.0.7(svelte@5.0.0-next.244)
-      '@drop-in/graffiti':
-        specifier: ^0.1.2
-        version: 0.1.2
       '@drop-in/toast':
         specifier: ^1.0.1
         version: 1.0.1
@@ -384,10 +381,6 @@ packages:
     engines: {node: '>20.11.1'}
     peerDependencies:
       svelte: 5.0.0-next.244
-
-  '@drop-in/graffiti@0.1.2':
-    resolution: {integrity: sha512-w2cPDHyzqVKqEB92OS7Jlyufxi+kHhuVaWi3fsIaGUZcQLKBLcCILhyzS9ZEVJ49AEqEYR5R2/82AaQTitv5Fw==}
-    hasBin: true
 
   '@drop-in/toast@1.0.1':
     resolution: {integrity: sha512-gd46eSqaQWYwDCd95t1MXArPAOaGX1I5IU5wm/mdlQklf0z16kp83oRbFIGNfWDBX6OBycZF2Oo8j0XoaXs8UQ==}
@@ -2753,8 +2746,6 @@ snapshots:
     dependencies:
       '@oddbird/popover-polyfill': 0.4.4
       svelte: 5.0.0-next.244
-
-  '@drop-in/graffiti@0.1.2': {}
 
   '@drop-in/toast@1.0.1':
     dependencies:

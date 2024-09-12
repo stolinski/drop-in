@@ -12,4 +12,4 @@ This is just base css that you can use as a starter for css in any kind of proje
 
 Then in your root layout,
 
-`import @drop-in/graffiti`
+`import @drop-in/graffiti/drop-in.css`
