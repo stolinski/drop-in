@@ -6,6 +6,8 @@
 	--min-vw: 360;
 	--max-vw: 800;
 
+	/* Deprecated	- use --fs: 1 instead */
+	/* Fluid Type */
 	--fs-xxxs: clamp(0.45rem, 0.305882vi + 0.37rem, 0.58rem);
 	--fs-xxs: clamp(0.56rem, 0.376471vi + 0.47rem, 0.72rem);
 	--fs-xs: clamp(0.7rem, 0.470588vi + 0.58rem, 0.9rem);
@@ -17,23 +19,45 @@
 	--fs-xxl: clamp(2.67rem, 1.788235vi + 2.22rem, 3.43rem);
 	--fs-xxxl: clamp(3.34rem, 2.235294vi + 2.78rem, 4.29rem);
 	--fs-xxxxl: clamp(4.17rem, 2.8vi + 3.47rem, 5.36rem);
+	/* END Deprecated Fluid Type */
 
 	--line-height: calc(2px + 2ex + 2px);
 
-	--vs-s: 0.5em;
-	--vs-base: 1em;
-	--vs-m: 1.5em;
-	--vs-l: 2em;
+	/* Vertical Spacing */
+	--vs-s: 0.5rem;
+	--vs-base: 1rem;
+	--vs-m: 1.5rem;
+	--vs-l: 2rem;
 
+	/* Border Radius */
 	--rad-xs: 2px;
 	--rad-s: 4px;
 	--rad-m: 8px;
 	--rad-l: 16px;
 
+	/* Padding */
 	--pad-xs: 2px;
-	--pad-s: 10px;
-	--pad-m: 20px;
+	--pad-s: 6px;
+	--pad-m: 12px;
 	--pad-l: 25px;
+
+	/* Shadow */
+	--shadow-color: 0deg 0% 0%;
+	--bs-s: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
+		0.8px 1.3px 1.7px -1.2px hsl(var(--shadow-color) / 0.3),
+		1.9px 3.1px 4.1px -2.5px hsl(var(--shadow-color) / 0.3);
+	--bs-m: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.32),
+		1.6px 2.6px 3.4px -0.8px hsl(var(--shadow-color) / 0.32),
+		3.9px 6.4px 8.4px -1.7px hsl(var(--shadow-color) / 0.32),
+		9.6px 15.5px 20.5px -2.5px hsl(var(--shadow-color) / 0.32);
+	--bs-l: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
+		2.7px 4.4px 5.8px -0.4px hsl(var(--shadow-color) / 0.3),
+		4.9px 8px 10.6px -0.7px hsl(var(--shadow-color) / 0.3),
+		8.1px 13.1px 17.3px -1.1px hsl(var(--shadow-color) / 0.3),
+		12.9px 20.9px 27.6px -1.4px hsl(var(--shadow-color) / 0.3),
+		20.1px 32.7px 43.2px -1.8px hsl(var(--shadow-color) / 0.3),
+		30.6px 49.7px 65.7px -2.1px hsl(var(--shadow-color) / 0.3),
+		45px 73.1px 96.6px -2.5px hsl(var(--shadow-color) / 0.3);
 
 	/* Default Palette */
 	--yellow: #ffd817;
@@ -49,6 +73,14 @@
 	--tint-or-shade: color-mix(in oklab, var(--fg), transparent 95%);
 	--tint-or-shade-harder: color-mix(in oklab, var(--fg), transparent 90%);
 
+	/* Fluid Type */
+	--font-size-min: 16;
+	--font-size-max: 20;
+	--font-ratio-min: 1.25;
+	--font-ratio-max: 1.25;
+	--font-width-min: 320;
+	--font-width-max: 1500;
+
 	color-scheme: light dark;
 }
 
@@ -61,10 +93,6 @@ body,
 body > div {
 	height: 100%;
 	margin: 0;
-}
-
-body {
-	font-size: var(--fs-base);
 }
 
 body > div {
@@ -95,78 +123,100 @@ body {
 	min-height: 100vh;
 }
 
+body,
 h1,
-.h1,
-.hxl,
 h2,
-.h2,
-.hl,
 h3,
-.h3,
-.hm,
 h4,
-.h4,
-.hs,
 h5,
-.h5,
-.hxs,
+h6,
+p,
+li,
+.fluid,
+textarea,
+input,
+select,
+button,
+th,
+td {
+	--fluid-min: calc(var(--font-size-min) * pow(var(--font-ratio-min), var(--fl, 0)));
+	--fluid-max: calc(var(--font-size-max) * pow(var(--font-ratio-max), var(--fl, 0)));
+	--fluid-preferred: calc(
+		(var(--fluid-max) - var(--fluid-min)) / (var(--font-width-max) - var(--font-width-min))
+	);
+	--fluid-type: clamp(
+		(var(--fluid-min) / 16) * 1rem,
+		((var(--fluid-min) / 16) * 1rem) -
+			(((var(--fluid-preferred) * var(--font-width-min)) / 16) * 1rem) +
+			(var(--fluid-preferred) * var(--variable-unit, 100vi)),
+		(var(--fluid-max) / 16) * 1rem
+	);
+	font-size: var(--fluid-type);
+	margin-block: 0 var(--vs-base);
+}
+
+/* This makes containers, with container queries use a cqi unit instead of vi */
+/* FC Fluid Container */
+.fluid-text-container. .fc {
+	container-type: inline-size;
+	--variable-unit: 100cqi;
+}
+h1,
+.h1 {
+	margin-block: 0 var(--vs-base);
+	--fl: 5;
+}
+h2,
+.h2 {
+	--fl: 4;
+}
+h3,
+.h3 {
+	--fl: 3;
+}
+h4,
+.h4 {
+	--fl: 2;
+}
+h5,
+.h5 {
+	--fl: 1;
+}
 h6,
 .h6 {
-	margin-block: 0.8em;
-	line-height: var(--line-height);
-	text-wrap: balance;
+	--fl: 0;
 }
-
-.hxl {
-	font-size: var(--fs-xl);
-}
-
-h1,
-.h1,
-.hl {
-	font-size: var(--fs-l);
-	margin-block: 0 var(--vs-base);
-}
-
-h2,
-.h2,
-.hm {
-	margin-block: 0 var(--vs-base);
-	font-size: var(--fs-m);
-}
-
-h3,
-.h3,
-.hs {
-	font-size: var(--fs-s);
-	margin-block: 0 var(--vs-base);
-}
-
-h4,
-.h4,
-.hxs {
-	margin-block: 0 var(--vs-base);
-	font-size: var(--fs-xs);
-}
-
-h5,
-.h5,
 p,
-.p,
-li {
-	margin-block: 0 var(--vs-base);
-	font-size: var(--fs-base);
+li,
+body,
+input,
+textarea,
+select {
+	--fl: 0;
 }
-
-h6,
-.s {
-	margin-block: 0 var(--vs-base);
-	font-size: var(--fs-s);
+.fs-xs {
+	--fl: -1;
 }
-
-.xs {
-	margin-block: 0 var(--vs-base);
-	font-size: var(--fs-xs);
+.fs-base {
+	--fl: 0;
+}
+.fs-s {
+	--fl: 1;
+}
+.fs-m {
+	--fl: 2;
+}
+.fs-l {
+	--fl: 3;
+}
+.fs-xl {
+	--fl: 4;
+}
+.fs-xxl {
+	--fl: 5;
+}
+.fs-xxxl {
+	--fl: 6;
 }
 
 img,
@@ -183,9 +233,20 @@ button,
 textarea,
 select {
 	font: inherit;
+	margin: 0;
 }
 
-/* Utils */
+button,
+.button {
+	cursor: pointer;
+	background: var(--bg);
+	color: var(--fg);
+	border: solid 1px var(--tint-or-shade);
+	border-radius: var(--rad-s);
+	padding: var(--pad-s) var(--pad-l);
+}
+
+/* UTILS */
 
 .readable {
 	max-width: 900px;
@@ -201,76 +262,6 @@ select {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
 	grid-gap: 20px;
-}
-
-.layout {
-	margin-inline: auto;
-	display: grid;
-	grid-template-rows: auto;
-	flex: 0;
-	max-width: var(--max-width);
-	grid-template-columns: [start] 2.5vw [content] 95% [content] 2.5vw [end];
-}
-
-.layout-sidebar {
-	--side-bar-width: 200px;
-	--layout-margin: 2.5vw;
-	margin-inline: auto;
-	max-width: var(--max-width);
-	grid-template-columns:
-		[start] var(--layout-margin) [main sidebar] var(--side-bar-width)
-		[sidebar gap] var(--layout-margin)
-		[gap content] calc(100vw - var(--side-bar-width) - var(--layout-margin) * 3)
-		[content main]
-		var(--layout-margin)
-		[end];
-	display: grid;
-}
-
-:is(.layout, .layout-sidebar, .layout-sidebar-inverse) > * {
-	grid-column: content / content;
-}
-
-.layout-sidebar-inverse {
-	--side-bar-width: var(--side-bar-width, 300px);
-	--layout-margin: 2.5vw;
-	max-width: var(--max-width);
-	margin-inline: auto;
-	grid-template-columns:
-		[start main l-margin] var(--layout-margin) [l-margin main content] auto
-		[content gap]
-		var(--layout-margin)
-		[gap sidebar] var(--side-bar-width) [sidebar main r-margin] var(--layout-margin)
-		[r-margin end];
-	display: grid;
-}
-
-.full {
-	width: 100%;
-	grid-column: start / end;
-}
-
-.content {
-	width: 100%;
-	grid-column: content / content;
-}
-
-.l-margin {
-	width: 100%;
-	grid-column: l-margin / l-margin;
-}
-
-.r-margin {
-	width: 100%;
-	grid-column: r-margin / r-margin;
-}
-.sidebar {
-	width: 100%;
-	grid-column: sidebar / sidebar;
-}
-.main {
-	width: 100%;
-	grid-column: main / main;
 }
 
 .visually-hidden {
@@ -294,24 +285,76 @@ select {
 	}
 }
 
-span.icon.icon-link::after {
-	content: '#';
-	position: absolute;
-	translate: -100%;
-	opacity: 0;
-	color: var(--fg);
-	transition: 0.2s ease opacity;
-	padding-right: 20px;
+.row {
+	margin-block: var(--vs-l);
 }
 
-:where(h1, h2, h3, h4, h5, h6):hover span.icon.icon-link::after {
-	opacity: 1;
+/* LAYOUT */
+.layout {
+	display: grid;
+	grid-template-rows: auto;
+	--gcs: 12;
+	--gg: 2.5;
+	--gc: minmax(50px, 100px);
+	--g-boundary: minmax(calc(var(--gg) * 1%), 1fr);
+	--g-gutter-width: calc(var(--gg) * 1%);
+
+	grid-template-columns:
+		[start gutter] var(--g-boundary) [content]
+		repeat(calc(var(--gcs) - 1), [col-start] var(--gc) [col-end gutter] var(--g-gutter-width))
+		[last-col-start] var(--gc) [content-end gutter] var(--g-boundary)
+		[end];
+	@media (width < 1000px) {
+		--gcs: 8;
+	}
+	@media (width < 500px) {
+		--gcs: 4;
+	}
+}
+
+.layout > * {
+	grid-column: content / content-end;
+}
+
+.layout .sub {
+	grid-template-columns: subgrid;
+	display: grid;
+	> * {
+		grid-column: content / content-end;
+	}
+}
+
+/* Sidebar class (1/4 width) */
+.layout .sidebar {
+	@media (width < 700px) {
+		grid-column: content / span 3;
+	}
+	@media (width < 500px) {
+		grid-column: content / content-end;
+	}
+	grid-column: content / span 3;
+}
+
+/* Main content area class */
+.layout .main {
+	grid-column: col-start 3 / content-end;
+	@media (width < 500px) {
+		grid-column: content / content-end;
+	}
+}
+
+.layout .full {
+	width: 100%;
+	grid-column: start / end;
 }
 
 :where(h1, h2, h3, h4, h5, h6) {
 	view-transition-name: var(--transition-name);
 }
 
+/* @drop-in/decks Specific Styles */
+
+/* Accordion */
 .di-accordion {
 	margin-block: 0 var(--vs-base);
 	summary {
@@ -322,19 +365,27 @@ span.icon.icon-link::after {
 	border-block-end: solid 1px var(--tint-or-shade);
 }
 
+/* Share */
 .di-share {
 	border-radius: var(--rad-m);
-	min-width: 50vi;
+	max-width: 60ch;
 	border: none;
-	box-shadow: 1px 1px 5px rgb(0 0 0 / 0.5);
 	padding: var(--pad-m);
 	position: relative;
+	box-shadow: var(--bs-l);
 	&::backdrop {
 		background-color: rgb(0 0 0 / 0.5);
 		backdrop-filter: blur(5px);
 	}
 	> *:first-child {
 		margin-top: 0;
+	}
+	.share-window {
+		display: flex;
+		align-items: center;
+	}
+	a {
+		text-decoration: none;
 	}
 }
 
@@ -348,9 +399,10 @@ span.icon.icon-link::after {
 	cursor: pointer;
 }
 
+/* Menu */
 .di-menu {
 	background: var(--bg);
-	box-shadow: 1px 1px 5px rgb(0 0 0 / 0.5);
+	box-shadow: var(--bs-m);
 	border-radius: var(--rad-m);
 	padding: var(--pad-base);
 	padding: 10px;

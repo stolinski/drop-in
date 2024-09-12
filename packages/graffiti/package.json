@@ -12,7 +12,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"type": "module",
-	"version": "0.1.2",
+	"version": "0.1.4",
 	"dependencies": {
 		"@drop-in/decks": "^0.0.7",
 		"@drop-in/graffiti": "^0.1.2",

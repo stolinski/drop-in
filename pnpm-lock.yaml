@@ -39,6 +39,9 @@ importers:
 
   packages/decks:
     dependencies:
+      '@drop-in/graffiti':
+        specifier: workspace:^
+        version: link:../graffiti
       '@oddbird/popover-polyfill':
         specifier: ^0.4.4
         version: 0.4.4
