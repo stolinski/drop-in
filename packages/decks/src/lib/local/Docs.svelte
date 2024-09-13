@@ -4,6 +4,7 @@
 	import AreYouSure from '$lib/AreYouSure.svelte';
 	import Menu from '$lib/Menu.svelte';
 	import Share from '$lib/Share.svelte';
+	import { Toast, toaster } from '$lib/toast/index';
 </script>
 
 <div class="fc">
@@ -57,7 +58,22 @@
 						<button>Click me</button>
 					</Menu>
 				</div>
+
+				<div class="row">
+					<h2 class="fs-l">Toast</h2>
+
+					<button onclick={() => toaster.send('Hi from toast')}>Click me</button>
+					<button
+						onclick={() => toaster.send('Hi from toast', { type: 'SUCCESS', duration: 5000000 })}
+						>Success</button
+					>
+					<button onclick={() => toaster.send('Hi from toast', { type: 'ERROR' })}>Error</button>
+					<button onclick={() => toaster.send('Hi from toast', { type: 'WARNING' })}>Warning</button
+					>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<Toast position={{ inline: 'end', block: 'end' }} offset={{ inline: '20px', block: '20px' }} />

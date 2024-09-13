@@ -1,14 +1,14 @@
 <script>
 	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
-	import { toast } from './toast.svelte';
+	import { toaster } from './toaster.svelte';
 	export let message;
 
 	let progress = tweened(100, { duration: message.duration });
 
 	onMount(async () => {
 		progress.set(0).then(() => {
-			toast.remove(message.id);
+			toaster.remove(message.id);
 		});
 	});
 
@@ -23,26 +23,29 @@
 	}
 </script>
 
-<div class="toast-slice">
+<div class="di-toast-slice">
 	<p>{icon} {message.message}</p>
 	<div class="progress {message.type.toLowerCase()}" style={`width: ${$progress}%;`}></div>
 </div>
 
 <style>
-	.toast-slice {
+	.di-toast-slice {
+		background: var(--bg);
+		box-shadow: var(--bs-m);
+		border-radius: var(--rad-s);
+		padding: var(--pad-m) var(--pad-l);
+		flex-direction: column;
+		border: solid 1px var(--tint);
+		z-index: 10;
+		overflow: hidden;
 		position: relative;
-		padding-inline: 8px;
-		padding-block: 12px;
-		margin-block-start: 0.5rem;
 	}
 
 	.progress {
-		height: 8px;
+		height: 5px;
 		background: var(--info, blue);
 		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		inset: auto 0 0 0;
 	}
 
 	.progress.success {

@@ -10,7 +10,7 @@ export function auth_form_state() {
 		status = 'LOADING';
 	}
 	function error(e_message: string) {
-		toast.error(e_message);
+		// toast.error(e_message);
 		status = 'ERROR';
 		error_message = e_message;
 	}

@@ -405,7 +405,6 @@ button,
 	box-shadow: var(--bs-m);
 	border-radius: var(--rad-m);
 	padding: var(--pad-base);
-	padding: 10px;
 	flex-direction: column;
 	border: solid 1px var(--tint);
 	width: 150px;
@@ -431,5 +430,23 @@ button,
 		&:active {
 			background: var(--tint-or-shade);
 		}
+	}
+}
+
+.di-toast-slice {
+	background: var(--bg);
+	box-shadow: var(--bs-m);
+	border-radius: var(--rad-s);
+	padding: var(--pad-m) var(--pad-l);
+	flex-direction: column;
+	border: solid 1px var(--tint);
+	z-index: 10;
+	overflow: hidden;
+	position: relative;
+	.progress {
+		--info: var(--blue);
+		--success: var(--green);
+		--warning: var(--yellow);
+		--error: var(--red);
 	}
 }

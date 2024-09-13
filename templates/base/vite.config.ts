@@ -1,11 +1,6 @@
-// vite.config.js
 import { sveltekit } from '@sveltejs/kit/vite';
-// import sickPackage from "./sick-package"
+import { defineConfig } from 'vite';
 
-/** @type {import('vite').UserConfig} */
-const config = {
-	// plugins: [sveltekit()]
-	plugins: [sveltekit()]
-};
-
-export default config;
+export default defineConfig({
+	plugins: [sveltekit()],
+});

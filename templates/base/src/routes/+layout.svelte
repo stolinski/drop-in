@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "@drop-in/graffiti";
-	import { Toast, toast } from '@drop-in/toast';
+	// import { Toast, toast } from '@drop-in/toast';
 	let { children } = $props()
 
 </script>
@@ -16,4 +16,4 @@ SickToast -> just use any of these methods
 <button onclick={() => toast.success('Test Toast')}>Test Toast</button>
 <button onclick={() => toast.info('Test Toast')}>Test Toast</button>
 -->
-<Toast position={{ inline: 'end', block: 'end' }} offset={{ inline: '20px', block: '20px' }} />
+<!-- <Toast position={{ inline: 'end', block: 'end' }} offset={{ inline: '20px', block: '20px' }} /> -->

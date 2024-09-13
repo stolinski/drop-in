@@ -18,7 +18,7 @@
 	"type": "module",
 	"version": "0.1.6",
 	"dependencies": {
-		"@drop-in/decks": "^0.0.7",
+		"@drop-in/decks": "^0.0.8",
 		"@drop-in/toast": "^1.0.1"
 	}
 }

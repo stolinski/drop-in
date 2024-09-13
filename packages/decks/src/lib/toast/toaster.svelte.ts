@@ -15,11 +15,11 @@ type Toast = {
 
 function cook_toast() {
 	let toasts: Toast[] = $state([]);
-	let status: 'ON' | 'OFF' = $derived(toasts.length > 0 ? 'ON' : 'OFF');
+	const status: 'ON' | 'OFF' = $derived(toasts.length > 0 ? 'ON' : 'OFF');
 
 	function send(
 		message: string,
-		{ type = 'INFO', duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {},
+		{ type = 'INFO', duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {}
 	) {
 		toasts.push({ message, type, duration, id });
 	}
@@ -29,28 +29,28 @@ function cook_toast() {
 	}
 	function info(
 		message: string,
-		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {},
+		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {}
 	) {
 		send(message, { duration, id });
 	}
 
 	function success(
 		message: string,
-		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {},
+		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {}
 	) {
 		send(message, { duration, id, type: 'SUCCESS' });
 	}
 
 	function error(
 		message: string,
-		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {},
+		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {}
 	) {
 		send(message, { duration, id, type: 'ERROR' });
 	}
 
 	function warning(
 		message: string,
-		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {},
+		{ duration = 3000, id = 'toast-' + Math.random() }: ToastOptions = {}
 	) {
 		send(message, { duration, id, type: 'WARNING' });
 	}
@@ -72,8 +72,8 @@ function cook_toast() {
 		},
 		get status() {
 			return status;
-		},
+		}
 	};
 }
 
-export const toast = cook_toast();
+export const toaster = cook_toast();

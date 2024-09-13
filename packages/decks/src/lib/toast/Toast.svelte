@@ -1,10 +1,8 @@
 <script lang="ts">
-	// SickToast
 	// A simple, standards based toast component.
 	// Uses popover / logical properties to position the toast.
-	// Delete if you would like to bring your own toaster (ie svelte-french-toast)
 	import { fade, fly } from 'svelte/transition';
-	import { toast } from './toast.svelte';
+	import { toaster } from './toaster.svelte';
 	import { flip } from 'svelte/animate';
 	import ToastSlice from './ToastSlice.svelte';
 
@@ -12,7 +10,7 @@
 
 	let {
 		position,
-		offset = { inline: 0, block: 0 },
+		offset = { inline: 0, block: 0 }
 	}: {
 		position: { inline: 'start' | 'end' | 'center'; block: 'start' | 'end' | 'center' };
 		offset?: { inline: number | string; block: number | string };
@@ -22,7 +20,7 @@
 	let block = position.block === 'center' ? 'inset-block' : `inset-block-${position.inline}`;
 
 	$effect(() => {
-		if (toast.status === 'ON') {
+		if (toaster.status === 'ON') {
 			popover?.showPopover();
 		} else {
 			popover?.hidePopover();
@@ -35,14 +33,15 @@
 	id="toast-popover"
 	bind:this={popover}
 	style="{inline}:{offset.inline}; {block}:{offset.block};"
-	class="sick-toast"
+	class="di-toast"
 >
-	{#each toast.toasts as message (message.id)}
+	{#each toaster.toasts as message (message.id)}
 		<div
-			onclick={() => toast.remove(message.id)}
+			onclick={() => toaster.remove(message.id)}
 			in:fly={{ opacity: 0, x: 100 }}
 			out:fade
 			animate:flip
+			style="margin-top: var(--vs-s);"
 		>
 			<ToastSlice {message} />
 		</div>
@@ -50,13 +49,14 @@
 </div>
 
 <style>
-	.sick-toast {
+	.di-toast {
 		inset: auto;
 		opacity: 0;
 		transition-behavior: allow-discrete;
 		transition-property: opacity, display;
 		transition-duration: 0.25s;
 		border: none;
+		overflow: visible;
 	}
 
 	[popover]:popover-open {
