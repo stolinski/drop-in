@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"@drop-in/graffiti": "workspace:^",
 		"@oddbird/popover-polyfill": "^0.4.4"
 	},
 	"devDependencies": {
@@ -58,5 +57,5 @@
 	"svelte": "./dist/index.js",
 	"type": "module",
 	"types": "./dist/index.d.ts",
-	"version": "0.0.10"
+	"version": "0.0.11"
 }

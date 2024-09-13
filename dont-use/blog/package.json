@@ -1,7 +1,6 @@
 {
 	"dependencies": {
 		"@drop-in/graffiti": "workspace:^",
-		"@drop-in/toast": "workspace:^",
 		"@drop-in/tools": "workspace:^",
 		"@shikijs/markdown-it": "^1.10.3",
 		"@stefanprobst/remark-excerpt": "^2.0.2",

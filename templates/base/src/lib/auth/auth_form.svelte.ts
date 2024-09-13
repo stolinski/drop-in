@@ -1,6 +1,6 @@
 import { settings } from '$settings';
 import { goto } from '$app/navigation';
-import { toast } from '@drop-in/toast';
+import { toaster } from '@drop-in/decks';
 
 export function auth_form_state() {
 	let status: 'LOADING' | 'SUCCESS' | 'ERROR' | 'INITIAL' = $state('INITIAL');
@@ -10,7 +10,7 @@ export function auth_form_state() {
 		status = 'LOADING';
 	}
 	function error(e_message: string) {
-		// toast.error(e_message);
+		toaster.error(e_message);
 		status = 'ERROR';
 		error_message = e_message;
 	}

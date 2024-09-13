@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { users } from '$/pocketbase';
-	import { toast } from '@drop-in/toast';
+	import { toaster } from '@drop-in/decks';
 	import { auth_form_state } from './auth_form.svelte';
 	const auth = auth_form_state();
 	const loading = $derived(auth.status === 'LOADING');
@@ -17,7 +17,7 @@
 		users
 			.requestPasswordReset(email)
 			.then(() => {
-				toast.success('Password reset email sent');
+				toaster.success('Password reset email sent');
 				auth.success(false);
 			})
 			.catch((e) => {

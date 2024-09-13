@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { toast } from '@drop-in/toast';
+	import { toaster } from '@drop-in/decks';
 
 	let bundler: 'npm' | 'pnpm' = $state('npm');
 
@@ -10,7 +10,7 @@ ${bundler} install`);
 
 	function copy(text: string) {
 		navigator?.clipboard.writeText(text);
-		toast.info('Copied to clipboard');
+		toaster.info('Copied to clipboard');
 	}
 </script>
 

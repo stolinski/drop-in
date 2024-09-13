@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { users } from '$/pocketbase';
 	import { auth_form_state } from '$lib/auth/auth_form.svelte';
-	import { toast } from '@drop-in/toast';
+	import { toaster } from '@drop-in/decks';
 	const auth = auth_form_state();
 	const loading = $derived(auth.status === 'LOADING');
 
@@ -18,7 +18,7 @@
 
 		try {
 			await users.confirmPasswordReset(token, password, passwordConfirm);
-			toast.success('Password reset successful');
+			toaster.success('Password reset successful');
 			auth.success();
 		} catch (e) {
 			auth.error('Password reset failed');
@@ -55,5 +55,3 @@
 <p>
 	<a href="/auth/forgot-password">Forgot your password?</a>
 </p>
-
-<!-- TODO -->

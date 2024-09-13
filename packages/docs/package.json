@@ -3,7 +3,6 @@
 		"@drop-in/decks": "workspace:^",
 		"@drop-in/documents": "workspace:^",
 		"@drop-in/graffiti": "workspace:^",
-		"@drop-in/toast": "workspace:^",
 		"@drop-in/tools": "workspace:^",
 		"@shikijs/markdown-it": "^1.17.6",
 		"@sveltejs/adapter-static": "^3.0.4",

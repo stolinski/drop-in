@@ -29,7 +29,9 @@
 <Header />
 
 <main class="layout">
-	{@render children()}
+	<div class="content">
+		{@render children()}
+	</div>
 </main>
 
 <Footer />

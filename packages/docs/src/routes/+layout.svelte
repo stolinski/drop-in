@@ -6,7 +6,7 @@
 	import { SideNav } from '@drop-in/documents';
 	import Header from '$routes/Header.svelte';
 	import Footer from '$routes/Footer.svelte';
-	import { Toast } from '@drop-in/toast';
+	import { Toast } from '@drop-in/decks';
 	import { onNavigate } from '$app/navigation'
 	let { children, data} = $props()
 	let { routes } = data

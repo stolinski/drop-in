@@ -17,7 +17,7 @@ This is a WIP. bot of the templates base and blog are usable but under construct
 ## Templates
 
 - Base -> SvelteKit / Svelte 5 / PocketBase. CSR for app code, SSR for Site code
-- Blog -> A Markdown based blog with super powers
+- Blank -> A nearly blank starter using Decks and Graffiti to kickstart (no PocketBase)
 
 ### Extras
 
