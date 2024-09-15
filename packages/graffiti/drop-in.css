@@ -246,7 +246,7 @@ button,
 	padding: var(--pad-s) var(--pad-l);
 }
 
-/* UTILS */
+/* UTILITIES */
 
 .readable {
 	max-width: 900px;
@@ -288,21 +288,24 @@ button,
 .row {
 	margin-block: var(--vs-l);
 }
+/* END UTILITIES */
 
 /* LAYOUT */
 .layout {
 	display: grid;
 	grid-template-rows: auto;
+	--max-col-size: 100px;
+	--min-col-size: 50px;
 	--gcs: 12;
 	--gg: 2.5;
-	--gc: minmax(50px, 100px);
+	--gc: minmax(var(--min-col-size), var(--max-col-size));
 	--g-boundary: minmax(calc(var(--gg) * 1%), 1fr);
 	--g-gutter-width: calc(var(--gg) * 1%);
 
 	grid-template-columns:
 		[start gutter] var(--g-boundary) [content]
 		repeat(calc(var(--gcs) - 1), [col-start] var(--gc) [col-end gutter] var(--g-gutter-width))
-		[last-col-start] var(--gc) [content-end gutter] var(--g-boundary)
+		[last-col-start col-start] var(--gc) [col-end content-end gutter] var(--g-boundary)
 		[end];
 	@media (width < 1000px) {
 		--gcs: 8;
@@ -314,6 +317,11 @@ button,
 
 .layout > * {
 	grid-column: content / content-end;
+}
+
+.col {
+	grid-column: col-start round(down, mod(calc(var(--start) - 1), var(--gcs)) + 1) / span
+		var(--span, 'end');
 }
 
 .layout .sub {
@@ -343,14 +351,72 @@ button,
 	}
 }
 
+/* Sidebar class (1/4 width) */
+.layout .invert-sidebar {
+	@media (width < 1000px) {
+		--start: 7;
+		--span: 3;
+	}
+	@media (width < 500px) {
+		grid-column: content / content-end;
+	}
+
+	--start: 10;
+	--span: 5;
+}
+
+/* Main content area class */
+.layout .invert-main {
+	@media (width < 1000px) {
+		grid-column: col-start / span 11;
+	}
+	@media (width < 500px) {
+		grid-column: content / content-end;
+	}
+	grid-column: col-start / span 17;
+}
+
 .layout .full {
 	width: 100%;
 	grid-column: start / end;
 }
 
+.c-full {
+	--start: 1;
+	--span: calc((var(--gcs) * 2 - 1));
+}
+
+.c-quarter {
+	--start: 1; /* Always starts at column 2 */
+	--span: calc((var(--gcs) / 2) - 1); /* Half of the total columns, excluding the first gutter */
+}
+
+.c-quarter:nth-child(2 of .c-quarter) {
+	--start: calc((var(--gcs) / 4) + 1);
+}
+
+.c-quarter:nth-child(3 of .c-quarter) {
+	--start: calc((var(--gcs) / 4) * 2 + 1);
+}
+
+.c-quarter:nth-child(4 of .c-quarter) {
+	--start: calc(((var(--gcs) / 4) * 3) + 1);
+}
+
+.c-half {
+	--start: 1;
+	--span: calc((var(--gcs) - 1)); /* Half of the total columns, excluding the first gutter */
+}
+.c-half:nth-child(2 of .c-half) {
+	--start: calc(
+		(var(--gcs) / 2) + 1
+	); /* Starts after the first .c-half including its span and the gutter */
+}
+
 :where(h1, h2, h3, h4, h5, h6) {
 	view-transition-name: var(--transition-name);
 }
+/* END LAYOUT */
 
 /* @drop-in/decks Specific Styles */
 
