@@ -319,7 +319,7 @@ button,
 	grid-column: content / content-end;
 }
 
-.col {
+.layout .col {
 	grid-column: col-start round(down, mod(calc(var(--start) - 1), var(--gcs)) + 1) / span
 		var(--span, 'end');
 }
