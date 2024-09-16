@@ -26,16 +26,12 @@
 	"license": "ISC",
 	"dependencies": {
 		"@clack/prompts": "^0.7.0",
-		"@drop-in/graffiti": "^0.1.7",
-		"@sentry/node": "^8.30.0",
-		"@sentry/profiling-node": "^8.30.0",
 		"kleur": "^4.1.5"
 	},
 	"devDependencies": {
 		"eslint": "^9.10.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.44.0",
-		"svelte": "5.0.0-next.191",
 		"typescript": "^5.6.2"
 	}
 }

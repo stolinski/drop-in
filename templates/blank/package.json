@@ -1,7 +1,7 @@
 {
 	"dependencies": {
 		"@drop-in/decks": "^0.0.11",
-		"@drop-in/graffiti": "^0.1.7"
+		"@drop-in/graffiti": "^0.2.0"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.2.2",

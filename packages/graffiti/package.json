@@ -1,7 +1,7 @@
 {
 	"author": "Scott Tolinski",
 	"bin": "bin.js",
-	"description": "A dope package to theme Drop In",
+	"description": "A dope package to theme @drop-in",
 	"exports": {
 		".": "./drop-in.css",
 		"./drop-in.css": "./drop-in.css"
@@ -16,8 +16,12 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"type": "module",
-	"version": "0.2.0",
-	"dependencies": {
-		"@drop-in/decks": "^0.0.10"
+	"version": "0.2.1",
+	"devDependencies": {
+		"@drop-in/decks": "workspace:*"
+	},
+	"publishConfig": {
+		"access": "public",
+		"directory": "dist"
 	}
 }
