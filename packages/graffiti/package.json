@@ -18,7 +18,7 @@
 	"type": "module",
 	"version": "0.2.1",
 	"devDependencies": {
-		"@drop-in/decks": "workspace:*"
+		"@drop-in/decks": "workspace:* || ^0.0.11"
 	},
 	"publishConfig": {
 		"access": "public",
