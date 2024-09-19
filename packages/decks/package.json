@@ -42,7 +42,7 @@
 	],
 	"name": "@drop-in/decks",
 	"peerDependencies": {
-		"svelte": "next"
+		"svelte": "5.0.0-next.246"
 	},
 	"scripts": {
 		"build": "vite build && npm run package",
