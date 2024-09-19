@@ -19,8 +19,6 @@
 		onclose: () => void;
 	}>();
 
-	$inspect(active);
-
 	const coords = spring(
 		{ x: 0, y: 600 },
 		{
@@ -76,6 +74,8 @@
 		}
 	});
 </script>
+
+<!-- TODO make drawer close on drag -->
 
 {#if show_button}
 	<button class="di-drawer-open-button" onclick={toggle}>{button_text}</button>
