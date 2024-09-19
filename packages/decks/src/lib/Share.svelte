@@ -1,17 +1,21 @@
 <script lang="ts">
+	import Dialog from './Dialog.svelte';
+	import { toaster } from './toast/toaster.svelte.js';
+
 	let {
-		modal = $bindable(),
+		modal: dialog = $bindable(),
 		url,
 		title,
 		text,
 		twitter_account,
 		after_copy,
-		active
+		active = $bindable(false)
 	}: {
 		modal?: HTMLDialogElement;
 		url: string;
 		title: string;
 		text: string;
+		show_button: boolean;
 		twitter_account?: string;
 		after_copy?: () => unknown;
 		active?: boolean;
@@ -33,33 +37,18 @@
 				return;
 			}
 		} else {
-			modal.showModal();
+			dialog?.showModal();
 		}
 	}
-
-	$effect(() => {
-		if (active) {
-			modal.showModal();
-		} else {
-			modal.close();
-		}
-	});
 
 	function copy() {
 		navigator.clipboard.writeText(decodeURIComponent(url));
+		toaster.info('Copied to clipboard');
 		if (after_copy) after_copy();
-	}
-
-	function close() {
-		modal.close();
 	}
 </script>
 
-<button class="share" onclick={share}>Share</button>
-
-<dialog bind:this={modal} class="di-share" aria-labelledby="share-header">
-	<h3>Share</h3>
-	<button onclick={close} class="di-share-close">×</button>
+<Dialog button_text="Share" show_button={true} buttons={false} title="Share" {active}>
 	<section aria-label="Share Window" class="share-window">
 		<button class="button di-share-button" onclick={copy}>Link</button>
 		<a
@@ -82,4 +71,4 @@
 			LinkedIn</a
 		>
 	</section>
-</dialog>
+</Dialog>

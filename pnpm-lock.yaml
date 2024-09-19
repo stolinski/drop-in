@@ -34,6 +34,9 @@ importers:
         specifier: ^0.4.4
         version: 0.4.4
     devDependencies:
+      '@drop-in/graffiti':
+        specifier: workspace:* || ^0.2.2
+        version: link:../graffiti
       '@sveltejs/adapter-auto':
         specifier: ^3.2.4
         version: 3.2.4(@sveltejs/kit@2.5.27(@sveltejs/vite-plugin-svelte@4.0.0-next.7(svelte@5.0.0-next.246)(vite@5.4.5))(svelte@5.0.0-next.246)(vite@5.4.5))
@@ -166,7 +169,7 @@ importers:
   packages/graffiti:
     devDependencies:
       '@drop-in/decks':
-        specifier: workspace:*
+        specifier: workspace:* || ^0.0.11
         version: link:../decks/dist
     publishDirectory: .
 

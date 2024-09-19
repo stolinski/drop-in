@@ -4,11 +4,15 @@
 	import AreYouSure from '$lib/AreYouSure.svelte';
 	import Menu from '$lib/Menu.svelte';
 	import Share from '$lib/Share.svelte';
-	import { Toast, toaster } from '$lib/toast/index';
+	import { Toast, toaster } from '../toast/index.js';
+	import Dialog from '$lib/Dialog.svelte';
+	import Drawer from '$lib/Drawer.svelte';
+
+	let drawer_open = $state(false);
 </script>
 
-<div class="fc">
-	<div class="layout">
+<div class="layout">
+	<div class="content">
 		<h1>@drop-in/decks 🛹</h1>
 		<div class="sub">
 			<div class="content fc">
@@ -34,6 +38,33 @@
 						twitter_account="sveltejs"
 						after_copy={() => {}}
 					/>
+				</div>
+
+				<div class="row">
+					<h2 class="fs-l">Dialog</h2>
+					<Dialog title="This is a fake form" show_button={true}>
+						<p>This is a dialog, it's basically just a modal alert.</p>
+					</Dialog>
+				</div>
+
+				<div class="row">
+					<h2 class="fs-l">Drawer</h2>
+					<button onclick={() => (drawer_open = true)}>Open Drawer from Outside</button>
+					<Drawer
+						show_button={true}
+						button_text="Open Drawer"
+						bind:active={drawer_open}
+						onclose={() => {
+							console.log('closing');
+						}}
+					>
+						<form action="">
+							<input type="text" name="name" />
+							<input type="email" name="email" />
+							<button type="submit">Submit</button>
+						</form>
+						<button onclick={() => (drawer_open = false)}>Close from outside Drawer</button>
+					</Drawer>
 				</div>
 
 				<div class="row">

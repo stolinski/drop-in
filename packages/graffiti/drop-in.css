@@ -157,7 +157,8 @@ td {
 
 /* This makes containers, with container queries use a cqi unit instead of vi */
 /* FC Fluid Container */
-.fluid-text-container. .fc {
+.fluid-text-container,
+.fc {
 	container-type: inline-size;
 	--variable-unit: 100cqi;
 }
@@ -319,19 +320,15 @@ button,
 	grid-column: content / content-end;
 }
 
+.layout .sub {
+	grid-template-columns: subgrid;
+	display: grid;
+}
+
 .layout .col {
 	grid-column: col-start round(down, mod(calc(var(--start) - 1), var(--gcs)) + 1) / span
 		var(--span, 'end');
 }
-
-.layout .sub {
-	grid-template-columns: subgrid;
-	display: grid;
-	> * {
-		grid-column: content / content-end;
-	}
-}
-
 /* Sidebar class (1/4 width) */
 .layout .sidebar {
 	@media (width < 700px) {
@@ -365,6 +362,7 @@ button,
 	--span: 5;
 }
 
+/* TODO this is being overridden by specificity */
 /* Main content area class */
 .layout .invert-main {
 	@media (width < 1000px) {
@@ -432,7 +430,7 @@ button,
 }
 
 /* Share */
-.di-share {
+.di-dialog {
 	border-radius: var(--rad-m);
 	max-width: 60ch;
 	border: none;
@@ -454,8 +452,24 @@ button,
 		text-decoration: none;
 	}
 }
+.di-drawer {
+	border: none;
+	border-radius: var(--rad-m);
+	padding: var(--pad-m);
+	box-shadow: var(--bs-l);
+	&::backdrop {
+		background-color: rgb(0 0 0 / 0.5);
+		backdrop-filter: blur(5px);
+	}
+}
 
-.di-share-close {
+.di-drawer-close-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.di-dialog-close {
 	position: absolute;
 	border: none;
 	right: 10px;
