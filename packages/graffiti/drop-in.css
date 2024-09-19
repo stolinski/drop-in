@@ -484,7 +484,7 @@ button,
 	background: var(--bg);
 	box-shadow: var(--bs-m);
 	border-radius: var(--rad-m);
-	padding: var(--pad-base);
+	padding: var(--pad-s);
 	flex-direction: column;
 	border: solid 1px var(--tint);
 	width: 150px;

@@ -30,14 +30,11 @@
 				</p>
 
 				<div class="row">
-					<h2 class="fs-l">Share</h2>
-					<Share
-						url="https://svelte.dev"
-						title="Svelte"
-						text="Check out Svelte"
-						twitter_account="sveltejs"
-						after_copy={() => {}}
-					/>
+					<h2 class="fs-l">Accordion</h2>
+					<Accordion summary="What is up with this?">
+						<h3>It ain't nothing really</h3>
+						<p>ayo Dun, spark the Philly</p>
+					</Accordion>
 				</div>
 
 				<div class="row">
@@ -68,14 +65,6 @@
 				</div>
 
 				<div class="row">
-					<h2 class="fs-l">Accordion</h2>
-					<Accordion summary="What is up with this?">
-						<h3>It ain't nothing really</h3>
-						<p>ayo Dun, spark the Philly</p>
-					</Accordion>
-				</div>
-
-				<div class="row">
 					<h2 class="fs-l">Are you sure? - Confirmation Button</h2>
 					<AreYouSure onclick={() => alert('Doing whatever')} />
 				</div>
@@ -91,12 +80,21 @@
 				</div>
 
 				<div class="row">
+					<h2 class="fs-l">Share</h2>
+					<Share
+						url="https://svelte.dev"
+						title="Svelte"
+						text="Check out Svelte"
+						twitter_account="sveltejs"
+						after_copy={() => {}}
+					/>
+				</div>
+
+				<div class="row">
 					<h2 class="fs-l">Toast</h2>
 
 					<button onclick={() => toaster.send('Hi from toast')}>Click me</button>
-					<button
-						onclick={() => toaster.send('Hi from toast', { type: 'SUCCESS', duration: 5000000 })}
-						>Success</button
+					<button onclick={() => toaster.send('Hi from toast', { type: 'SUCCESS' })}>Success</button
 					>
 					<button onclick={() => toaster.send('Hi from toast', { type: 'ERROR' })}>Error</button>
 					<button onclick={() => toaster.send('Hi from toast', { type: 'WARNING' })}>Warning</button
