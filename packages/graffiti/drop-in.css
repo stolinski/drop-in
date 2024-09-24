@@ -90,12 +90,12 @@ html {
 
 html,
 body,
-body > div {
+body > .body-fill {
 	height: 100%;
 	margin: 0;
 }
 
-body > div {
+body > .body-fill {
 	display: flex;
 	flex-direction: column;
 }

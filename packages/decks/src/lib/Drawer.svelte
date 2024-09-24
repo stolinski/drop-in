@@ -39,6 +39,7 @@
 	}
 
 	function handlePanEnd() {
+		console.log('panend');
 		coords.stiffness = 0.2;
 		coords.damping = 0.4;
 		coords.set({ x: 0, y: 0 });
