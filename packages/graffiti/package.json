@@ -8,16 +8,20 @@
 		"./raw": "./raw.js"
 	},
 	"files": [
-		"drop-in.css"
+		"drop-in.css",
+		"raw.js",
+		"build.js"
 	],
 	"license": "ISC",
 	"main": "drop-in.css",
 	"name": "@drop-in/graffiti",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"prepublishOnly": "pnpm run build",
+		"build": "node build.js"
 	},
 	"type": "module",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"devDependencies": {
 		"@drop-in/decks": "workspace:* || ^0.0.11"
 	},
