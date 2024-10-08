@@ -1,0 +1,43 @@
+{
+	"dependencies": {
+		"@drop-in/decks": "^0.0.11",
+		"@drop-in/graffiti": "^0.2.0",
+		"pocketbase": "^0.21.3",
+		"@rocicorp/zero": "^0.0.2024100502"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^3.2.2",
+		"@sveltejs/kit": "^2.5.26",
+		"@sveltejs/vite-plugin-svelte": "next",
+		"@typescript-eslint/eslint-plugin": "^8.5.0",
+		"@typescript-eslint/parser": "^8.5.0",
+		"pocketbase-typegen": "^1.2.1",
+		"prettier": "^3.3.3",
+		"prettier-plugin-svelte": "^3.2.6",
+		"svelte": "next",
+		"svelte-check": "^4.0.2",
+		"svelte-preprocess": "^6.0.2",
+		"tslib": "^2.6.3",
+		"typescript": "^5.6.2",
+		"vite": "^5.4.5"
+	},
+	"engines": {
+		"node": ">20.11.1"
+	},
+	"name": "base",
+	"scripts": {
+		"build": "vite build",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+		"dev": "vite dev",
+		"format": "prettier --write --plugin-search-dir=. .",
+		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+		"make-package": "node ./src/packages/@drop-in/tools/package.js",
+		"package": "svelte-kit package",
+		"prepare": "svelte-kit sync",
+		"preview": "svelte-kit preview",
+		"types": "pocketbase-typegen --env --out ./src/types/pocketbase.ts"
+	},
+	"type": "module",
+	"version": "0.0.4"
+}
