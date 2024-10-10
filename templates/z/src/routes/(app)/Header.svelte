@@ -3,7 +3,7 @@
 </script>
 
 <header class="layout">
-	<div>
+	<div class="flex">
 		<p><a href="/">{settings.app_name}</a></p>
 		<nav>
 			<!-- Add your nav -->
@@ -13,6 +13,11 @@
 
 <style>
 	header {
-		border-bottom: 1px solid #eee;
+		padding: var(--vs-m) 0;
+		p a {
+			text-decoration: none;
+			color: var(--fg);
+			font-weight: bold;
+		}
 	}
 </style>

@@ -3,9 +3,9 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
-	server: {
-		fs: {
-			strict: false // Disable strict file serving restrictions
-		}
-	}
+	optimizeDeps: {
+		esbuildOptions: {
+			target: 'es2022',
+		},
+	},
 });

@@ -1,5 +1,5 @@
 <footer class="layout">
-	<p>&copy; {new Date().getFullYear()} YOUR NAME HERE 😜</p>
+	<p>&copy; {new Date().getFullYear()} Your brand here.</p>
 	<ul>
 		<li><a href="/">Home</a></li>
 	</ul>
