@@ -3,7 +3,7 @@ import { type AuthDataSource } from './types';
 import bcrypt from 'bcryptjs';
 import type { CookieSerializeOptions } from '@types/cookie';
 import type { Session, User } from '$src/schema';
-import { bcryptPassword, getPasswordString } from '../auth';
+import { bcryptPassword, getPasswordString } from '../../auth';
 const { compare } = bcrypt;
 
 export class AuthService {
@@ -103,16 +103,6 @@ export class AuthService {
 		sessionToken: string;
 		cookie_options: CookieSerializeOptions & { path: string };
 	} | null> {
-		const normalizedEmail = this.normalizeEmail(email);
-
-		if (!this.isValidEmail(normalizedEmail)) {
-			throw new Error('Invalid email');
-		}
-
-		if (!this.checkIsPasswordValid(password)) {
-			throw new Error('Invalid password');
-		}
-
 		try {
 			// Check if user exists
 			const userExists = await this.dataSource.getUserByEmail(normalizedEmail);
@@ -141,23 +131,6 @@ export class AuthService {
 			console.error('Error during sign up:', e);
 			throw new Error(e.message);
 		}
-	}
-
-	private normalizeEmail(email: string): string {
-		// Implement email normalization logic here
-		return decodeURIComponent(email).toLowerCase().trim();
-	}
-
-	private isValidEmail(maybeEmail: string): boolean {
-		// Implement email validation logic here
-		if (typeof maybeEmail !== 'string') return false;
-		if (maybeEmail.length > 255) return false;
-		const emailRegexp = /^.+@.+$/; // [one or more character]@[one or more character]
-		return emailRegexp.test(maybeEmail);
-	}
-
-	private checkIsPasswordValid(password: string): boolean {
-		return typeof password === 'string' && password.length >= 6 && password.length <= 255;
 	}
 
 	private async extendSession(sessionToken: string): Promise<void> {

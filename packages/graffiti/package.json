@@ -23,7 +23,7 @@
 	"type": "module",
 	"version": "0.3.3",
 	"devDependencies": {
-		"@drop-in/decks": "workspace:* || ^0.0.11"
+		"@drop-in/decks": "workspace:^"
 	},
 	"publishConfig": {
 		"access": "public",

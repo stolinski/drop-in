@@ -1,7 +1,9 @@
 {
 	"dependencies": {
 		"@drop-in/decks": "^0.0.12",
+		"@drop-in/email": "^0.0.3",
 		"@drop-in/graffiti": "^0.3.3",
+		"@drop-in/plugin": "^0.0.1",
 		"@rocicorp/zero": "^0.1.2024100802",
 		"pocketbase": "^0.21.3",
 		"zero-svelte": "^0.0.1"
@@ -25,7 +27,7 @@
 	"engines": {
 		"node": ">20.11.1"
 	},
-	"name": "base",
+	"name": "z",
 	"scripts": {
 		"build": "vite build",
 		"check": "svelte-check --tsconfig ./tsconfig.json",

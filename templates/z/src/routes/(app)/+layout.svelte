@@ -1,9 +1,18 @@
 <script lang="ts">
+	import { create_zero } from '$/lib/z';
 	import Header from '$/routes/(app)/Header.svelte';
 	import Footer from '$routes/(app)/Footer.svelte';
 	// import Verify from '$/lib/auth/Verify.svelte';
 	let { children } = $props()
-	// TODO Auth Gaurd?	
+	
+	const auth = get_login()
+	create_zero({
+		user_id: auth.user_id,
+		jwt: auth.jwt,
+	});
+
+
+	// TODO Auth Gaurd?
 </script>
 
 

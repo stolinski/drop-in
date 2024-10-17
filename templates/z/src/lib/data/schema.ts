@@ -68,7 +68,7 @@ const messageSchema = {
 	},
 } as const;
 
-const schema = {
+export const schema = {
 	version: 1,
 	tables: {
 		user: userSchema,
@@ -77,13 +77,3 @@ const schema = {
 		todo: todoSchema,
 	},
 } as const;
-
-export const z = new Zero({
-	// Documentation on auth coming soon.
-	userID: 'anon',
-	server: PUBLIC_SERVER,
-	schema,
-	// This is easier to develop with until we make the persistent state
-	// delete itself on schema changes. Just remove to get persistent storage.
-	kvStore: 'mem',
-});
