@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"forceConsistentCasingInFileNames": true,
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "Bundler",
+		"outDir": "./dist",
+		"strict": true,
+		"skipLibCheck": true,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"types": ["./global.d.ts"]
+	},
+	"include": ["src/**/*", "global.d.ts"],
+	"exclude": ["node_modules", "dist"]
+}
