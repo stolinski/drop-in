@@ -3,10 +3,12 @@ node_modules
 .svelte-kit
 **/.svelte-kit
 /package
+/dist
 .env
 .env.*
 !.env.example
 
 .DS_STORE
-
+**/dist/
+**/build/
 *.tgz
