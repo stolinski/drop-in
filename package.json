@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/new",
-	"version": "0.0.24",
+	"version": "0.0.25",
 	"description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
 	"bin": "bin.js",
 	"scripts": {

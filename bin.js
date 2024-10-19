@@ -156,25 +156,25 @@ function replaceAppName(cwd, newName) {
  */
 function write_template_files(template, name, cwd) {
 	const templateDir = dist(`templates/${template}`);
-	const templatePackageJsonPath = path.join(templateDir, 'package.json');
+	// const templatePackageJsonPath = path.join(templateDir, 'package.json');
 
 	// Copy template files and example env file
 	copy(templateDir, cwd);
 	copy(path.join(templateDir, 'example.env'), path.join(cwd, '.env'));
 
 	// Read template's package.json
-	const templatePackageJson = JSON.parse(fs.readFileSync(templatePackageJsonPath, 'utf8'));
+	// const templatePackageJson = JSON.parse(fs.readFileSync(templatePackageJsonPath, 'utf8'));
 
 	// Copy any @drop-in packages from root
-	const dropInDependencies = Object.keys(templatePackageJson.dependencies || {}).filter((dep) =>
-		dep.startsWith('@drop-in/'),
-	);
-	dropInDependencies.forEach((dep) => {
-		const packageName = dep.replace('@drop-in/', '');
-		const sourcePath = dist(`packages/${packageName}`);
-		const destPath = path.join(cwd, 'src', 'packages', packageName);
-		copy(sourcePath, destPath);
-	});
+	// const dropInDependencies = Object.keys(templatePackageJson.dependencies || {}).filter((dep) =>
+	// 	dep.startsWith('@drop-in/'),
+	// );
+	// dropInDependencies.forEach((dep) => {
+	// 	const packageName = dep.replace('@drop-in/', '');
+	// 	const sourcePath = dist(`packages/${packageName}`);
+	// 	const destPath = path.join(cwd, 'src', 'packages', packageName);
+	// 	copy(sourcePath, destPath);
+	// });
 
 	replacePackageName(cwd, to_valid_package_name(name));
 	replaceAppName(cwd, name);

@@ -1,5 +1,5 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { pgTable, varchar, timestamp, unique, foreignKey, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 // Define the 'user' table with a fixed schema
 export const user = pgTable('user', {

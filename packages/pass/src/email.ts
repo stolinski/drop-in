@@ -1,5 +1,5 @@
 import '@drop-in/plugin/global';
-import { beeper } from '../../beeper/src';
+import { beeper } from '@drop-in/email';
 import { create_expiring_auth_digest, generate_token } from './utils';
 import { db } from './db';
 import { user } from './schema';

@@ -1,11 +1,8 @@
-import crypto from 'crypto';
 import { get_full_user_by_email } from './find_user';
 import { verify_password } from './password';
 import { create_jwt } from './jwt';
 import { User } from './schema';
 import { create_refresh_token } from './token';
-import { password } from '@clack/prompts';
-
 /**
  * Logs in a user with the given email and password.
  *

@@ -17,14 +17,10 @@
 	"name": "@drop-in/graffiti",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"prepublishOnly": "pnpm run build",
 		"build": "node build.js"
 	},
 	"type": "module",
 	"version": "0.3.4",
-	"devDependencies": {
-		"@drop-in/decks": "workspace:* || ^0.0.11"
-	},
 	"publishConfig": {
 		"access": "public",
 		"directory": "."
