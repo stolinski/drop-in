@@ -21,7 +21,7 @@
 		"build": "node build.js"
 	},
 	"type": "module",
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"devDependencies": {
 		"@drop-in/decks": "workspace:* || ^0.0.11"
 	},
