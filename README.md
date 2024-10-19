@@ -16,21 +16,25 @@ This is a WIP. In the near future, the primary template will be local first via 
 
 ## Templates
 
+- Lofi -> Will eventually be the main template. Hidden until Zero is released.
 - Base -> SvelteKit / Svelte 5 / PocketBase. CSR for app code, SSR for Site code
-- Blank -> A nearly blank starter using Decks and Graffiti to kickstart (no PocketBase)
 
 ### Features & Packages
 
-- Auth @drop-in/pass
 - Base CSS @drop-in/graffiti
   - Basic typography system
   - Grid System
 - Elements @drop-in/decks
   - Standards based simple toast system
-- Email @drop-in/email
 - Aliases and structure
 
 ### Lofi Template
+
+- Automatic Zero / Svelte integration
+- Drizzle Schema for User Accounts
+- Auth @drop-in/pass
+- Email @drop-in/email
+- Zero Server baked in
 
 ### PocketBase Template
 
