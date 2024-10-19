@@ -1,10 +1,10 @@
 # Drop In 🛹
 
-Drop into your new app with a SvelteKit / Svelte 5 starter with lots of extras.
+Drop-in to your new app. Get started in no time, your framework should do more for you.
 
 ## NOTE
 
-This is a WIP. bot of the templates base and blog are usable but under construction.
+This is a WIP. In the near future, the primary template will be local first via Zero. The most usable and available template is the
 
 ## Getting Started
 
@@ -19,35 +19,34 @@ This is a WIP. bot of the templates base and blog are usable but under construct
 - Base -> SvelteKit / Svelte 5 / PocketBase. CSR for app code, SSR for Site code
 - Blank -> A nearly blank starter using Decks and Graffiti to kickstart (no PocketBase)
 
-### Extras
+### Features & Packages
 
-- Auth with templates
+- Auth @drop-in/pass
+- Base CSS @drop-in/graffiti
+  - Basic typography system
+  - Grid System
+- Elements @drop-in/decks
+  - Standards based simple toast system
+- Email @drop-in/email
+- Aliases and structure
+
+### Lofi Template
+
+### PocketBase Template
+
 - Type generation via pocketbase-typegen
 - Auth guard & App guard functions
-- Aliases and structure
-- Standards based simple toast system
 - Packages dir & scaffolding cli for easy internal packages
-- Extendable local package system
-- Basic typography system
-- Custom excerpt remark plugin
-- +page.html routes
-- +page.md routes
 
 ### Included Aliases
 
 ```js
-$: 'src';
-$settings: 'src/settings';
+$lib: 'src/lib';
 $routes: 'src/routes';
 $state: 'src/state';
 $types: 'src/types';
 $utils: 'src/utilities';
 ```
-
-### Packages
-
-- Decks: A library of dependency free unstyled Svelte 5 components
-- Graffiti: A base CSS framework
 
 ### Commands
 

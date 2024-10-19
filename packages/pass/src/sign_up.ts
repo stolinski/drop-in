@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import { db } from './db';
 import { get_user_by_email } from './find_user';
 import { create_jwt } from './jwt';
-import { bcrypt_password, get_password_string } from './password';
+import { hash_n_salt_password, get_password_string } from './password';
 import { user, User } from './schema';
 import { check_is_password_valid, is_valid_email, normalize_email } from './utils';
 import { create_refresh_token } from './token';
@@ -33,19 +33,14 @@ export async function sign_up(
 			throw new Error('User already exists');
 		}
 
-		// Hash password
-		const passwordHash: string = get_password_string(password);
-
-		// Salts the hashed password before saving to the db
-		// Salt Password
-		const passwordBcrypt: string = await bcrypt_password(passwordHash);
+		// Salts and hashes password before saving to the db
+		const passwordBcrypt: string = await hash_n_salt_password(password);
 
 		// Create new user
 		const new_user = await create_user(normalizedEmail, passwordBcrypt);
 
 		if (new_user?.id && new_user?.email) {
-			const jwt = await create_jwt(new_user.id, new_user.email);
-
+			const jwt = await create_jwt(new_user.id);
 			const refresh_token: string = await create_refresh_token(new_user.id);
 
 			return {
@@ -61,6 +56,13 @@ export async function sign_up(
 	}
 }
 
+/**
+ * Creates a new user in the database.
+ *
+ * @param email - The email of the user
+ * @param hashedPassword - The hashed password of the user
+ * @returns The new user object
+ */
 export async function create_user(email: string, hashedPassword: string): Promise<Partial<User>> {
 	const [new_user] = await db
 		.insert(user)
@@ -68,7 +70,7 @@ export async function create_user(email: string, hashedPassword: string): Promis
 			id: nanoid(),
 			email,
 			password_hash: hashedPassword,
-			verified: false, // Assuming new users start as unverified
+			verified: false,
 		})
 		.returning({
 			id: user.id,

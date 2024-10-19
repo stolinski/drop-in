@@ -85,6 +85,13 @@ export async function logout_route(event: RequestEvent) {
 	});
 }
 
+/**
+ * Handles the authentication routes.
+ *
+ * @param event - The event object
+ * @param resolve - The resolve function
+ * @returns The response object
+ */
 export const pass_routes: Handle = async ({ event, resolve }) => {
 	const { url } = event;
 
