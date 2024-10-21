@@ -4,6 +4,10 @@ import { login } from './login';
 import { logout } from './logout';
 import { parseFormData } from 'parse-nested-form-data';
 import { cookie_options, jwt_cookie_options } from './cookies';
+import { create_expiring_auth_digest } from './utils';
+import { eq } from 'drizzle-orm';
+import { db } from './db';
+import { user } from './schema';
 
 type FormData = {
 	email?: string;
@@ -86,6 +90,50 @@ export async function logout_route(event: RequestEvent) {
 }
 
 /**
+ * Handles the email verification route.
+ *
+ * @param event - The event object
+ * @param data - The form data
+ * @returns The response object
+ */
+export async function verify_email_route(event: RequestEvent, data: FormData) {
+	// Get toke from query params.
+	const verification_token = event.url.searchParams.get('token');
+	const email = event.url.searchParams.get('email');
+	const expire = parseInt(event.url.searchParams.get('expire') || '0', 10);
+	if (!verification_token || !email || !expire) {
+		return new Response('Invalid token', {
+			status: 400,
+		});
+	}
+	const test_token = create_expiring_auth_digest(email, expire);
+	if (verification_token !== test_token) {
+		return new Response('Invalid token', {
+			status: 400,
+		});
+	}
+	// Check to make sure it's not expired.
+	if (Date.now() > expire) {
+		return new Response('Token expired', {
+			status: 400,
+		});
+	}
+	// Verify the user.
+	await db
+		.update(user)
+		.set({ verified: true, verification_token: null })
+		.where(eq(user.email, email))
+		.execute();
+	// Redirect to home.
+	return new Response('Success', {
+		status: 302,
+		headers: {
+			Location: '/',
+		},
+	});
+}
+
+/**
  * Handles the authentication routes.
  *
  * @param event - The event object
@@ -110,6 +158,8 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 			return sign_up_route(event, data);
 		} else if (url.pathname === '/auth/logout') {
 			return logout_route(event);
+		} else if (url.pathname === '/auth/verify-email') {
+			return verify_email_route(event, data);
 		}
 		// Return 404 for unhandled auth routes
 		return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404 });
@@ -118,3 +168,5 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 	// If it's not an auth route, continue with the next handler
 	return resolve(event);
 };
+
+// TODO verify email route

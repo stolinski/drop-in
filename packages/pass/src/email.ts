@@ -31,11 +31,13 @@ export async function send_reset_password_email(email: string) {
 }
 
 export async function send_verification_email(user_id: string) {
+	const expirationTimestamp = Date.now() + 1000 * 60 * 60 * 24;
 	const found_user = await db.select().from(user).where(eq(user.id, user_id)).execute();
 	const email = found_user[0].email;
-	const verificationToken = generate_token();
+	const verification_token = create_expiring_auth_digest(email, expirationTimestamp);
+	const URIEncodedEmail = encodeURIComponent(email);
 
-	const verification_link = `${global.drop_in_config.app.public.url}/verify-email/${verificationToken}`;
+	const verification_link = `${global.drop_in_config.app.public.url}/verify-email?token=${verification_token}&email=${URIEncodedEmail}&key=${verification_token}&expire=${expirationTimestamp}`;
 
 	await beeper.send({
 		to: email,
@@ -46,7 +48,9 @@ export async function send_verification_email(user_id: string) {
 	});
 
 	// Store the verification token in the database for later verification
-	await db.update(user).set({ verificationToken }).where(eq(user.id, user_id)).execute();
+	await db
+		.update(user)
+		.set({ verification_token: verification_token })
+		.where(eq(user.id, user_id))
+		.execute();
 }
-
-// TODO fix verification code.

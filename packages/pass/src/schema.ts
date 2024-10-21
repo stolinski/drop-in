@@ -9,6 +9,7 @@ export const user = pgTable('user', {
 	created_at: timestamp('created_at').defaultNow().notNull(),
 	updated_at: timestamp('updated_at').defaultNow().notNull(),
 	verified: boolean('verified').notNull().default(false),
+	verification_token: varchar('verification_token', { length: 255 }),
 });
 
 export type User = InferSelectModel<typeof user>;
