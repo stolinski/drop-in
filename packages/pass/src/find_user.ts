@@ -2,6 +2,18 @@ import { eq } from 'drizzle-orm';
 import { refresh_tokens, user, User } from './schema';
 import { db } from './db';
 
+/**
+ * Fetches all user data by their email. Do not use for
+ *
+ * @param email - The email of the user
+ * @returns The user object if found, undefined otherwise
+ */
+export async function get_full_user_by_email(email: string): Promise<User | undefined> {
+	return db.query.user.findFirst({
+		where: eq(user.email, email),
+	});
+}
+
 export async function get_user_by_email(
 	email: string,
 	full = false,
@@ -24,6 +36,12 @@ export async function get_user_by_email(
 	return db.query.user.findFirst(query);
 }
 
+/**
+ * Fetches a user by their ID.
+ *
+ * @param id - The ID of the user
+ * @returns The user object if found, undefined otherwise
+ */
 export async function get_user_by_id(id: string | number): Promise<Partial<User> | undefined> {
 	return db.query.user.findFirst({
 		where: eq(user.id, id as any),

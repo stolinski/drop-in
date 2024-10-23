@@ -8,7 +8,7 @@ export interface DropInConfig {
 		secure?: boolean;
 		from?: string;
 		auth?: {
-			user?: string;
+			user: string;
 			pass: string;
 		};
 	};

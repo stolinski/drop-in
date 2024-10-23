@@ -294,6 +294,7 @@ button,
 /* LAYOUT */
 .layout {
 	display: grid;
+	align-content: start;
 	grid-template-rows: auto;
 	--max-col-size: 100px;
 	--min-col-size: 50px;

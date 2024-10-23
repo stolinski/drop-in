@@ -1,10 +1,15 @@
-import { get_user_by_email } from './find_user';
+import { get_full_user_by_email } from './find_user';
 import { verify_password } from './password';
 import { create_jwt } from './jwt';
-import crypto from 'crypto';
 import { User } from './schema';
 import { create_refresh_token } from './token';
-
+/**
+ * Logs in a user with the given email and password.
+ *
+ * @param email - The email of the user
+ * @param password - The password of the user
+ * @returns The user object, JWT, and refresh token if successful, null otherwise
+ */
 export async function login(
 	email: string,
 	password: string,
@@ -15,15 +20,14 @@ export async function login(
 } | null> {
 	try {
 		// Check if a user exists with that email
-		const user = await get_user_by_email(email, true);
+		const user = await get_full_user_by_email(email);
 
 		if (!user) {
 			return null;
 		}
 
-		const password_hash = crypto.createHash('sha256').update(password).digest('hex');
 		// Is the password correct?
-		const is_verified = await verify_password(password_hash, user.password_hash);
+		const is_verified = await verify_password(password, user.password_hash);
 		// If the password is not correct, return null
 		if (!is_verified) {
 			return null;

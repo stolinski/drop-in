@@ -10,4 +10,5 @@ node_modules
 
 .DS_STORE
 **/dist/
+**/build/
 *.tgz

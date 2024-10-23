@@ -1,5 +1,5 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { pgTable, varchar, timestamp, unique, foreignKey, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 // Define the 'user' table with a fixed schema
 export const user = pgTable('user', {
@@ -9,6 +9,7 @@ export const user = pgTable('user', {
 	created_at: timestamp('created_at').defaultNow().notNull(),
 	updated_at: timestamp('updated_at').defaultNow().notNull(),
 	verified: boolean('verified').notNull().default(false),
+	verification_token: varchar('verification_token', { length: 255 }),
 });
 
 export type User = InferSelectModel<typeof user>;
