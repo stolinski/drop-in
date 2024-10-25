@@ -10,12 +10,10 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			$: 'src',
-			$settings: 'src/settings',
-			$routes: 'src/routes',
-			$state: 'src/state',
-			$types: 'src/types',
-			$utils: 'src/utils',
+			$routes: './src/routes',
+			$state: './src/state',
+			$types: './src/types',
+			$utils: './src/utils',
 		},
 	},
 };

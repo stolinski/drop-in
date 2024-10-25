@@ -247,6 +247,11 @@ button,
 	padding: var(--pad-s) var(--pad-l);
 }
 
+label {
+	display: block;
+	font-size: var(--fs-xs);
+}
+
 /* UTILITIES */
 
 .readable {
@@ -289,6 +294,7 @@ button,
 .row {
 	margin-block: var(--vs-l);
 }
+
 /* END UTILITIES */
 
 /* LAYOUT */

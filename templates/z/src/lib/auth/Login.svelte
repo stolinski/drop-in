@@ -2,6 +2,7 @@
 	// Q: Why is this a component and not just a page?
 	// A: You might want to drop it anywhere you want, it will work.
 	import { AuthForm } from './auth_form.svelte';
+	const { title_element = 'h1' } = $props();
 	const auth = new AuthForm();
 	const loading = $derived(auth.status === 'LOADING');
 
@@ -28,13 +29,13 @@
 	}
 </script>
 
-<h1>Login</h1>
+<svelte:element this={title_element}>Login</svelte:element>
 <form method="post" {onsubmit}>
-	<div>
+	<div class="row">
 		<label for="email">Email</label>
 		<input required type="email" name="email" id="email" /><br />
 	</div>
-	<div>
+	<div class="row">
 		<label for="password">Password</label>
 		<input required type="password" name="password" id="password" /><br />
 	</div>
@@ -45,15 +46,19 @@
 	</button>
 </form>
 
-{#if auth.error_message}
-	<p class="error">{auth.error_message}</p>
-{/if}
+<div class="row">
+	{#if auth.error_message}
+		<p class="error">{auth.error_message}</p>
+	{/if}
+</div>
 
-<p>
-	Need an account?
-	<a href="/auth/signup">Sign Up</a>
-</p>
+<div class="row">
+	<p>
+		Need an account?
+		<a href="/auth/signup">Sign Up</a>
+	</p>
 
-<p>
-	<a href="/auth/forgot-password">Forgot your password?</a>
-</p>
+	<p>
+		<a href="/auth/forgot-password">Forgot your password?</a>
+	</p>
+</div>

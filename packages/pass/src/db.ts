@@ -1,6 +1,7 @@
 import '@drop-in/plugin/global';
-import { drizzle } from 'drizzle-orm/connect';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from './schema';
+import { sql } from 'drizzle-orm';
 
 // The db connection
 // We use drizzle to connect to the database
@@ -10,7 +11,20 @@ import * as schema from './schema';
 // The question here is really how much this should be possibly created in teh app itself so that there aren't multiple connections
 // But tbh not sure how much of a problem that is. LMK what you think. The goal is to make the user do a little bit of work as possible
 // To get up and running.
-export const db = await drizzle('node-postgres', {
+export const db = drizzle({
 	connection: global.drop_in_config.db.url,
 	schema,
 });
+
+const publications = '"user" (id, email, verified), profile';
+
+await db.execute(sql`
+DO $$
+BEGIN
+  DROP PUBLICATION IF EXISTS zero_data;
+
+  CREATE PUBLICATION zero_data
+  FOR TABLE ${sql.raw(publications)};
+END
+$$;
+`);

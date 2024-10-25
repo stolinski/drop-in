@@ -1,5 +1,9 @@
+<script lang="ts">
+	import settings from 'virtual:dropin-config';
+</script>
+
 <footer class="layout">
-	<p>&copy; {new Date().getFullYear()} Your brand here.</p>
+	<p>&copy; {new Date().getFullYear()} {settings.app.name}.</p>
 	<ul>
 		<li><a href="/">Home</a></li>
 	</ul>

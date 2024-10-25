@@ -1,4 +1,4 @@
-import { settings } from '$settings';
+import settings from 'virtual:dropin-config';
 import { goto } from '$app/navigation';
 import { toaster } from '@drop-in/decks';
 
@@ -16,7 +16,7 @@ export class AuthForm {
 		this.error_message = e_message;
 	}
 
-	success(route: string | boolean = settings.app_route, message: string = 'Success') {
+	success(route: string | boolean = settings.app.route, message: string = 'Success') {
 		toaster.success(message);
 		this.error_message = undefined;
 		this.status = 'SUCCESS';

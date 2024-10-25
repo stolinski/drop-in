@@ -6,6 +6,10 @@ export default ({ mode }: ConfigEnv) => {
 	Object.assign(process.env, loadEnv(mode, process.cwd(), ''));
 
 	return defineConfig({
+		server: {
+			port: 4444,
+		},
+
 		plugins: [dropin(), sveltekit()],
 		optimizeDeps: {
 			esbuildOptions: {

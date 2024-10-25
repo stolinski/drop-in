@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { AuthForm } from './auth_form.svelte';
+	const { title_element = 'h1' } = $props();
+
 	const auth = new AuthForm();
 	const loading = $derived(auth.status === 'LOADING');
 
@@ -26,12 +28,12 @@
 	}
 </script>
 
-<h1>Forgot Password</h1>
+<svelte:element this={title_element}>Forgot Password</svelte:element>
 {#if auth.status === 'SUCCESS'}
 	<p>Please check your email for password reset instructions</p>
 {:else}
 	<form method="post" {onsubmit}>
-		<div>
+		<div class="row">
 			<label for="email">Email</label>
 			<input required name="email" id="email" type="email" /><br />
 		</div>
@@ -41,17 +43,20 @@
 			{/if}
 		</button>
 	</form>
-
-	{#if auth.error_message}
-		<p class="error">{auth.error_message}</p>
-	{/if}
+	<div class="row">
+		{#if auth.error_message}
+			<p class="error">{auth.error_message}</p>
+		{/if}
+	</div>
 {/if}
 
-<p>
-	Need an account?
-	<a href="/auth/signup">Sign Up</a>
-</p>
-<p>
-	Know your account?
-	<a href="/auth/login">Login</a>
-</p>
+<div class="row">
+	<p>
+		Need an account?
+		<a href="/auth/signup">Sign Up</a>
+	</p>
+	<p>
+		Know your account?
+		<a href="/auth/login">Login</a>
+	</p>
+</div>

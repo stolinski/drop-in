@@ -2,6 +2,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 import { beeper } from '@drop-in/email';
 import { pass_routes } from '@drop-in/pass';
+console.log('pass_routes', pass_routes);
 
 beeper.send({
 	to: 'test@test.com',

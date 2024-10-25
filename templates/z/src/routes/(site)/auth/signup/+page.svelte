@@ -2,4 +2,4 @@
 	import Signup from '$lib/auth/Signup.svelte';
 </script>
 
-<Signup />
+<Signup title_element="h1" />

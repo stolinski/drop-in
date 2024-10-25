@@ -1,17 +1,12 @@
-import { settings } from '$settings';
+import settings from 'virtual:dropin-config';
 import { goto } from '$app/navigation';
+import { get_db } from '$lib/z';
 
 // Sends users to the app if they try to access login or landing pages after logging in.
 export function app_guard() {
-	let user;
-	// TODO App gaurd
-	// if (pb.authStore.isValid) {
-	// 	user = pb.authStore.model
-	// } else {
-	// 	user = undefined
-	// }
+	const z = get_db();
 
-	if (user) {
-		goto(settings.app_route);
+	if (z.userID && z.userID !== 'anon') {
+		goto(settings.app.route);
 	}
 }

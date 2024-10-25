@@ -21,16 +21,21 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 		});
 	}
 	const sign_up_response = await sign_up(data.email, data.password);
+	console.log('sign_up_response', sign_up_response);
 	if (sign_up_response?.refresh_token && sign_up_response?.jwt) {
 		const { refresh_token, jwt } = sign_up_response;
-
-		event.cookies.set('refresh_token', refresh_token, cookie_options);
-		event.cookies.set('jwt', jwt, jwt_cookie_options);
+		const refresh_token_cookie = event.cookies.serialize(
+			'refresh_token',
+			refresh_token,
+			cookie_options,
+		);
+		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
 		return new Response('Success', {
 			status: 200,
 			headers: {
 				'Content-Type': 'text/plain',
+				'Set-Cookie': `${refresh_token_cookie}, ${jwt_cookie}`,
 			},
 		});
 	}
@@ -45,6 +50,9 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 export async function login_route(event: RequestEvent, data: FormData) {
 	if (!data.email || !data.password) {
 		return new Response(JSON.stringify({ error: 'Email and password are required' }), {
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			status: 400,
 		});
 	}
@@ -54,13 +62,18 @@ export async function login_route(event: RequestEvent, data: FormData) {
 	if (login_response?.refresh_token && login_response?.jwt) {
 		const { refresh_token, jwt } = login_response;
 
-		event.cookies.set('refresh_token', refresh_token, cookie_options);
-		event.cookies.set('jwt', jwt, jwt_cookie_options);
+		const refresh_token_cookie = event.cookies.serialize(
+			'refresh_token',
+			refresh_token,
+			cookie_options,
+		);
+		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
 		return new Response('Success', {
 			status: 200,
 			headers: {
 				'Content-Type': 'text/plain',
+				'Set-Cookie': `${refresh_token_cookie}, ${jwt_cookie}`,
 			},
 		});
 	}
@@ -144,7 +157,7 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 	const { url } = event;
 
 	// Check if the URL matches your auth routes
-	if (url.pathname.startsWith('/auth')) {
+	if (url.pathname.startsWith('/api/auth')) {
 		// Make a clone to prevent error in already read body
 		const request_2 = event.request.clone();
 		// Get form data
@@ -152,13 +165,14 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 		// Parse that ish
 		const data = parseFormData(form_data);
 
-		if (url.pathname === '/auth/login') {
+		if (url.pathname === '/api/auth/login') {
 			return login_route(event, data);
-		} else if (url.pathname === '/auth/register') {
+		} else if (url.pathname === '/api/auth/register') {
+			console.log('sign up route');
 			return sign_up_route(event, data);
-		} else if (url.pathname === '/auth/logout') {
+		} else if (url.pathname === '/api/auth/logout') {
 			return logout_route(event);
-		} else if (url.pathname === '/auth/verify-email') {
+		} else if (url.pathname === '/api/auth/verify-email') {
 			return verify_email_route(event, data);
 		}
 		// Return 404 for unhandled auth routes

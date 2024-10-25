@@ -1,15 +1,9 @@
 import { goto } from '$app/navigation';
+import { get_db } from '$lib/z';
 
 export function auth_guard() {
-	let user;
-	// TODO: Auth gaurd
-	// if (pb.authStore.isValid) {
-	// 	user = pb.authStore.model as UsersResponse
-	// } else {
-	// 	user = undefined
-	// }
-
-	if (!user) {
+	const z = get_db();
+	if (!z.userID || z.userID === 'anon') {
 		goto('/auth/login');
 	}
 }

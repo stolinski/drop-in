@@ -4,6 +4,7 @@
 	"description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
 	"bin": "bin.js",
 	"scripts": {
+		"dev": "turbo dev",
 		"all:update": "pnpm -r update -L -i",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"clean": "find ./ -name .svelte-kit -type d -exec rm -rf {} +; find ./ -name node_modules -type d -exec rm -rf {} +; find ./ -name pnpm-lock.yaml -type f -exec rm {} +;",
@@ -11,8 +12,7 @@
 		"docs:build": "pnpm -F @drop-in/decks package && pnpm -F @drop-in/docs run build",
 		"decks:dev": "pnpm -F @drop-in/decks run dev",
 		"decks:package": "pnpm -F @drop-in/decks package",
-		"template:blog:dev": "pnpm -F blog run dev",
-		"template:blank:dev": "pnpm -F blank run dev",
+		"template:z:dev": "pnpm -F z run dev",
 		"template:base:dev": "pnpm -F base run dev"
 	},
 	"type": "module",
@@ -22,6 +22,7 @@
 		"PocketBase",
 		"Starter Kit"
 	],
+	"packageManager": "pnpm@9.0.0",
 	"author": "Scott Tolinski",
 	"license": "ISC",
 	"dependencies": {
@@ -30,10 +31,11 @@
 		"kleur": "^4.1.5"
 	},
 	"devDependencies": {
-		"eslint": "^9.12.0",
+		"eslint": "^9.13.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^2.44.1",
+		"eslint-plugin-svelte": "^2.46.0",
+		"turbo": "^2.2.3",
 		"typescript": "^5.6.3",
-		"vite": "^5.4.8"
+		"vite": "^5.4.10"
 	}
 }

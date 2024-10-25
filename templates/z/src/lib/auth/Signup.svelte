@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { AuthForm } from './auth_form.svelte';
+	import { pass } from '@drop-in/pass/client';
 	const auth = new AuthForm();
 	const loading = $derived(auth.status === 'LOADING');
+	const { title_element = 'h1' } = $props();
 
-	async function signup(e: SubmitEvent) {
+	async function onsubmit(e: SubmitEvent) {
 		e.preventDefault();
 		auth.loading();
 		const form = e.target as HTMLFormElement;
@@ -11,29 +13,23 @@
 
 		const email = form.email.value;
 		const password = form.password.value;
-		// TODO: Signup Z code
-		// try {
-		// 	await users.create({
-		// 		email,
-		// 		password,
-		// 		passwordConfirm: password, // if you want a real password confirm, just add form element and grab value.
-		// 	});
-		// 	await users.authWithPassword(email, password);
-		// 	auth.success();
-		// } catch (e) {
-		// 	auth.error(e.data.data.password.message);
-		// 	// Write your own messages here if you want to change the error message
-		// }
+		try {
+			const res = await pass.signup(email, password);
+			console.log('res', res);
+			// auth.success();
+		} catch (e) {
+			auth.error(e.data.data.password.message);
+		}
 	}
 </script>
 
-<h1>Sign up</h1>
-<form method="post" onsubmit={signup}>
-	<div>
+<svelte:element this={title_element}>Sign up</svelte:element>
+<form method="post" {onsubmit}>
+	<div class="row">
 		<label for="email">Email</label>
-		<input name="email" id="email" /><br />
+		<input name="email" id="email" type="email" /><br />
 	</div>
-	<div>
+	<div class="row">
 		<label for="password">Password</label>
 		<input required type="password" name="password" id="password" /><br />
 	</div>
@@ -43,10 +39,12 @@
 		{/if}</button
 	>
 </form>
-
-{#if auth.error_message}
-	<p class="error">{auth.error_message}</p>
-{/if}
-
-<p>Already have an account?</p>
-<a href="/auth/login">Sign in</a>
+<div class="row">
+	{#if auth.error_message}
+		<p class="error">{auth.error_message}</p>
+	{/if}
+</div>
+<div class="row">
+	<p>Already have an account?</p>
+	<a href="/auth/login">Sign in</a>
+</div>

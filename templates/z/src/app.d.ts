@@ -11,3 +11,14 @@ declare global {
 		// interface Stuff {}
 	}
 }
+
+declare module 'virtual:dropin-config' {
+	const config: {
+		app: {
+			url: string;
+			name: string;
+			route: string;
+		};
+	};
+	export default config;
+}

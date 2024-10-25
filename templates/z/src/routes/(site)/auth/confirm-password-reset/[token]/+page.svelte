@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { users } from '$/pocketbase';
-	import { auth_form_state } from '$lib/auth/auth_form.svelte';
+	import { AuthForm } from '../../../../lib/auth/auth_form.svelte';
 	import { toaster } from '@drop-in/decks';
-	const auth = auth_form_state();
+	const auth = new AuthForm();
 	const loading = $derived(auth.status === 'LOADING');
 
 	async function onsubmit(e: SubmitEvent) {
@@ -17,7 +16,8 @@
 		const { token } = $page.params;
 
 		try {
-			await users.confirmPasswordReset(token, password, passwordConfirm);
+			// TODO: Implement this
+			// await users.confirmPasswordReset(token, password, passwordConfirm);
 			toaster.success('Password reset successful');
 			auth.success();
 		} catch (e) {

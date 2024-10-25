@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { db } from './db';
-import { get_user_by_email } from './find_user';
+import { get_full_user_by_email, get_user_by_email } from './find_user';
 import { create_jwt } from './jwt';
 import { hash_n_salt_password } from './password';
 import { user, User } from './schema';
@@ -27,7 +27,7 @@ export async function sign_up(
 
 	try {
 		// Check if user exists
-		const userExists = await get_user_by_email(normalizedEmail);
+		const userExists = await get_full_user_by_email(normalizedEmail);
 
 		if (userExists) {
 			throw new Error('User already exists');
@@ -41,6 +41,7 @@ export async function sign_up(
 
 		if (new_user?.id && new_user?.email) {
 			const jwt = await create_jwt(new_user.id);
+
 			const refresh_token: string = await create_refresh_token(new_user.id);
 
 			return {
@@ -52,7 +53,10 @@ export async function sign_up(
 		return null;
 	} catch (e) {
 		console.error('Error during sign up:', e);
-		throw new Error(e.message);
+		if (e instanceof Error) {
+			throw new Error(e.message);
+		}
+		throw new Error('An unknown error occurred');
 	}
 }
 

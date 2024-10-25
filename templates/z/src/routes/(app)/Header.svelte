@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { settings } from '$settings';
+	import settings from 'virtual:dropin-config';
 </script>
 
 <header class="layout">
 	<div class="flex">
-		<p><a href="/">{settings.app_name}</a></p>
+		<p><a href="/">{settings.app.name}</a></p>
 		<nav>
 			<!-- Add your nav -->
 		</nav>
