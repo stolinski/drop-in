@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { UsersResponse } from '$/pocket-types'
+	import type { UsersResponse } from '$/types/pocketbase';
 	import { users } from '$/pocketbase'
 	const { user }: { user: UsersResponse } = $props()
 
