@@ -1,6 +1,3 @@
-import { PUBLIC_SERVER } from '$env/static/public';
-import { Zero } from '@rocicorp/zero';
-
 const userSchema = {
 	tableName: 'user',
 	columns: {
@@ -26,6 +23,7 @@ const profileSchema = {
 		id: { type: 'string' },
 		user_id: { type: 'string' },
 		name: { type: 'string' },
+		avatar: { type: 'string', optional: true },
 	},
 	primaryKey: ['id'],
 	relationships: {
@@ -39,6 +37,7 @@ const profileSchema = {
 	},
 } as const;
 
+// KEEPING AS A REFERENCE
 // const mediumSchema = {
 // 	tableName: 'medium',
 // 	columns: {

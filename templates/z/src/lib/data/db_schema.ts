@@ -8,6 +8,7 @@ const profile = pgTable('profile', {
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
 	name: varchar().notNull(),
+	avatar: varchar(),
 	// Additional fields can be added here by consumers
 });
 

@@ -1,9 +1,8 @@
 import { goto } from '$app/navigation';
-import { get_db } from '$lib/z';
+import { auth } from '$lib/auth.svelte';
 
 export function auth_guard() {
-	const z = get_db();
-	if (!z.userID || z.userID === 'anon') {
+	if (!auth.user_id || auth.user_id === 'anon') {
 		goto('/auth/login');
 	}
 }

@@ -1,17 +1,28 @@
 class User {
 	async login(email: string, password: string) {
-		try {
-			const formData = new FormData();
-			formData.append('email', email);
-			formData.append('password', password);
-			const res = await fetch('/api/auth/login', {
-				method: 'POST',
-				body: formData,
-			});
-			return res.json();
-		} catch (e) {
-			throw e;
+		const formData = new FormData();
+		formData.append('email', email);
+		formData.append('password', password);
+
+		const res = await fetch('/api/auth/login', {
+			method: 'POST',
+			body: formData,
+		});
+
+		const data = await res.json().catch(() => null);
+		console.log('data', data);
+
+		if (!res.ok) {
+			// Handle server error responses
+			throw new Error(data?.error || 'Login failed. Please check your credentials.');
 		}
+
+		if (!data) {
+			throw new Error('Invalid response from server');
+		}
+		console.log('data', data);
+
+		return data;
 	}
 	async signup(email: string, password: string) {
 		try {
@@ -22,17 +33,25 @@ class User {
 				method: 'POST',
 				body: formData,
 			});
-			console.log('res', res);
-			return res.json();
+
+			const data = await res.json().catch(() => null);
+
+			if (!res.ok) {
+				throw new Error(data?.error || 'Registration failed. Please try again.');
+			}
+
+			return data;
 		} catch (e) {
 			throw e;
 		}
 	}
+
 	async logout() {
-		const res = await fetch('/api/auth/logout', {
+		return fetch('/api/auth/logout', {
 			method: 'POST',
 		});
 	}
+
 	requestPasswordReset(email: string) {
 		return fetch('/api/auth/forgot-password', {
 			method: 'POST',

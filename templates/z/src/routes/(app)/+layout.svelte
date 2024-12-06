@@ -1,19 +1,16 @@
 <script lang="ts">
-	import { create_zero } from '$lib/z';
+	import { cache } from '$lib/z.svelte';
 	import Header from '$routes/(app)/Header.svelte';
 	import Footer from '$routes/(app)/Footer.svelte';
-	import { get_login } from '@drop-in/pass/client';
 	import { auth_guard } from '$utils/auth_guard';
 	// import Verify from '$/lib/auth/Verify.svelte';
-	let { children } = $props()
-	
+	let { children } = $props();
+	const z = $derived(cache.z);
 
 	$effect.pre(() => {
-		auth_guard()
+		auth_guard();
 	});
-	// TODO Auth Gaurd?
 </script>
-
 
 <!-- App and Site both use the Header and Footer, but you can make separate ones if you want -->
 

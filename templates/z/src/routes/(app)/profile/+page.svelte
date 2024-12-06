@@ -1,31 +1,22 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { get_db } from '$lib/z';
-	import { Query } from '$lib/query.svelte';
+	import { cache } from '$lib/z.svelte';
 	import { nanoid } from 'nanoid';
+	import { auth } from '$lib/auth.svelte';
 
-	const z = get_db();
+	const z = $derived(cache.z);
+	let user = $derived(auth.user);
 
-	const user = new Query(
-		z.query.user
-			.where('id', '=', z.userID)
-			.related('profile', (profile) => profile.one())
-			.one(),
-	);
-	$inspect(user.data);
-	// $effect.pre(auth_guard);
-
-	function onclick() {
+	async function onclick() {
 		// LOGOUT
-		goto('/');
+		auth.logout();
 	}
 
 	function oninput(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
 		const input = e.target as HTMLInputElement;
 		const input_id = input.id;
 		if (!input) return;
-		if (user.data?.profile) {
-			z.mutate.profile.update({ id: user.data.profile.id, [input_id]: input.value });
+		if (user?.profile) {
+			z.mutate.profile.update({ id: user.profile.id, [input_id]: input.value });
 		} else {
 			z.mutate.profile.create({ id: nanoid(), user_id: user.data.id, [input_id]: input.value });
 		}
@@ -35,14 +26,18 @@
 <h2>Profile</h2>
 
 <p>
-	Email: {user.data?.email}
+	Email: {user.email}
 </p>
 
 <form>
 	<div class="row">
 		<label for="name">Name</label>
-		<input type="text" name="name" id="name" {oninput} value={user.data?.profile?.name} />
+		<input type="text" name="name" id="name" {oninput} value={user.profile?.name} />
 	</div>
 </form>
+
+<hr />
+
+<h3>Logout</h3>
 
 <button {onclick}>Logout</button>
