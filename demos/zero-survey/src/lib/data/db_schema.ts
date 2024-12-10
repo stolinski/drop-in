@@ -1,6 +1,7 @@
+import type { QuestionConfig } from '$lib/types';
 import { user, refresh_tokens } from '@drop-in/pass/schema';
 import { relations } from 'drizzle-orm';
-import { pgTable, varchar, timestamp, integer, text } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, timestamp, integer, text, jsonb } from 'drizzle-orm/pg-core';
 
 // Put any user information you want attached to the user here by extending the profile_base.
 const profile = pgTable('profile', {
@@ -25,6 +26,10 @@ export const surveys = pgTable('surveys', {
 		.references(() => user.id, { onDelete: 'cascade' })
 });
 
+export const DEFAULT_CONFIG = {
+	required: false
+} as const;
+
 export const questions = pgTable('questions', {
 	id: varchar().primaryKey(),
 	survey_id: varchar()
@@ -33,7 +38,8 @@ export const questions = pgTable('questions', {
 	question_text: text().notNull(),
 	description: text(),
 	question_type: varchar().default('text').notNull(),
-	order_num: integer().notNull()
+	order: integer().notNull(),
+	config: jsonb('config').$type<QuestionConfig>().notNull().default(DEFAULT_CONFIG)
 });
 
 export const responses = pgTable('responses', {

@@ -4,6 +4,8 @@
 	let { question, index } = $props();
 	const cache = get_cache();
 
+	let current_type = $state($state.snapshot(question.question_type));
+
 	function oninput(e: Event) {
 		const form = e.target?.closest('form') as HTMLFormElement;
 
@@ -37,7 +39,12 @@
 
 {#snippet type(index: number)}
 	<label for={`type-${index}`}>Type</label>
-	<select name="type" id={`type-${index}`} value={question.question_type}>
+	<select
+		name="type"
+		id={`type-${index}`}
+		defaultValue={question.question_type}
+		bind:value={current_type}
+	>
 		<option value="text">Text</option>
 		<option value="long">Long Text</option>
 		<option value="rating">Rating</option>

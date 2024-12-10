@@ -43,6 +43,27 @@
       "when": 1732899862162,
       "tag": "0005_sour_warhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1733522441302,
+      "tag": "0006_remarkable_quentin_quire",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1733832289748,
+      "tag": "0007_typical_mandarin",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1733848339041,
+      "tag": "0008_lethal_swordsman",
+      "breakpoints": true
     }
   ]
 }

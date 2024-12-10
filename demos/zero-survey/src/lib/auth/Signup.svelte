@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { Zero } from '@rocicorp/zero';
 	import { AuthForm } from './auth_form.svelte';
 	import { pass } from '@drop-in/pass/client';
+	import { get_cache, get_z_options } from '$lib/z.svelte';
 
 	const auth = new AuthForm();
 	const loading = $derived(auth.status === 'LOADING');
 	const { title_element = 'h1' } = $props();
+	let cache = get_cache();
 
 	async function onsubmit(e: SubmitEvent) {
 		e.preventDefault();
@@ -24,8 +27,9 @@
 			const res = await pass.signup(email, password);
 
 			// Check if we got the expected response
-			if (res === 'Success') {
+			if (res.status === 'success') {
 				// Toast and redirect
+				cache.z = new Zero(get_z_options());
 				auth.success();
 			} else {
 				// Handle unexpected response format

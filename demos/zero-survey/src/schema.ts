@@ -1,54 +1,57 @@
-import { createSchema, createTableSchema, type TableSchemaToRow } from '@rocicorp/zero';
-
-const userSchema = createTableSchema({
-	tableName: 'user',
-	columns: {
-		id: { type: 'string' },
-		email: { type: 'string' },
-		verified: { type: 'boolean' }
-	},
-	primaryKey: ['id'],
-	relationships: {
-		profile: {
-			source: 'id',
-			dest: {
-				schema: () => profileSchema,
-				field: 'user_id'
-			}
-		}
-	}
-});
+import {
+	createSchema,
+	createTableSchema,
+	definePermissions,
+	type ExpressionBuilder,
+	type TableSchemaToRow
+} from '@rocicorp/zero';
 
 const profileSchema = createTableSchema({
 	tableName: 'profile',
 	columns: {
-		id: { type: 'string' },
-		user_id: { type: 'string' },
-		name: { type: 'string' },
-		avatar: { type: 'string', optional: true }
+		id: 'string',
+		user_id: 'string',
+		name: 'string',
+		avatar: 'string'
 	},
 	primaryKey: ['id'],
 	relationships: {}
 });
 
+const userSchema = createTableSchema({
+	tableName: 'user',
+	columns: {
+		id: 'string',
+		email: 'string',
+		verified: 'boolean'
+	},
+	primaryKey: ['id'],
+	relationships: {
+		profile: {
+			sourceField: 'id',
+			destSchema: profileSchema,
+			destField: 'user_id'
+		}
+	}
+});
+
 const questionSchema = createTableSchema({
 	tableName: 'questions',
 	columns: {
-		id: { type: 'string' },
-		survey_id: { type: 'string' },
-		question_text: { type: 'string' },
-		question_type: { type: 'string' },
+		id: 'string',
+		survey_id: 'string',
+		question_text: 'string',
+		question_type: 'string',
 		description: { type: 'string', optional: true },
-		order_num: { type: 'number' }
+		order_num: 'number',
+		config: 'json'
 	},
 	primaryKey: ['id'],
 	relationships: {
 		answers: {
-			source: 'id',
-			dest: {
-				schema: () => answerSchema,
-				field: 'question_id'
-			}
+			sourceField: 'id',
+			destSchema: () => answerSchema,
+			destField: 'question_id'
 		}
 	}
 });
@@ -89,25 +92,19 @@ const surveySchema = createTableSchema({
 	primaryKey: ['id'],
 	relationships: {
 		questions: {
-			source: 'id',
-			dest: {
-				schema: () => questionSchema,
-				field: 'survey_id'
-			}
+			sourceField: 'id',
+			destSchema: () => questionSchema,
+			destField: 'survey_id'
 		},
 		user: {
-			source: 'user_id',
-			dest: {
-				schema: () => userSchema,
-				field: 'id'
-			}
+			sourceField: 'user_id',
+			destSchema: () => userSchema,
+			destField: 'id'
 		},
 		responses: {
-			source: 'id',
-			dest: {
-				schema: () => responseSchema,
-				field: 'survey_id'
-			}
+			sourceField: 'id',
+			destSchema: () => responseSchema,
+			destField: 'survey_id'
 		}
 	}
 });
@@ -132,9 +129,27 @@ export type Question = TableSchemaToRow<typeof questionSchema>;
 export type Response = TableSchemaToRow<typeof responseSchema>;
 export type Answer = TableSchemaToRow<typeof answerSchema>;
 
-// type AuthData = {
-// 	sub: string;
-// };
+type AuthData = {
+	sub: string;
+};
+
+export const permissions = definePermissions<AuthData, Schema>(schema, () => {
+	const allowIfLoggedIn = (authData: AuthData, { cmp }: ExpressionBuilder<typeof surveySchema>) => {
+		const yo = cmp('user_id', '=', authData.sub);
+		return yo;
+	};
+
+	const allowSurveyIfLogggedIn = (
+		authData: AuthData,
+		{ cmp }: ExpressionBuilder<typeof surveySchema>
+	) => cmp('user_id', '=', authData.sub);
+
+	return {
+		surveys: {
+			insert: undefined
+		}
+	};
+});
 
 // export const authorization = defineAuthorization<AuthData, Schema>(schema, (query) => {
 // 	const allowIfLoggedIn = (authData: AuthData) => query.user.where('id', '=', authData.sub);

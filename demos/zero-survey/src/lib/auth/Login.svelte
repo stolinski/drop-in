@@ -84,10 +84,10 @@
 <div class="row">
 	<p>
 		Need an account?
-		<a href="/auth_form/signup">Sign Up</a>
+		<a href="/auth/signup">Sign Up</a>
 	</p>
 
 	<p>
-		<a href="/auth_form/forgot-password">Forgot your password?</a>
+		<a href="/auth/forgot-password">Forgot your password?</a>
 	</p>
 </div>

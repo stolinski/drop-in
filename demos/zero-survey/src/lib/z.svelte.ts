@@ -41,6 +41,6 @@ export function get_z_options() {
 		server: PUBLIC_SERVER,
 		schema,
 		kvStore: 'mem',
-		auth: a.jwt ?? ''
+		auth: () => a.jwt ?? ''
 	} as const;
 }

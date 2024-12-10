@@ -122,7 +122,7 @@ State Management
   	import { counter } from './counter.svelte.ts';
   </script>
 
-  <button on:click={() => counter.increment()}>
+  <button onclick={() => counter.increment()}>
   	Count: {counter.count}
   </button>
   ```
@@ -157,7 +157,7 @@ Data Fetching and API Routes
 - Create API routes in the src/routes/api/ directory.
 - Implement proper request handling and response formatting in API routes.
 - Use SvelteKit's hooks for global API middleware.
-- Data comes from Prisma via a Planetscale Mysql database.
+- Data comes from Drizzle via a Postgres database using Zero for data querying in the UI.
 
 SEO and Meta Tags
 
@@ -192,6 +192,153 @@ Documentation
 
 - Svelte Documentation: https://svelte.dev/docs/svelte/overview
 - SvelteKit Documentation: https://svelte.dev/docs/kit/introduction
-- Prisma Documentation: https://www.prisma.io/docs
+- Drizzle Documentation: https://orm.drizzle.team/
+- Zero Documentation: https://zero-docs-preview.vercel.app/docs/zero-schema
+- Zero Reading Data: https://zero-docs-preview.vercel.app/docs/reading-data
+- Zero Writing Data: https://zero-docs-preview.vercel.app/docs/writing-data
+- Zero Permissions: https://zero-docs-preview.vercel.app/docs/permissions
 
-Refer to Svelte, SvelteKit, and Prisma documentation for detailed information on components, database queries, and best practices.
+Refer to Svelte, SvelteKit, Zero and Drizzle documentation for detailed information on components, database queries, and best practices.
+
+Data
+
+My data schema looks like
+
+const profileSchema = createTableSchema({
+	tableName: 'profile',
+	columns: {
+		id: 'string',
+		user_id: 'string',
+		name: 'string',
+		avatar: 'string'
+	},
+	primaryKey: ['id'],
+	relationships: {}
+});
+
+const userSchema = createTableSchema({
+	tableName: 'user',
+	columns: {
+		id: 'string',
+		email: 'string',
+		verified: 'boolean'
+	},
+	primaryKey: ['id'],
+	relationships: {
+		profile: {
+			sourceField: 'id',
+			destSchema: profileSchema,
+			destField: 'user_id'
+		}
+	}
+});
+
+const questionSchema = createTableSchema({
+	tableName: 'questions',
+	columns: {
+		id: { type: 'string' },
+		survey_id: { type: 'string' },
+		question_text: { type: 'string' },
+		question_type: { type: 'string' },
+		description: { type: 'string', optional: true },
+		order_num: { type: 'number' },
+		config: { type: 'json' }
+	},
+	primaryKey: ['id'],
+	relationships: {
+		answers: {
+			sourceField: 'id',
+			destSchema: () => answerSchema,
+			destField: 'question_id'
+		}
+	}
+});
+
+const responseSchema = createTableSchema({
+	tableName: 'responses',
+	columns: {
+		id: { type: 'string' },
+		survey_id: { type: 'string' },
+		started_at: { type: 'number' },
+		completed_at: { type: 'number', optional: true }
+	},
+	primaryKey: ['id'],
+	relationships: {}
+});
+
+const answerSchema = createTableSchema({
+	tableName: 'answers',
+	columns: {
+		id: { type: 'string' },
+		response_id: { type: 'string' },
+		question_id: { type: 'string' },
+		answer_text: { type: 'string' }
+	},
+	primaryKey: ['id'],
+	relationships: {}
+});
+
+const surveySchema = createTableSchema({
+	tableName: 'surveys',
+	columns: {
+		id: { type: 'string' },
+		title: { type: 'string' },
+		description: { type: 'string', optional: true },
+		created_at: { type: 'number' },
+		user_id: { type: 'string' }
+	},
+	primaryKey: ['id'],
+	relationships: {
+		questions: {
+			sourceField: 'id',
+			destSchema: () => questionSchema,
+			destField: 'survey_id'
+		},
+		user: {
+			sourceField: 'user_id',
+			destSchema: () => userSchema,
+			destField: 'id'
+		},
+		responses: {
+			sourceField: 'id',
+			destSchema: () => responseSchema,
+			destField: 'survey_id'
+		}
+	}
+});
+
+export const schema = createSchema({
+	version: 1,
+	tables: {
+		user: userSchema,
+		profile: profileSchema,
+		surveys: surveySchema,
+		questions: questionSchema,
+		responses: responseSchema,
+		answers: answerSchema
+	}
+});
+
+export type Schema = typeof schema;
+export type User = TableSchemaToRow<typeof userSchema>;
+export type Profile = TableSchemaToRow<typeof profileSchema>;
+export type Survey = TableSchemaToRow<typeof surveySchema>;
+export type Question = TableSchemaToRow<typeof questionSchema>;
+export type Response = TableSchemaToRow<typeof responseSchema>;
+export type Answer = TableSchemaToRow<typeof answerSchema>;
+
+type AuthData = {
+	sub: string;
+};
+
+export const permissions = definePermissions<AuthData, Schema>(schema, () => {
+	return {
+		surveys: {
+			row: {
+				insert: []
+			}
+		}
+	};
+});
+
+

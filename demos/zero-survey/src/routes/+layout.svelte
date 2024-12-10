@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '@drop-in/graffiti';
+	import './global.css';
 	import { Toast } from '@drop-in/decks';
 	import { get_cache, ZCache } from '$lib/z.svelte';
 	new ZCache();

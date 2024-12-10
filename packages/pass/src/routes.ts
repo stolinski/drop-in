@@ -18,6 +18,9 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 	if (!data.email || !data.password) {
 		return new Response(JSON.stringify({ error: 'Email and password are required' }), {
 			status: 400,
+			headers: {
+				'Content-Type': 'application/json',
+			},
 		});
 	}
 	const sign_up_response = await sign_up(data.email, data.password);
@@ -31,18 +34,18 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 		);
 		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
-		return new Response('Success', {
+		return new Response(JSON.stringify({ status: 'success' }), {
 			status: 200,
 			headers: {
-				'Content-Type': 'text/plain',
+				'Content-Type': 'application/json',
 				'Set-Cookie': `${refresh_token_cookie}, ${jwt_cookie}`,
 			},
 		});
 	}
-	return new Response('Failed', {
+	return new Response(JSON.stringify({ status: 'error', error: 'Signup Failed' }), {
 		status: 400,
 		headers: {
-			'Content-Type': 'text/plain',
+			'Content-Type': 'application/json',
 		},
 	});
 }

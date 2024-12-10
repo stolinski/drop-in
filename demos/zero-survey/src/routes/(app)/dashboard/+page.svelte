@@ -9,14 +9,16 @@
 
 	async function createSurvey() {
 		const id = nanoid();
-		await cache.z.mutate.surveys.insert({
+
+		const res = await cache.z.mutate.surveys.insert({
 			id,
 			title: 'New Survey',
 			description: 'A new survey',
 			created_at: Date.now(),
 			user_id: cache.z.userID
 		});
-		goto(`/surveys/${id}`);
+		console.log('res', res);
+		// goto(`/surveys/${id}`);
 	}
 </script>
 
