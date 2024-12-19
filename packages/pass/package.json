@@ -31,7 +31,7 @@
 		"@drop-in/email": "^0.0.3",
 		"@types/pg": "^8.11.10",
 		"bcryptjs": "^2.4.3",
-		"drizzle-orm": "^0.38.0",
+		"drizzle-orm": "^0.38.2",
 		"jose": "^5.9.6",
 		"js-cookie": "^3.0.5",
 		"jsonwebtoken": "^9.0.2",
@@ -42,7 +42,7 @@
 		"typescript": "^5.7.2"
 	},
 	"devDependencies": {
-		"@sveltejs/kit": "^2.9.1",
+		"@sveltejs/kit": "^2.13.0",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/js-cookie": "^3.0.6",
 		"@types/jsonwebtoken": "^9.0.6"

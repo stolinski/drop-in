@@ -39,7 +39,7 @@ export const questions = pgTable('questions', {
 	description: text(),
 	question_type: varchar().default('text').notNull(),
 	order: integer().notNull(),
-	config: jsonb('config').$type<QuestionConfig>().notNull().default(DEFAULT_CONFIG)
+	config: jsonb().$type<QuestionConfig>().notNull().default(DEFAULT_CONFIG)
 });
 
 export const responses = pgTable('responses', {

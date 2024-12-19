@@ -36,11 +36,11 @@ export function get_cache() {
 
 export function get_z_options() {
 	const a = get_login();
+
 	return {
 		userID: a.sub ?? 'anon',
 		server: PUBLIC_SERVER,
 		schema,
-		kvStore: 'mem',
-		auth: () => a.jwt ?? ''
+		auth: a.jwt
 	} as const;
 }

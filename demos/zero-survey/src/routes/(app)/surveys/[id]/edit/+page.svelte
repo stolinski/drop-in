@@ -14,23 +14,16 @@
 			.related('questions', (q) => q)
 	);
 
+	$inspect(survey.data);
+
 	function onclick() {
-		console.log({
-			id: nanoid(),
-			survey_id: $page.params.id,
-			question_text: 'New Question',
-			question_type: 'text',
-			description: '',
-			order_num: survey?.data?.questions?.length || 0 + 1,
-			config: {}
-		});
 		cache.z.mutate.questions.insert({
 			id: nanoid(),
 			survey_id: $page.params.id,
 			question_text: 'New Question',
 			question_type: 'text',
 			description: '',
-			order_num: survey?.data?.questions?.length || 0 + 1,
+			order: survey?.data?.questions?.length || 0 + 1,
 			config: {
 				required: false
 			}

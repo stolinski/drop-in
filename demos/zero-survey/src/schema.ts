@@ -43,7 +43,7 @@ const questionSchema = createTableSchema({
 		question_text: 'string',
 		question_type: 'string',
 		description: { type: 'string', optional: true },
-		order_num: 'number',
+		order: 'number',
 		config: 'json'
 	},
 	primaryKey: ['id'],
@@ -146,6 +146,9 @@ export const permissions = definePermissions<AuthData, Schema>(schema, () => {
 
 	return {
 		surveys: {
+			insert: undefined
+		},
+		questions: {
 			insert: undefined
 		}
 	};

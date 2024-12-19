@@ -8,9 +8,8 @@
 
 	function oninput(e: Event) {
 		const form = e.target?.closest('form') as HTMLFormElement;
-
-		const question_text = form.question_text.value;
-		const question_type = form.type.value;
+		const question_text = form['question_text-' + index].value;
+		const question_type = form['type-' + index].value;
 
 		cache.z.mutate.questions.update({
 			id: question.id,
@@ -35,6 +34,18 @@
 		<label for="description">Description</label>
 		<textarea name="description" id="description-{index}">{question.description}</textarea>
 	</div>
+	<!-- Specific Type Config Fields -->
+	{#if current_type === 'text'}
+		<div class="row">
+			<label for="question_min_length-{index}">Min Length</label>
+			<input
+				type="text"
+				name="question_text"
+				id="question_min_length-{index}"
+				value={question.config.minLength}
+			/>
+		</div>
+	{:else if current_type === 'long'}{:else if current_type === 'rating'}{:else if current_type === 'choice'}{/if}
 </form>
 
 {#snippet type(index: number)}

@@ -10,4 +10,4 @@
 	}
 </script>
 
-<wa-rating {label} value={answer.answer_text} onwa-change={onwa_change}></wa-rating>
+<wa-rating {label} value={answer?.answer_text} onwa-change={onwa_change}></wa-rating>
