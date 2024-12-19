@@ -1,26 +1,26 @@
 {
 	"dependencies": {
-		"@oddbird/popover-polyfill": "^0.4.4"
+		"@oddbird/popover-polyfill": "^0.5.2"
 	},
 	"devDependencies": {
-		"@drop-in/graffiti": "^0.2.2",
-		"@sveltejs/adapter-auto": "^3.2.4",
-		"@sveltejs/kit": "^2.5.27",
-		"@sveltejs/package": "^2.3.5",
-		"@sveltejs/vite-plugin-svelte": "4.0.0-next.7",
+		"@drop-in/graffiti": "0.3.4",
+		"@sveltejs/adapter-auto": "^3.3.1",
+		"@sveltejs/kit": "^2.13.0",
+		"@sveltejs/package": "^2.3.7",
+		"@sveltejs/vite-plugin-svelte": "5.0.3",
 		"@types/eslint": "^9.6.1",
-		"eslint": "^9.10.0",
+		"eslint": "^9.17.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^2.44.0",
-		"globals": "^15.0.0",
-		"prettier": "^3.1.1",
-		"prettier-plugin-svelte": "^3.1.2",
-		"publint": "^0.2.10",
-		"svelte": "5.0.0-next.246",
-		"svelte-check": "^4.0.2",
-		"typescript": "^5.6.2",
-		"typescript-eslint": "^8.5.0",
-		"vite": "^5.4.5"
+		"eslint-plugin-svelte": "^2.46.1",
+		"globals": "^15.14.0",
+		"prettier": "^3.4.2",
+		"prettier-plugin-svelte": "^3.3.2",
+		"publint": "^0.2.11",
+		"svelte": "5.14.5",
+		"svelte-check": "^4.1.1",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.18.1",
+		"vite": "^6.0.4"
 	},
 	"engines": {
 		"node": ">20.11.1"
@@ -28,7 +28,8 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js"
+			"svelte": "./dist/index.js",
+			"default": "./dist/index.js"
 		},
 		"./docs": {
 			"types": "./dist/local/Docs.svelte.d.ts",
@@ -55,12 +56,9 @@
 		"prepublishOnly": "npm run package",
 		"preview": "vite preview"
 	},
+	"main": "./dist/index.js",
 	"svelte": "./dist/index.js",
 	"type": "module",
 	"types": "./dist/index.d.ts",
-	"version": "0.0.12",
-	"publishConfig": {
-		"access": "public",
-		"directory": "dist"
-	}
+	"version": "0.0.12"
 }

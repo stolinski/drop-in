@@ -247,6 +247,11 @@ button,
 	padding: var(--pad-s) var(--pad-l);
 }
 
+label {
+	display: block;
+	font-size: var(--fs-xs);
+}
+
 /* UTILITIES */
 
 .readable {
@@ -289,6 +294,15 @@ button,
 .row {
 	margin-block: var(--vs-l);
 }
+
+.circle {
+	--size: 40px;
+	border-radius: var(--size);
+	padding: 0;
+	width: var(--size);
+	height: var(--size);
+}
+
 /* END UTILITIES */
 
 /* LAYOUT */
@@ -498,6 +512,7 @@ button,
 	button,
 	a {
 		line-height: 1;
+		text-decoration: none;
 		background: transparent;
 		color: var(--fg);
 		gap: 10px;

@@ -1,0 +1,221 @@
+{
+  "permissions": {
+    "surveys": {},
+    "questions": {}
+  },
+  "schema": {
+    "version": 1,
+    "tables": {
+      "answers": {
+        "tableName": "answers",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "answer_text": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "question_id": {
+            "type": "string",
+            "optional": false
+          },
+          "response_id": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {}
+      },
+      "profile": {
+        "tableName": "profile",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "avatar": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "name": {
+            "type": "string",
+            "optional": false
+          },
+          "user_id": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {}
+      },
+      "questions": {
+        "tableName": "questions",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "config": {
+            "type": "json",
+            "optional": false
+          },
+          "description": {
+            "type": "string",
+            "optional": true
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "order": {
+            "type": "number",
+            "optional": false
+          },
+          "question_text": {
+            "type": "string",
+            "optional": false
+          },
+          "question_type": {
+            "type": "string",
+            "optional": false
+          },
+          "survey_id": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {
+          "answers": {
+            "sourceField": [
+              "id"
+            ],
+            "destField": [
+              "question_id"
+            ],
+            "destSchema": "answers"
+          }
+        }
+      },
+      "responses": {
+        "tableName": "responses",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "completed_at": {
+            "type": "number",
+            "optional": true
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "started_at": {
+            "type": "number",
+            "optional": false
+          },
+          "survey_id": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {}
+      },
+      "surveys": {
+        "tableName": "surveys",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "created_at": {
+            "type": "number",
+            "optional": false
+          },
+          "description": {
+            "type": "string",
+            "optional": true
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "title": {
+            "type": "string",
+            "optional": false
+          },
+          "user_id": {
+            "type": "string",
+            "optional": false
+          }
+        },
+        "relationships": {
+          "questions": {
+            "sourceField": [
+              "id"
+            ],
+            "destField": [
+              "survey_id"
+            ],
+            "destSchema": "questions"
+          },
+          "responses": {
+            "sourceField": [
+              "id"
+            ],
+            "destField": [
+              "survey_id"
+            ],
+            "destSchema": "responses"
+          },
+          "user": {
+            "sourceField": [
+              "user_id"
+            ],
+            "destField": [
+              "id"
+            ],
+            "destSchema": "user"
+          }
+        }
+      },
+      "user": {
+        "tableName": "user",
+        "primaryKey": [
+          "id"
+        ],
+        "columns": {
+          "email": {
+            "type": "string",
+            "optional": false
+          },
+          "id": {
+            "type": "string",
+            "optional": false
+          },
+          "verified": {
+            "type": "boolean",
+            "optional": false
+          }
+        },
+        "relationships": {
+          "profile": {
+            "sourceField": [
+              "id"
+            ],
+            "destField": [
+              "user_id"
+            ],
+            "destSchema": "profile"
+          }
+        }
+      }
+    }
+  }
+}

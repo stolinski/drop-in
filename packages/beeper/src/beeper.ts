@@ -12,6 +12,7 @@ import nodemailer from 'nodemailer';
 export class Beeper {
 	transporter: nodemailer.Transporter | undefined;
 	from: string | undefined;
+	mode: 'PRINT' | 'SEND' = 'PRINT';
 	constructor({
 		host,
 		port,
@@ -27,15 +28,19 @@ export class Beeper {
 				from?: string;
 		  }
 		| undefined = {}) {
+		console.log('host', host);
+		console.log('global.drop_in_config.email', global.drop_in_config);
 		if (host) {
+			this.mode = 'SEND';
 			this.transporter = nodemailer.createTransport({
 				host,
 				port,
 				secure,
 				auth,
 			});
-		} else if (global.drop_in_config.email) {
-			this.transporter = nodemailer.createTransport(global.drop_in_config.email);
+		} else if (global.drop_in_config?.email?.host) {
+			this.mode = 'SEND';
+			this.transporter = nodemailer.createTransport(global?.drop_in_config?.email);
 		}
 		this.from = from;
 	}
@@ -50,13 +55,17 @@ export class Beeper {
 		html?: string;
 		from?: string;
 	} = {}) {
-		if (this.transporter) {
-			await this.transporter.sendMail({
-				from,
-				to,
-				subject,
-				html,
-			});
+		if (this.mode === 'SEND' && this.transporter) {
+			try {
+				await this.transporter.sendMail({
+					from,
+					to,
+					subject,
+					html,
+				});
+			} catch (error) {
+				console.error('Error sending email', error);
+			}
 		} else {
 			console.log('Sending email', to, subject, html, from);
 		}
@@ -64,4 +73,4 @@ export class Beeper {
 }
 
 // This is the beeper that's configured in the global config file.
-export const beeper = new Beeper(global.drop_in_config.email);
+export const beeper = new Beeper(global.drop_in_config?.email);

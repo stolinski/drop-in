@@ -3,10 +3,27 @@
 	"version": "0.0.1",
 	"description": "Your drop-in season pass. aka Auth",
 	"main": "dist/index.js",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./client": {
+			"types": "./dist/client/index.d.ts",
+			"default": "./dist/client/index.js"
+		},
+		"./schema": {
+			"types": "./dist/schema.d.ts",
+			"default": "./dist/schema.js"
+		}
+	},
 	"scripts": {
+		"dev": "tsc --watch",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"prepublish": "tsc",
-		"build": "tsc"
+		"build": "tsc",
+		"package": "tsc"
 	},
 	"author": "Scott Tolinski",
 	"license": "ISC",
@@ -14,20 +31,20 @@
 		"@drop-in/email": "^0.0.3",
 		"@types/pg": "^8.11.10",
 		"bcryptjs": "^2.4.3",
-		"drizzle-orm": "^0.34.1",
-		"jose": "^5.9.3",
+		"drizzle-orm": "^0.38.2",
+		"jose": "^5.9.6",
 		"js-cookie": "^3.0.5",
 		"jsonwebtoken": "^9.0.2",
-		"nanoid": "^5.0.7",
+		"nanoid": "^5.0.8",
 		"parse-nested-form-data": "^1.0.0",
 		"pg": "^8.13.0",
-		"postgres": "^3.4.4",
-		"typescript": "^5.6.3"
+		"postgres": "^3.4.5",
+		"typescript": "^5.7.2"
 	},
 	"devDependencies": {
+		"@sveltejs/kit": "^2.13.0",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/js-cookie": "^3.0.6",
-		"@types/jsonwebtoken": "^9.0.6",
-		"@sveltejs/kit": "^2.6.4"
+		"@types/jsonwebtoken": "^9.0.6"
 	}
 }
