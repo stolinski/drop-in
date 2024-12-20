@@ -2,10 +2,10 @@
 	import Header from '$routes/(app)/Header.svelte';
 	import Footer from '$routes/(app)/Footer.svelte';
 	import { auth_guard } from '$utils/auth_guard';
-	import { get_cache } from '$lib/z.svelte';
+	import { getZ } from 'zero-svelte';
 	// import Verify from '$/lib/auth/Verify.svelte';
 	let { children } = $props();
-	let cache = get_cache();
+	let z = getZ();
 
 	$effect.pre(() => {
 		auth_guard();
@@ -21,7 +21,7 @@
 
 <Header />
 
-{#if cache.z.userID}
+{#if z.current.userID}
 	<main class="layout">
 		<div class="content">
 			{@render children()}

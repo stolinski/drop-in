@@ -1,21 +1,19 @@
 <script lang="ts">
 	import { nanoid } from 'nanoid';
-	import { get_cache } from '$lib/z.svelte';
-	import { goto } from '$app/navigation';
-	import { Query } from '$lib/query.svelte';
+	import { Query, getZ } from 'zero-svelte';
 
-	const cache = get_cache();
-	const surveys = new Query(cache.z.query.surveys.where('user_id', '=', cache.z.userID));
+	const z = getZ();
+	const surveys = new Query(z.current.query.surveys.where('user_id', '=', z.current.userID));
 
 	async function createSurvey() {
 		const id = nanoid();
 
-		const res = await cache.z.mutate.surveys.insert({
+		const res = await z.current.mutate.surveys.insert({
 			id,
 			title: 'New Survey',
 			description: 'A new survey',
 			created_at: Date.now(),
-			user_id: cache.z.userID
+			user_id: z.current.userID
 		});
 		console.log('res', res);
 		// goto(`/surveys/${id}`);
@@ -29,7 +27,7 @@
 <button onclick={createSurvey}>Create Survey</button>
 
 <ul>
-	{#each surveys?.data as survey}
+	{#each surveys?.current as survey}
 		<li><a href={`/surveys/${survey.id}`}>{survey.title}</a></li>
 	{/each}
 </ul>

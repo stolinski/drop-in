@@ -2,12 +2,12 @@
 	import { Zero } from '@rocicorp/zero';
 	import { AuthForm } from './auth_form.svelte';
 	import { pass } from '@drop-in/pass/client';
-	import { get_cache, get_z_options } from '$lib/z.svelte';
+	import { getZ, get_z_options } from '$lib/z.svelte';
 
 	const auth = new AuthForm();
 	const loading = $derived(auth.status === 'LOADING');
 	const { title_element = 'h1' } = $props();
-	let cache = get_cache();
+	let cache = getZ();
 
 	async function onsubmit(e: SubmitEvent) {
 		e.preventDefault();

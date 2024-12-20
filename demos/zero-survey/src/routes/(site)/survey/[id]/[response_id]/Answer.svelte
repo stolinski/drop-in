@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { get_cache } from '$lib/z.svelte';
+	import { getZ } from 'zero-svelte';
 	import { nanoid } from 'nanoid';
 	import Rating from './Rating.svelte';
 	import Text from './Text.svelte';
 	import LongText from './LongText.svelte';
 	import type { Answer, Question } from '../../../../../schema';
 	let { question }: { question: Question & { answers: Answer } } = $props();
-	const cache = get_cache();
+	const cache = getZ();
 
 	function oninput(value: any) {
 		if (question.answers) {

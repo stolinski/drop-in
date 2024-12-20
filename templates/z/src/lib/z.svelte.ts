@@ -42,6 +42,6 @@ export class Cache {
 
 export const cache = new Cache();
 
-export function get_cache() {
+export function getZ() {
 	return getContext<Zero<typeof schema>>('z');
 }

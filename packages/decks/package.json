@@ -16,11 +16,11 @@
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.2",
 		"publint": "^0.2.11",
-		"svelte": "5.14.5",
+		"svelte": "5.15.0",
 		"svelte-check": "^4.1.1",
 		"typescript": "^5.7.2",
 		"typescript-eslint": "^8.18.1",
-		"vite": "^6.0.4"
+		"vite": "^6.0.5"
 	},
 	"engines": {
 		"node": ">20.11.1"

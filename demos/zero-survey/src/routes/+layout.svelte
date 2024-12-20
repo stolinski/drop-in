@@ -2,15 +2,18 @@
 	import '@drop-in/graffiti';
 	import './global.css';
 	import { Toast } from '@drop-in/decks';
-	import { get_cache, ZCache } from '$lib/z.svelte';
-	new ZCache();
-	let cache = get_cache();
+	import { Z, getZ } from 'zero-svelte';
+	import { get_z_options } from '$lib/z.svelte';
+	import type { Schema } from '../schema';
+	new Z<Schema>(get_z_options());
+	let z = getZ();
+
 	let { children } = $props();
 </script>
 
 <!-- If you would like to use the same layout in app and site, use this file -->
 
-{#key cache.z.userID}
+{#key z.current.userID}
 	{@render children()}
 {/key}
 

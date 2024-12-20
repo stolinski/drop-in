@@ -4,8 +4,8 @@
 	// A: You might want to drop it anywhere you want, it will work.
 	import { AuthForm } from './auth_form.svelte';
 	import { Zero } from '@rocicorp/zero';
-	import { get_cache, get_z_options } from '$lib/z.svelte';
-	let cache = get_cache();
+	import { getZ, get_z_options } from '$lib/z.svelte';
+	let cache = getZ();
 	const { title_element = 'h1' } = $props();
 	const auth_form = new AuthForm();
 	const loading = $derived(auth_form.status === 'LOADING');
