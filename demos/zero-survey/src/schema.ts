@@ -3,7 +3,7 @@ import {
 	createTableSchema,
 	definePermissions,
 	type ExpressionBuilder,
-	type TableSchemaToRow
+	type Row
 } from '@rocicorp/zero';
 
 const profileSchema = createTableSchema({
@@ -122,12 +122,12 @@ export const schema = createSchema({
 });
 
 export type Schema = typeof schema;
-export type User = TableSchemaToRow<typeof userSchema>;
-export type Profile = TableSchemaToRow<typeof profileSchema>;
-export type Survey = TableSchemaToRow<typeof surveySchema>;
-export type Question = TableSchemaToRow<typeof questionSchema>;
-export type Response = TableSchemaToRow<typeof responseSchema>;
-export type Answer = TableSchemaToRow<typeof answerSchema>;
+export type User = Row<typeof userSchema>;
+export type Profile = Row<typeof profileSchema>;
+export type Survey = Row<typeof surveySchema>;
+export type Question = Row<typeof questionSchema>;
+export type Response = Row<typeof responseSchema>;
+export type Answer = Row<typeof answerSchema>;
 
 type AuthData = {
 	sub: string;

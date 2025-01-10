@@ -39,17 +39,17 @@ importers:
 
   demos/zero-survey:
     dependencies:
+      '@drop-in/beeper':
+        specifier: ^0.0.3
+        version: link:../../packages/beeper
       '@drop-in/decks':
         specifier: ^0.0.12
         version: link:../../packages/decks
-      '@drop-in/email':
-        specifier: ^0.0.3
-        version: link:../../packages/beeper
       '@drop-in/graffiti':
         specifier: ^0.3.4
         version: link:../../packages/graffiti
       '@drop-in/pass':
-        specifier: ^0.0.1
+        specifier: ^0.0.2
         version: link:../../packages/pass
       '@drop-in/plugin':
         specifier: ^0.0.1
@@ -200,7 +200,7 @@ importers:
 
   packages/pass:
     dependencies:
-      '@drop-in/email':
+      '@drop-in/beeper':
         specifier: ^0.0.3
         version: link:../beeper
       '@types/pg':
@@ -316,17 +316,17 @@ importers:
 
   templates/z:
     dependencies:
+      '@drop-in/beeper':
+        specifier: ^0.0.3
+        version: link:../../packages/beeper
       '@drop-in/decks':
         specifier: ^0.0.12
         version: link:../../packages/decks
-      '@drop-in/email':
-        specifier: ^0.0.3
-        version: link:../../packages/beeper
       '@drop-in/graffiti':
         specifier: ^0.3.4
         version: link:../../packages/graffiti
       '@drop-in/pass':
-        specifier: ^0.0.1
+        specifier: ^0.0.2
         version: link:../../packages/pass
       '@drop-in/plugin':
         specifier: ^0.0.1

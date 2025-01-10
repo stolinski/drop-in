@@ -96,6 +96,12 @@ export async function logout_route(event: RequestEvent) {
 	const refresh_token = event.cookies.get('refresh_token');
 	const jwt = event.cookies.get('jwt');
 
+	if (!refresh_token || !jwt) {
+		return new Response('No refresh token or JWT found', {
+			status: 400,
+		});
+	}
+
 	await logout(refresh_token, jwt);
 
 	const refresh_token_cookie = event.cookies.serialize('refresh_token', '', {

@@ -1,5 +1,5 @@
 {
-	"name": "@drop-in/email",
+	"name": "@drop-in/beeper",
 	"version": "0.0.3",
 	"description": "Your beeper",
 	"main": "./dist/index.js",
