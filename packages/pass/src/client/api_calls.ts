@@ -64,10 +64,22 @@ class User {
 			body: JSON.stringify({ token, password }),
 		});
 	}
-	verifyEmail(token: string) {
-		return fetch('/api/auth/verify-email', {
+
+	verifyEmail(token: string, email: string, expire: number) {
+		const url = new URL('/api/auth/verify-email', window.location.origin);
+		return fetch(url.toString(), {
 			method: 'POST',
-			body: JSON.stringify({ token }),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ token, email, expire }),
+		});
+	}
+
+	sendVerifyEmail(user_id: string) {
+		return fetch('/api/auth/send-verify-email', {
+			method: 'POST',
+			body: JSON.stringify({ user_id }),
 		});
 	}
 }

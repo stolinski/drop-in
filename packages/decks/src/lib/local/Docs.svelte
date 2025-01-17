@@ -9,6 +9,7 @@
 	import Drawer from '$lib/Drawer.svelte';
 
 	let drawer_open = $state(false);
+	let dialog_open = $state(false);
 </script>
 
 <div class="layout">
@@ -40,6 +41,10 @@
 				<div class="row">
 					<h2 class="fs-l">Dialog</h2>
 					<Dialog title="This is a fake form" show_button={true}>
+						<p>This is a dialog, it's basically just a modal alert.</p>
+					</Dialog>
+					<button onclick={() => (dialog_open = true)}>Dialog show_button false</button>
+					<Dialog title="This is a fake form" show_button={false} bind:active={dialog_open}>
 						<p>This is a dialog, it's basically just a modal alert.</p>
 					</Dialog>
 				</div>

@@ -8,10 +8,14 @@ import { create_expiring_auth_digest } from './utils';
 import { eq } from 'drizzle-orm';
 import { db } from './db';
 import { user } from './schema';
+import { send_verification_email } from './email';
 
 type FormData = {
 	email?: string;
 	password?: string;
+	user_id?: string;
+	token?: string;
+	expire?: number;
 };
 
 export async function sign_up_route(event: RequestEvent, data: FormData) {
@@ -130,10 +134,11 @@ export async function logout_route(event: RequestEvent) {
  * @returns The response object
  */
 export async function verify_email_route(event: RequestEvent, data: FormData) {
-	// Get toke from query params.
-	const verification_token = event.url.searchParams.get('token');
-	const email = event.url.searchParams.get('email');
-	const expire = parseInt(event.url.searchParams.get('expire') || '0', 10);
+	const verification_token = data.token;
+	const email = data.email;
+	const expire = data.expire;
+
+	console.log(verification_token, email, expire);
 	if (!verification_token || !email || !expire) {
 		return new Response('Invalid token', {
 			status: 400,
@@ -157,12 +162,32 @@ export async function verify_email_route(event: RequestEvent, data: FormData) {
 		.set({ verified: true, verification_token: null })
 		.where(eq(user.email, email))
 		.execute();
+
 	// Redirect to home.
 	return new Response('Success', {
 		status: 302,
 		headers: {
 			Location: '/',
 		},
+	});
+}
+
+export async function send_verify_email_route(event: RequestEvent, data: FormData) {
+	const user_id = data.user_id;
+	if (!user_id) {
+		return new Response('User ID is required', {
+			status: 400,
+		});
+	}
+	try {
+		await send_verification_email(user_id);
+	} catch (error) {
+		return new Response('Error', {
+			status: 500,
+		});
+	}
+	return new Response('Success', {
+		status: 200,
 	});
 }
 
@@ -197,6 +222,8 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 			return logout_route(event);
 		} else if (url.pathname === '/api/auth/verify-email') {
 			return verify_email_route(event, data);
+		} else if (url.pathname === '/api/auth/send-verify-email') {
+			return send_verify_email_route(event, data);
 		}
 		// Return 404 for unhandled auth routes
 		return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404 });

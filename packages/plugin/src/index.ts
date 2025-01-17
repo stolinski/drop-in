@@ -16,10 +16,13 @@ export function dropin(): Plugin {
 			try {
 				// Use the root from Vite's config to resolve the config file path
 				const configFilePath = normalize(resolve(config.root, 'drop-in.config.js'));
+				console.log('configFilePath', configFilePath);
 
 				// Convert the file path to a URL for importing
 				const fileUrl = new URL(`file://${configFilePath}`);
+				console.log('fileUrl', fileUrl);
 				const configModule = await import(fileURLToPath(fileUrl));
+				console.log('configModule', configModule);
 
 				if (configModule && configModule.default) {
 					global.drop_in_config = configModule.default;
@@ -38,6 +41,7 @@ export function dropin(): Plugin {
 					} else {
 						throw new Error('DATABASE_URL is not set');
 					}
+					console.log('global.drop_in_config', global.drop_in_config);
 
 					console.log('Server Config has been set in global:', global.drop_in_config);
 				} else {
