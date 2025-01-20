@@ -28,7 +28,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@clack/prompts": "^0.7.0",
-		"@drop-in/plugin": "^0.0.1",
+		"@drop-in/plugin": "workspace:^",
 		"kleur": "^4.1.5"
 	},
 	"devDependencies": {

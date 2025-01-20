@@ -1,14 +1,14 @@
 import type { RequestEvent, Handle } from '@sveltejs/kit';
-import { sign_up } from './sign_up';
-import { login } from './login';
-import { logout } from './logout';
+import { sign_up } from './sign_up.js';
+import { login } from './login.js';
+import { logout } from './logout.js';
 import { parseFormData } from 'parse-nested-form-data';
-import { cookie_options, jwt_cookie_options } from './cookies';
-import { create_expiring_auth_digest } from './utils';
+import { cookie_options, jwt_cookie_options } from './cookies.js';
+import { create_expiring_auth_digest } from './utils.js';
 import { eq } from 'drizzle-orm';
-import { db } from './db';
-import { user } from './schema';
-import { send_verification_email } from './email';
+import { db } from './db.js';
+import { user } from './schema.js';
+import { send_verification_email } from './email.js';
 
 type FormData = {
 	email?: string;
@@ -55,6 +55,7 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 }
 
 export async function login_route(event: RequestEvent, data: FormData) {
+	console.log('data', data);
 	if (!data.email || !data.password) {
 		return new Response(
 			JSON.stringify({ status: 'error', error: 'Email and password are required' }),
@@ -68,6 +69,7 @@ export async function login_route(event: RequestEvent, data: FormData) {
 	}
 
 	const login_response = await login(data.email, data.password);
+	console.log('login_response', login_response);
 
 	if (login_response?.refresh_token && login_response?.jwt) {
 		const { refresh_token, jwt } = login_response;
@@ -138,13 +140,13 @@ export async function verify_email_route(event: RequestEvent, data: FormData) {
 	const email = data.email;
 	const expire = data.expire;
 
-	console.log(verification_token, email, expire);
 	if (!verification_token || !email || !expire) {
 		return new Response('Invalid token', {
 			status: 400,
 		});
 	}
 	const test_token = create_expiring_auth_digest(email, expire);
+	console.log('test_token', test_token);
 	if (verification_token !== test_token) {
 		return new Response('Invalid token', {
 			status: 400,

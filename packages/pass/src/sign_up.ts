@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid';
-import { db } from './db';
-import { get_full_user_by_email, get_user_by_email } from './find_user';
-import { create_jwt } from './jwt';
-import { hash_n_salt_password } from './password';
-import { user, User } from './schema';
-import { check_is_password_valid, is_valid_email, normalize_email } from './utils';
-import { create_refresh_token } from './token';
+import { db } from './db.js';
+import { get_full_user_by_email } from './find_user.js';
+import { create_jwt } from './jwt.js';
+import { hash_n_salt_password } from './password.js';
+import { user, User } from './schema.js';
+import { check_is_password_valid, is_valid_email, normalize_email } from './utils.js';
+import { create_refresh_token } from './token.js';
 
 export async function sign_up(
 	email: string,

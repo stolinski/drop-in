@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/pass",
-	"version": "0.0.9",
+	"version": "0.0.19",
 	"description": "Your drop-in season pass. aka Auth",
 	"main": "dist/index.js",
 	"type": "module",
@@ -22,20 +22,24 @@
 			"default": "./dist/routes.js"
 		}
 	},
+	"files": [
+		"dist/"
+	],
 	"scripts": {
 		"dev": "tsc --watch",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"prepublish": "tsc",
 		"build": "tsc",
 		"package": "tsc",
-		"ebuild": "esbuild src/index.ts --bundle --platform=node --format=esm --outdir=dist --splitting --external:pg --external:crypto --external:bcryptjs --external:fs --external:path --external:os --external:util"
+		"ebuild": "esbuild src/index.ts --bundle --platform=node --format=esm --outdir=dist --external:pg --external:crypto --external:bcryptjs --external:fs --external:path --external:os --external:util --external:events"
 	},
 	"author": "Scott Tolinski",
 	"license": "ISC",
 	"dependencies": {
-		"@drop-in/beeper": "^0.0.3",
+		"@drop-in/beeper": "^0.0.11",
+		"@drop-in/plugin": "^0.0.6",
 		"bcryptjs": "^2.4.3",
-		"drizzle-orm": "^0.38.2",
+		"drizzle-orm": "^0.38.3",
 		"jose": "^5.9.6",
 		"js-cookie": "^3.0.5",
 		"jsonwebtoken": "^9.0.2",

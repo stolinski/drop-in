@@ -1,8 +1,8 @@
-import { get_full_user_by_email } from './find_user';
-import { verify_password } from './password';
-import { create_jwt } from './jwt';
-import { User } from './schema';
-import { create_refresh_token } from './token';
+import { get_full_user_by_email } from './find_user.js';
+import { verify_password } from './password.js';
+import { create_jwt } from './jwt.js';
+import { User } from './schema.js';
+import { create_refresh_token } from './token.js';
 /**
  * Logs in a user with the given email and password.
  *

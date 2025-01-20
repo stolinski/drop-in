@@ -3,7 +3,7 @@
 
 import { decodeJwt } from 'jose';
 import Cookies from 'js-cookie';
-import { JWTPayload } from './jwt';
+import { JWTPayload } from './jwt.js';
 
 export function get_jwt(): JWTPayload | undefined {
 	const token = get_raw_jwt();

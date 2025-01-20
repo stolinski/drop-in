@@ -1,6 +1,7 @@
-import '@drop-in/plugin/global';
+/// <reference types="@drop-in/plugin/global" />
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { schema } from './db_schema';
+import * as schema from './db_schema';
+import config from 'virtual:dropin-server-config';
 
 // The db connection
 // We use drizzle to connect to the database
@@ -11,6 +12,6 @@ import { schema } from './db_schema';
 // But tbh not sure how much of a problem that is. LMK what you think. The goal is to make the user do a little bit of work as possible
 // To get up and running.
 export const db = drizzle({
-	connection: global.drop_in_config.db.url,
-	schema,
+	connection: config.db.url,
+	schema
 });

@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/beeper",
-	"version": "0.0.3",
+	"version": "0.0.11",
 	"description": "Your beeper",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -18,12 +18,13 @@
 		"dev": "tsc --watch",
 		"build": "tsc",
 		"package": "tsc",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"ebuild": "esbuild src/index.ts --bundle --platform=node --format=esm --outdir=dist --external:pg --external:crypto --external:bcryptjs --external:fs --external:path --external:os --external:util --external:events"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@drop-in/plugin": "^0.0.1",
+		"@drop-in/plugin": "^0.0.6",
 		"@types/nodemailer": "^6.4.17",
 		"nodemailer": "^6.9.16"
 	}

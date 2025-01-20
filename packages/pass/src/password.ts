@@ -1,8 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { sha256 } from './utils';
-import { db } from './db';
-import { user } from './schema';
-import crypto from 'crypto';
+import { sha256 } from './utils.js';
+import { db } from './db.js';
+import { user } from './schema.js';
 import { eq } from 'drizzle-orm';
 const { compare, genSalt, hash } = bcrypt;
 

@@ -1,12 +1,12 @@
 {
 	"name": "@drop-in/plugin",
-	"version": "0.0.1",
+	"version": "0.0.8",
 	"description": "",
 	"types": "global.d.ts",
 	"type": "module",
 	"exports": {
 		"./global": {
-			"default": "./global.d.ts"
+			"types": "./global.d.ts"
 		},
 		".": {
 			"types": "./dist/index.js",
