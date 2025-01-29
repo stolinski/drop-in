@@ -1,28 +1,27 @@
 <script lang="ts">
 	import { Menu } from '@drop-in/decks';
-	import { get_cache, get_z_options } from '$lib/z.svelte';
-	import { Query } from '$lib/query.svelte';
+	import { get_z_options } from '$lib/z.svelte';
+	import { Query, getZ } from 'zero-svelte';
 	import { clear_jwt, pass } from '@drop-in/pass/client';
 	import { goto } from '$app/navigation';
-	import { Zero } from '@rocicorp/zero';
 
-	const cache = get_cache();
+	const z = getZ();
 
 	const user = new Query(
-		cache.z.query.user
-			.where('id', '=', cache.z?.userID)
+		z.current.query.user
+			.where('id', '=', z.current.userID)
 			.related('profile', (profile) => profile.one())
 			.one()
 	);
 </script>
 
-{#if cache.z?.userID !== 'anon'}
+{#if z.current.userID !== 'anon'}
 	<Menu name="user-menu" horizontal="RIGHT">
 		{#snippet button()}
-			{#if user?.data?.profile?.avatar}
-				<img src={user?.data?.profile?.avatar} alt="avatar" />
+			{#if user?.current?.profile?.avatar}
+				<img src={user?.current?.profile?.avatar} alt="avatar" />
 			{:else}
-				<span>{user?.data?.email?.[0]}</span>
+				<span>{user?.current?.email?.[0]}</span>
 			{/if}
 		{/snippet}
 		<div>
@@ -35,8 +34,8 @@
 					});
 
 					clear_jwt();
-					cache.z.close();
-					cache.z = new Zero(get_z_options());
+					z.close();
+					z.build(get_z_options());
 					goto('/');
 				}}>Logout</button
 			>

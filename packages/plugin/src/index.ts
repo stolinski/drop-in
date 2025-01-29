@@ -1,9 +1,10 @@
 import type { Plugin, ResolvedConfig } from 'vite';
 import { resolve, normalize } from 'path';
-import { fileURLToPath } from 'url';
+import { pathToFileURL } from 'url';
 
 export function dropin(): Plugin {
 	let config: ResolvedConfig;
+	let configModule: any;
 
 	return {
 		name: 'vite-plugin-global-config',
@@ -14,51 +15,48 @@ export function dropin(): Plugin {
 
 		async buildStart() {
 			try {
-				// Use the root from Vite's config to resolve the config file path
 				const configFilePath = normalize(resolve(config.root, 'drop-in.config.js'));
 
-				// Convert the file path to a URL for importing
-				const fileUrl = new URL(`file://${configFilePath}`);
-				const configModule = await import(fileURLToPath(fileUrl));
+				// Explicitly convert to file URL string
+				const fileUrl = pathToFileURL(configFilePath).toString();
 
-				if (configModule && configModule.default) {
-					global.drop_in_config = configModule.default;
-
-					// Initialize default structures
-					global.drop_in_config.auth = global.drop_in_config.auth || {};
-					global.drop_in_config.db = global.drop_in_config.db || {};
-
-					// Apply environment variables
-					if (process.env.JWT_SECRET) {
-						global.drop_in_config.auth.jwt_secret = process.env.JWT_SECRET;
-					}
-
-					if (process.env.DATABASE_URL) {
-						global.drop_in_config.db.url = process.env.DATABASE_URL;
-					} else {
-						throw new Error('DATABASE_URL is not set');
-					}
-
-					console.log('Server Config has been set in global:', global.drop_in_config);
-				} else {
-					console.error('Invalid configuration file. Expected a default export.');
-				}
+				configModule = await import(fileUrl);
 			} catch (error) {
 				console.error('Error loading config:', error);
+				throw error;
 			}
 		},
 
 		resolveId(id) {
 			if (id === 'virtual:dropin-config') {
-				return id;
+				return '\0virtual:dropin-config';
+			}
+			if (id === 'virtual:dropin-server-config') {
+				return '\0virtual:dropin-server-config';
 			}
 			return null;
 		},
 
 		load(id) {
-			if (id === 'virtual:dropin-config') {
-				const publicConfig = extract_public_config(global.drop_in_config);
+			if (id === '\0virtual:dropin-config') {
+				const publicConfig = extract_public_config(configModule.default);
 				return `export default ${JSON.stringify(publicConfig)};`;
+			}
+
+			if (id === '\0virtual:dropin-server-config') {
+				return `
+          export default {
+            ...${JSON.stringify(configModule.default)},
+            auth: {
+              ...${JSON.stringify(configModule.default.auth || {})},
+              jwt_secret: process.env.JWT_SECRET
+            },
+            db: {
+              ...${JSON.stringify(configModule.default.db || {})},
+              url: process.env.DATABASE_URL
+            }
+          };
+        `;
 			}
 			return null;
 		},

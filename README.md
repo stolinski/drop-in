@@ -33,7 +33,7 @@ This is a WIP. In the near future, the primary template will be local first via 
 - Automatic Zero / Svelte integration
 - Drizzle Schema for User Accounts
 - Auth @drop-in/pass
-- Email @drop-in/email
+- Email @drop-in/beeper
 - Zero Server baked in
 
 ### PocketBase Template

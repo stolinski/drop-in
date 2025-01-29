@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Query } from '$lib/query.svelte';
-	import { get_cache } from '$lib/z.svelte';
+	import { Query, getZ } from 'zero-svelte';
 
-	const cache = get_cache();
+	const z = getZ();
 	const survey = new Query(
-		cache.z.query.surveys
+		z.current.query.surveys
 			.where('id', '=', $page.params.id)
 			.one()
 			.related('questions', (q) => q)
@@ -20,4 +19,4 @@
 <h2>Questions</h2>
 
 <a href={`/surveys/${$page.params.id}/edit`} class="button">Edit</a>
-<p>{survey?.data?.questions?.length} Questions</p>
+<p>{survey?.current?.questions?.length} Questions</p>

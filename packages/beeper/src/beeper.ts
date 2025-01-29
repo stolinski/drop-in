@@ -3,12 +3,14 @@
 // Why a wrapper? Well, we want to use the same config for nodemailer as we do for the rest of the app.
 // Also if you don't have the config, it just outputs to the console. Which is nice for getting up and running. Meteor did this and I liked it.
 
-// I'm having to do this import to get the config d.ts file to work so that way we get access to the global.drop_in_config object types. If you know a better way to do this, please let me know.
+// I'm having to do this import to get the config d.ts file to work so that way we get access to the config object types. If you know a better way to do this, please let me know.
 // I'm sure you could do it, but I spent hours on it and got frustrated.
-import '@drop-in/plugin/global';
-import nodemailer from 'nodemailer';
+/// <reference types="@drop-in/plugin/global" />
+// Change your import to use a namespace import:
+import * as nodemailer from 'nodemailer';
+import config from 'virtual:dropin-server-config';
 
-// The beeper class could be used if you want, but you are probably better off just using nodemailer directly at that point. Use beeper instance to send emails configured with global.drop_in_config.email
+// The beeper class could be used if you want, but you are probably better off just using nodemailer directly at that point. Use beeper instance to send emails configured with config.email
 export class Beeper {
 	transporter: nodemailer.Transporter | undefined;
 	from: string | undefined;
@@ -29,7 +31,7 @@ export class Beeper {
 		  }
 		| undefined = {}) {
 		console.log('host', host);
-		console.log('global.drop_in_config.email', global.drop_in_config);
+		console.log('config.email', config);
 		if (host) {
 			this.mode = 'SEND';
 			this.transporter = nodemailer.createTransport({
@@ -38,9 +40,9 @@ export class Beeper {
 				secure,
 				auth,
 			});
-		} else if (global.drop_in_config?.email?.host) {
+		} else if (config?.email?.host) {
 			this.mode = 'SEND';
-			this.transporter = nodemailer.createTransport(global?.drop_in_config?.email);
+			this.transporter = nodemailer.createTransport(config?.email);
 		}
 		this.from = from;
 	}
@@ -73,4 +75,4 @@ export class Beeper {
 }
 
 // This is the beeper that's configured in the global config file.
-export const beeper = new Beeper(global.drop_in_config?.email);
+export const beeper = new Beeper(config?.email);

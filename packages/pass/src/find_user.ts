@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { refresh_tokens, user, User } from './schema';
-import { db } from './db';
+import { refresh_tokens, user, User } from './schema.js';
+import { db } from './db.js';
 
 /**
  * Fetches all user data by their email. Do not use for

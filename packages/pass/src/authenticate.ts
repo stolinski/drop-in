@@ -2,11 +2,11 @@
 // Returns the user_id if authenticated, null otherwise.
 
 import type { Cookies } from '@sveltejs/kit';
-import { get_raw_jwt } from './client_jwt';
-import { create_jwt, verify_access_token } from './jwt';
-import { jwt_cookie_options, cookie_options } from './cookies';
-import { refresh_refresh_token } from './token';
-import { verify_refresh_token } from './token';
+import { get_raw_jwt } from './client_jwt.js';
+import { create_jwt, verify_access_token } from './jwt.js';
+import { jwt_cookie_options, cookie_options } from './cookies.js';
+import { refresh_refresh_token } from './token.js';
+import { verify_refresh_token } from './token.js';
 
 export async function authenticate_user(cookies: Cookies) {
 	// Get cookies

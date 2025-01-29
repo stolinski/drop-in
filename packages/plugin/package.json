@@ -1,12 +1,12 @@
 {
 	"name": "@drop-in/plugin",
-	"version": "0.0.1",
+	"version": "0.0.8",
 	"description": "",
 	"types": "global.d.ts",
 	"type": "module",
 	"exports": {
 		"./global": {
-			"default": "./global.d.ts"
+			"types": "./global.d.ts"
 		},
 		".": {
 			"types": "./dist/index.js",
@@ -24,6 +24,6 @@
 	"license": "ISC",
 	"devDependencies": {
 		"typescript": "^5.7.2",
-		"vite": "^6.0.4"
+		"vite": "^6.0.5"
 	}
 }

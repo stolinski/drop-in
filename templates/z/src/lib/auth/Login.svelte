@@ -3,10 +3,10 @@
 	// Q: Why is this a component and not just a page?
 	// A: You might want to drop it anywhere you want, it will work.
 	import { AuthForm } from './auth_form.svelte';
-	import { get_cache } from '$lib/z.svelte';
+	import { getZ } from 'zero-svelte';
 	const { title_element = 'h1' } = $props();
 	const auth = new AuthForm();
-	const cache = get_cache();
+	const cache = getZ();
 	const loading = $derived(auth.status === 'LOADING');
 
 	async function onsubmit(e: SubmitEvent) {

@@ -1,8 +1,8 @@
-import { get_full_user_by_email } from './find_user';
-import { verify_password } from './password';
-import { create_jwt } from './jwt';
-import { User } from './schema';
-import { create_refresh_token } from './token';
+import { get_full_user_by_email } from './find_user.js';
+import { verify_password } from './password.js';
+import { create_jwt } from './jwt.js';
+import { User } from './schema.js';
+import { create_refresh_token } from './token.js';
 /**
  * Logs in a user with the given email and password.
  *
@@ -23,13 +23,15 @@ export async function login(
 		const user = await get_full_user_by_email(email);
 
 		if (!user) {
+			console.log('User not found');
 			return null;
 		}
 
 		// Is the password correct?
-		const is_verified = await verify_password(password, user.password_hash);
+		const is_verified = await verify_password(password, user.password_hash, user.id);
 		// If the password is not correct, return null
 		if (!is_verified) {
+			console.log('Password verification failed.');
 			return null;
 		}
 

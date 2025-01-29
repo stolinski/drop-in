@@ -1,10 +1,10 @@
 import crypto from 'crypto';
-import { db } from './db';
-import { refresh_tokens } from './schema';
-import { generate_token } from './utils';
+import { db } from './db.js';
+import { refresh_tokens } from './schema.js';
+import { generate_token } from './utils.js';
 import { nanoid } from 'nanoid';
 import { eq, and } from 'drizzle-orm';
-import { jwt_cookie_options } from './cookies';
+import { jwt_cookie_options } from './cookies.js';
 
 // Creates a refresh token record
 export async function create_refresh_token(user_id: string): Promise<string> {

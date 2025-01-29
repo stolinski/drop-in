@@ -1,4 +1,5 @@
-import '@drop-in/plugin/global';
+/// <reference types="@drop-in/plugin/global" />
+
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { schema } from './db_schema';
 
@@ -12,5 +13,5 @@ import { schema } from './db_schema';
 // To get up and running.
 export const db = drizzle({
 	connection: global.drop_in_config.db.url,
-	schema,
+	schema
 });

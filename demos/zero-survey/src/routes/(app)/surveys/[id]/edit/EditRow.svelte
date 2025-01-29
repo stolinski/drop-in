@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { get_cache } from '$lib/z.svelte';
+	import { getZ } from 'zero-svelte';
 
 	let { question, index } = $props();
-	const cache = get_cache();
+	const z = getZ();
 
 	let current_type = $state($state.snapshot(question.question_type));
 
@@ -11,7 +11,7 @@
 		const question_text = form['question_text-' + index].value;
 		const question_type = form['type-' + index].value;
 
-		cache.z.mutate.questions.update({
+		z.current.mutate.questions.update({
 			id: question.id,
 			question_text,
 			question_type

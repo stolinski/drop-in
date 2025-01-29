@@ -4,13 +4,16 @@
 		"checkJs": true,
 		"forceConsistentCasingInFileNames": true,
 		"target": "esnext",
-		"module": "esnext",
-		"moduleResolution": "Bundler",
+		"module": "NodeNext",
+		"moduleResolution": "nodenext", // change from "Bundler" to "node16"
 		"outDir": "./dist",
 		"strict": true,
 		"skipLibCheck": true,
 		"declaration": true,
 		"declarationMap": true,
-		"sourceMap": true
-	}
+		"sourceMap": true,
+		"allowSyntheticDefaultImports": true,
+		"types": ["@drop-in/plugin/global"]
+	},
+	"include": ["src/**/*"]
 }

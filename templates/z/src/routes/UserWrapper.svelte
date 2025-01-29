@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { auth } from '$lib/auth.svelte';
-	import { Query } from '$lib/query.svelte';
+	import { Query } from 'zero-svelte';
 	import { cache } from '$lib/z.svelte';
 	import type { Snippet } from 'svelte';
 	let { children }: { children: Snippet } = $props();

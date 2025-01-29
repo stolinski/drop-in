@@ -1,4 +1,6 @@
 import { jwtVerify, SignJWT } from 'jose';
+import config from 'virtual:dropin-server-config';
+console.log('config with jwt', config);
 
 export type JWTPayload = {
 	sub: string;
@@ -15,13 +17,10 @@ export async function create_jwt(user_id: string) {
 	return new SignJWT(jwtPayload)
 		.setProtectedHeader({ alg: 'HS256' })
 		.setExpirationTime('30days')
-		.sign(new TextEncoder().encode(global.drop_in_config.auth.jwt_secret));
+		.sign(new TextEncoder().encode(config.auth.jwt_secret));
 }
 
 export async function verify_access_token(jwt: string): Promise<JWTPayload> {
-	const { payload } = await jwtVerify(
-		jwt,
-		new TextEncoder().encode(global.drop_in_config.auth.jwt_secret),
-	);
+	const { payload } = await jwtVerify(jwt, new TextEncoder().encode(config.auth.jwt_secret));
 	return payload as JWTPayload;
 }

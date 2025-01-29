@@ -20,7 +20,6 @@ class User {
 		if (!data) {
 			throw new Error('Invalid response from server');
 		}
-		console.log('data', data);
 
 		return data;
 	}
@@ -53,21 +52,40 @@ class User {
 	}
 
 	requestPasswordReset(email: string) {
+		const formData = new FormData();
+		formData.append('email', email);
 		return fetch('/api/auth/forgot-password', {
 			method: 'POST',
-			body: JSON.stringify({ email }),
+			body: formData,
 		});
 	}
 	resetPassword(token: string, password: string) {
+		const formData = new FormData();
+		formData.append('token', token);
+		formData.append('password', password);
 		return fetch('/api/auth/reset-password', {
 			method: 'POST',
-			body: JSON.stringify({ token, password }),
+			body: formData,
 		});
 	}
-	verifyEmail(token: string) {
+
+	verifyEmail(token: string, email: string, expire: number) {
+		const formData = new FormData();
+		formData.append('token', token);
+		formData.append('email', email);
+		formData.append('expire', expire.toString());
 		return fetch('/api/auth/verify-email', {
 			method: 'POST',
-			body: JSON.stringify({ token }),
+			body: formData,
+		});
+	}
+
+	sendVerifyEmail(user_id: string) {
+		const formData = new FormData();
+		formData.append('user_id', user_id);
+		return fetch('/api/auth/send-verify-email', {
+			method: 'POST',
+			body: formData,
 		});
 	}
 }
