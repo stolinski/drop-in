@@ -1,5 +1,4 @@
 import { sequence } from '@sveltejs/kit/hooks';
-
 import { beeper } from '@drop-in/beeper';
 import { pass_routes } from '@drop-in/pass';
 

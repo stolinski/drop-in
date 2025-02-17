@@ -1,10 +1,6 @@
-<script lang="ts">
-	import settings from 'virtual:dropin-config';
-</script>
-
 <header class="layout">
 	<div>
-		<p><a href="/">{settings.app.name}</a></p>
+		<p><a href="/">{DROP_IN.app.name}</a></p>
 		<nav>
 			<!-- Add your nav -->
 		</nav>

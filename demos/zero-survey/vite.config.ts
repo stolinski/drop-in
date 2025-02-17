@@ -1,4 +1,4 @@
-import { dropin } from '@drop-in/plugin';
+import dropin from '@drop-in/plugin';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, loadEnv, type ConfigEnv } from 'vite';
 
@@ -11,10 +11,5 @@ export default ({ mode }: ConfigEnv) => {
 		},
 
 		plugins: [dropin(), sveltekit()],
-		optimizeDeps: {
-			esbuildOptions: {
-				target: 'es2022'
-			}
-		}
 	});
 };

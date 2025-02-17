@@ -16,7 +16,7 @@ export function check_is_password_valid(password: string): boolean {
 }
 
 export function create_expiring_auth_digest(email: string, expirationTimestamp: number) {
-	const authString = `${drop_in_config.auth.jwt_secret}:${email}:${expirationTimestamp}`;
+	const authString = `${process.env.JWT_SECRET}:${email}:${expirationTimestamp}`;
 	return crypto.createHash('sha256').update(authString).digest('hex');
 }
 

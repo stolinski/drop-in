@@ -36,13 +36,12 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 			refresh_token,
 			cookie_options,
 		);
-		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
-		return new Response(JSON.stringify({ status: 'success' }), {
+		return new Response(JSON.stringify({ status: 'success', jwt }), {
 			status: 200,
 			headers: {
 				'Content-Type': 'application/json',
-				'Set-Cookie': `${refresh_token_cookie}, ${jwt_cookie}`,
+				'Set-Cookie': refresh_token_cookie,
 			},
 		});
 	}
@@ -55,7 +54,6 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 }
 
 export async function login_route(event: RequestEvent, data: FormData) {
-	console.log('data', data);
 	if (!data.email || !data.password) {
 		return new Response(
 			JSON.stringify({ status: 'error', error: 'Email and password are required' }),
@@ -69,7 +67,6 @@ export async function login_route(event: RequestEvent, data: FormData) {
 	}
 
 	const login_response = await login(data.email, data.password);
-	console.log('login_response', login_response);
 
 	if (login_response?.refresh_token && login_response?.jwt) {
 		const { refresh_token, jwt } = login_response;
@@ -79,13 +76,12 @@ export async function login_route(event: RequestEvent, data: FormData) {
 			refresh_token,
 			cookie_options,
 		);
-		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
-		return new Response(JSON.stringify({ status: 'success' }), {
+		return new Response(JSON.stringify({ status: 'success', jwt }), {
 			status: 200,
 			headers: {
 				'Content-Type': 'application/json',
-				'Set-Cookie': `${refresh_token_cookie}, ${jwt_cookie}`,
+				'Set-Cookie': refresh_token_cookie,
 			},
 		});
 	}

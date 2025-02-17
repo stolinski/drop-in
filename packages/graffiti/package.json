@@ -1,6 +1,8 @@
 {
 	"author": "Scott Tolinski",
-	"bin": "bin.js",
+	"bin": {
+		"graffiti": "bin.js"
+	},
 	"description": "A dope package to theme @drop-in",
 	"exports": {
 		".": "./drop-in.css",

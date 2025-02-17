@@ -13,9 +13,9 @@ const config = {
 			$routes: './src/routes',
 			$state: './src/state',
 			$types: './src/types',
-			$utils: './src/utils',
-		},
-	},
+			$utils: './src/utils'
+		}
+	}
 };
 
 export default config;

@@ -3,24 +3,24 @@
 		"@oddbird/popover-polyfill": "^0.5.2"
 	},
 	"devDependencies": {
-		"@drop-in/graffiti": "0.3.4",
-		"@sveltejs/adapter-auto": "^3.3.1",
-		"@sveltejs/kit": "^2.13.0",
-		"@sveltejs/package": "^2.3.7",
+		"@drop-in/graffiti": "^0.3.4",
+		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/kit": "^2.17.1",
+		"@sveltejs/package": "^2.3.10",
 		"@sveltejs/vite-plugin-svelte": "5.0.3",
 		"@types/eslint": "^9.6.1",
-		"eslint": "^9.18.0",
+		"eslint": "^9.20.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-svelte": "^2.46.1",
 		"globals": "^15.14.0",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
-		"publint": "^0.3.2",
-		"svelte": "5.17.5",
+		"publint": "^0.3.4",
+		"svelte": "5.19.9",
 		"svelte-check": "^4.1.4",
 		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.20.0",
-		"vite": "^6.0.5"
+		"typescript-eslint": "^8.23.0",
+		"vite": "^6.1.0"
 	},
 	"engines": {
 		"node": ">20.11.1"
@@ -43,7 +43,7 @@
 	],
 	"name": "@drop-in/decks",
 	"peerDependencies": {
-		"svelte": "5.0.0-next.246"
+		"svelte": "^5.0.0"
 	},
 	"scripts": {
 		"build": "vite build && npm run package",
@@ -60,5 +60,5 @@
 	"svelte": "./dist/index.js",
 	"type": "module",
 	"types": "./dist/index.d.ts",
-	"version": "0.0.13"
+	"version": "0.0.14"
 }

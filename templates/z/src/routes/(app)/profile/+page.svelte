@@ -1,24 +1,34 @@
 <script lang="ts">
-	import { cache } from '$lib/z.svelte';
 	import { nanoid } from 'nanoid';
-	import { auth } from '$lib/auth.svelte';
+	import { get_z_options, z } from '$lib/z.svelte';
+	import { clear_jwt, pass } from '@drop-in/pass/client';
+	import { goto } from '$app/navigation';
 
-	const z = $derived(cache.z);
-	let user = $derived(auth.user);
+	let { user } = $props();
 
 	async function onclick() {
 		// LOGOUT
-		auth.logout();
+		await pass.logout().catch((e) => {
+			console.log('logout error', e);
+		});
+		clear_jwt();
+		z.close();
+		z.build(get_z_options());
+		goto('/landing');
 	}
 
 	function oninput(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
 		const input = e.target as HTMLInputElement;
 		const input_id = input.id;
 		if (!input) return;
-		if (user?.profile) {
-			z.mutate.profile.update({ id: user.profile.id, [input_id]: input.value });
+		if (user?.current.profile) {
+			z.current.mutate.profile.update({ id: user.current.profile.id, [input_id]: input.value });
 		} else {
-			z.mutate.profile.create({ id: nanoid(), user_id: user.data.id, [input_id]: input.value });
+			z.current.mutate.profile.insert({
+				id: nanoid(),
+				user_id: user.current.id,
+				[input_id]: input.value
+			});
 		}
 	}
 </script>

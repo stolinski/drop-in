@@ -1,4 +1,4 @@
-import settings from 'virtual:dropin-config';
+import settings from '';
 import { goto } from '$app/navigation';
 import { getZ } from 'zero-svelte';
 // Sends users to the app if they try to access login or landing pages after logging in.

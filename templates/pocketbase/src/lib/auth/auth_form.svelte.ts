@@ -1,4 +1,3 @@
-import settings from 'virtual:dropin-config';
 import { goto } from '$app/navigation';
 import { toaster } from '@drop-in/decks';
 
@@ -15,7 +14,7 @@ export function auth_form_state() {
 		error_message = e_message;
 	}
 
-	function success(route: string | boolean = settings.app.route) {
+	function success(route: string | boolean = DROP_IN.app.route) {
 		error_message = undefined;
 		status = 'SUCCESS';
 		if (route && typeof route === 'string') goto(route);

@@ -12,8 +12,7 @@
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,
-		"allowSyntheticDefaultImports": true,
-		"types": ["@drop-in/plugin/global"]
+		"allowSyntheticDefaultImports": true
 	},
 	"include": ["src/**/*"]
 }

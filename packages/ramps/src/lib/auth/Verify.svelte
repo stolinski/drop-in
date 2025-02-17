@@ -1,12 +1,18 @@
 <script lang="ts">
-	const { user } = $props();
+	import { pass } from '@drop-in/pass/client';
+	import type { User } from '@drop-in/pass/schema';
+
+	const { user }: { user: User } = $props();
 
 	let verified_sent = $state(false);
 
 	async function onclick() {
-		// TODO: Request Verification
-		// await users.requestVerification(user.email)
-		verified_sent = true;
+		try {
+			await pass.sendVerifyEmail(user.id);
+			verified_sent = true;
+		} catch (e) {
+			console.error(e);
+		}
 	}
 </script>
 
@@ -17,13 +23,13 @@
 			<button class="btn-small" {onclick}> Send Verification </button>
 		</p>
 	{:else}
-		<p>Verification email sent to {user.email}. Please check your email.</p>
+		<p>Verification email sent to {user.email}.<br /> Please check your email.</p>
 	{/if}
 </div>
 
 <style>
 	div {
-		padding: 20px;
+		padding: 10px 5px;
 	}
 	p {
 		margin: 0;

@@ -1,11 +1,10 @@
 <script lang="ts">
-	import settings from 'virtual:dropin-config';
 	import UserMenu from '$lib/components/UserMenu.svelte';
 </script>
 
 <header class="layout">
 	<div class="flex">
-		<p><a href="/">{settings.app.name}</a></p>
+		<p><a href="/">{DROP_IN.app.name}</a></p>
 		<nav>
 			<!-- Add your nav -->
 		</nav>
