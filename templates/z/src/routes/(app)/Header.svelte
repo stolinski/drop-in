@@ -1,16 +1,16 @@
 <script lang="ts">
-	import settings from 'virtual:dropin-config';
 	import UserMenu from '$lib/components/UserMenu.svelte';
-	import { auth } from '$lib/auth.svelte';
+
+	let { user } = $props();
 </script>
 
 <header class="layout">
 	<div class="flex">
-		<p><a href="/">{settings.app.name}</a></p>
+		<p><a href="/">{DROP_IN.app.name}</a></p>
 		<nav>
 			<!-- Add your nav -->
 		</nav>
-		{#if auth.user?.id}
+		{#if user?.id}
 			<UserMenu />
 		{/if}
 	</div>

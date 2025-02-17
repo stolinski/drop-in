@@ -11,12 +11,12 @@
 
 	let { children, data } = $props()
 
-    $effect(() => {
-      return pb.collection('users').subscribe(pb.authStore.model.id, async () => {
-				await pb.collection('users').authRefresh();
-				invalidate('app:user');
-			});
-    });
+	$effect(() => {
+		return pb.collection('users').subscribe(pb.authStore.model.id, async () => {
+			await pb.collection('users').authRefresh();
+			invalidate('app:user');
+		});
+	});
 </script>
 
 

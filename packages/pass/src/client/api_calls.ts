@@ -7,10 +7,10 @@ class User {
 		const res = await fetch('/api/auth/login', {
 			method: 'POST',
 			body: formData,
+			credentials: 'include',
 		});
 
 		const data = await res.json().catch(() => null);
-		console.log('data', data);
 
 		if (!res.ok) {
 			// Handle server error responses
@@ -19,6 +19,11 @@ class User {
 
 		if (!data) {
 			throw new Error('Invalid response from server');
+		}
+
+		// Set JWT cookie if it's in the response
+		if (data.jwt) {
+			document.cookie = `jwt=${data.jwt}; path=/; max-age=${60 * 60 * 24 * 7}; secure; samesite=strict`;
 		}
 
 		return data;
@@ -31,12 +36,18 @@ class User {
 			const res = await fetch('/api/auth/register', {
 				method: 'POST',
 				body: formData,
+				credentials: 'include',
 			});
 
 			const data = await res.json().catch(() => null);
 
 			if (!res.ok) {
 				throw new Error(data?.error || 'Registration failed. Please try again.');
+			}
+
+			// Set JWT cookie if it's in the response
+			if (data.jwt) {
+				document.cookie = `jwt=${data.jwt}; path=/; max-age=${60 * 60 * 24 * 7}; secure; samesite=strict`;
 			}
 
 			return data;
@@ -66,6 +77,7 @@ class User {
 		return fetch('/api/auth/reset-password', {
 			method: 'POST',
 			body: formData,
+			credentials: 'include',
 		});
 	}
 
@@ -86,6 +98,7 @@ class User {
 		return fetch('/api/auth/send-verify-email', {
 			method: 'POST',
 			body: formData,
+			credentials: 'include',
 		});
 	}
 }

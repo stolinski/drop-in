@@ -1,21 +1,20 @@
 <script lang="ts">
 	import '@drop-in/graffiti';
 	import { Toast } from '@drop-in/decks';
-	import { auth } from '$lib/auth.svelte';
-	import { cache } from '$lib/z.svelte';
-	import UserWrapper from './UserWrapper.svelte';
+	// import { current_user } from '$lib/queries';
+	// import { Query } from 'zero-svelte';
 
-	const z = $derived(cache.z);
 	let { children } = $props();
+	// const user = new Query(current_user);
 </script>
 
 <!-- If you would like to use the same layout in app and site, use this file -->
 
-{#key auth.user_id}
-	<UserWrapper>
-		{@render children()}
-	</UserWrapper>
-{/key}
+ROOT
+
+<!-- {#key user?.current?.id} -->
+{@render children()}
+<!-- {/key} -->
 
 <!--  
 SickToast -> just use any of these methods

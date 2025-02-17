@@ -1,18 +1,15 @@
 export default {
-	auth: {
-		jwt_secret: process.env.JWT_SECRET,
-	},
 	email: {
-		from: 'fake@changeme.com',
+		from: 'fake@changeme.com'
 	},
 	db: {
-		url: process.env.DATABASE_URL,
+		url: process.env.DATABASE_URL
 	},
 	app: {
 		public: {
-			url: process.env.APP_URL,
+			url: 'http://localhost:5173',
 			name: 'Drop In',
-			route: '/dashboard',
-		},
-	},
+			route: '/dashboard'
+		}
+	}
 };

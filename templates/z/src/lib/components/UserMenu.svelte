@@ -1,27 +1,32 @@
 <script lang="ts">
-	import {Menu} from '@drop-in/decks';
-	import { auth } from '$lib/auth.svelte';
-
+	import { Menu } from '@drop-in/decks';
+	import { pass } from '@drop-in/pass/client';
+	import type { User } from '@drop-in/pass/schema';
+	let {
+		user
+	}: {
+		user: User;
+	} = $props();
 </script>
 
 <Menu name="user-menu" horizontal="RIGHT">
 	{#snippet button()}
-		{#if auth.user?.profile?.avatar}
-			<img src={auth.user?.profile?.avatar} alt="avatar" />
+		{#if user?.current.profile?.avatar}
+			<img src={user?.current.profile?.avatar} alt="avatar" />
 		{:else}
-			<span>{auth.user?.email?.[0]}</span>
+			<span>{user?.current.email?.[0]}</span>
 		{/if}
 	{/snippet}
 	<div>
 		<a href="/profile">Profile</a>
 		<hr />
-		<button onclick={() => auth.logout()}>Logout</button>
+		<button onclick={() => pass.logout()}>Logout</button>
 	</div>
-</Menu> 
+</Menu>
 
 <style>
 	:global(.di-menu-container .di-menu-button) {
-			--size: 40px;
+		--size: 40px;
 		border-radius: var(--size);
 		padding: 0;
 		width: var(--size);

@@ -1,16 +1,17 @@
 {
 	"name": "@drop-in/plugin",
-	"version": "0.0.8",
+	"version": "0.0.10",
 	"description": "",
 	"types": "global.d.ts",
 	"type": "module",
 	"exports": {
-		"./global": {
-			"types": "./global.d.ts"
-		},
 		".": {
 			"types": "./dist/index.js",
 			"default": "./dist/index.js"
+		},
+		"./hook": {
+			"types": "./dist/hook.js",
+			"default": "./dist/hook.js"
 		}
 	},
 	"scripts": {
@@ -24,6 +25,9 @@
 	"license": "ISC",
 	"devDependencies": {
 		"typescript": "^5.7.2",
-		"vite": "^6.0.5"
+		"vite": "^6.1.0"
+	},
+	"dependencies": {
+		"@sveltejs/kit": "^2.17.1"
 	}
 }
