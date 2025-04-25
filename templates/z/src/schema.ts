@@ -1,14 +1,13 @@
-import { createZeroSchema } from 'drizzle-zero';
+import { drizzleZeroConfig } from 'drizzle-zero';
 import { profile, user } from './db_schema';
 import { definePermissions, NOBODY_CAN, type ExpressionBuilder, type Row } from '@rocicorp/zero';
 
-export const schema = createZeroSchema(
+export const schema = drizzleZeroConfig(
 	{
 		user,
 		profile
 	},
 	{
-		version: 1,
 		tables: {
 			user: {
 				id: true,

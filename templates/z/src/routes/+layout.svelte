@@ -10,8 +10,6 @@
 
 <!-- If you would like to use the same layout in app and site, use this file -->
 
-ROOT
-
 <!-- {#key user?.current?.id} -->
 {@render children()}
 <!-- {/key} -->
