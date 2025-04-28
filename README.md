@@ -1,6 +1,6 @@
 # Drop In 🛹
 
-Drop-in to your new app. Get started in no time, your framework should do more for you.
+Drop-in to your new local first app. Get started in no time, your framework should do more for you.
 
 ## NOTE
 
@@ -16,27 +16,27 @@ This is a WIP. In the near future, the primary template will be local first via 
 
 ## Templates
 
-- Lofi -> Will eventually be the main template. Hidden until Zero is released.
+- Lofi -> The default template
 - Base -> SvelteKit / Svelte 5 / PocketBase. CSR for app code, SSR for Site code
 
 ### Features & Packages
 
+- Easy start for local first, Zero based sites
 - Base CSS @drop-in/graffiti
   - Basic typography system
   - Grid System
 - Elements @drop-in/decks
   - Standards based simple toast system
+  - Dialog based modals and drawers
+  - Popover base menues
+- Elements @drop-in/ramps
+  - Customizable tmeplates that you can pull into your project
 - Aliases and structure
+- Drizzle based server schema / migrations with Zero Drizzle connection for a one time schema authoring experience.
+- Auth via @drop-in/pass
+- Email via @drop-in/beeper
 
-### Lofi Template
-
-- Automatic Zero / Svelte integration
-- Drizzle Schema for User Accounts
-- Auth @drop-in/pass
-- Email @drop-in/beeper
-- Zero Server baked in
-
-### PocketBase Template
+### PocketBase Template (Deprecated)
 
 - Type generation via pocketbase-typegen
 - Auth guard & App guard functions
@@ -67,6 +67,10 @@ Usage: `npm run types`
 Generate types for pocketbase to be used throughout project. Requires all env vars to be correctly set.
 
 ### FAQ
+
+#### What is Zero?
+
+Zero Sync is the local first platform of your dreams. https://zero.rocicorp.dev/ utilizing Zero Svelte, Drop In is able to load data locally while syncing to your database in the backend.
 
 #### Why no authenticated SSR?
 

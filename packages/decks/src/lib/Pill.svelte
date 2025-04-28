@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
 	let {
 		children,
 		link,
-		onclick,
+		onclick
 	}: {
 		children: Snippet;
 		onclick?: () => unknown;
@@ -27,8 +27,8 @@
 	span {
 		display: inline-block;
 		padding: 2px 12px;
-		color: var(--fg);
-		border: 1px solid var(--fg);
+		color: var(--c-fg);
+		border: 1px solid var(--c-fg);
 		border-radius: 20px;
 		font-size: var(--fs-xs);
 	}

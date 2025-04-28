@@ -20,7 +20,7 @@
 			margin: 0;
 			a {
 				text-decoration: none;
-				color: var(--fg);
+				color: var(--c-fg);
 				font-weight: bold;
 			}
 		}
