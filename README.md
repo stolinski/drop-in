@@ -17,7 +17,6 @@ This is a WIP. In the near future, the primary template will be local first via 
 ## Templates
 
 - Lofi -> The default template
-- Base -> SvelteKit / Svelte 5 / PocketBase. CSR for app code, SSR for Site code
 
 ### Features & Packages
 
@@ -35,12 +34,6 @@ This is a WIP. In the near future, the primary template will be local first via 
 - Drizzle based server schema / migrations with Zero Drizzle connection for a one time schema authoring experience.
 - Auth via @drop-in/pass
 - Email via @drop-in/beeper
-
-### PocketBase Template (Deprecated)
-
-- Type generation via pocketbase-typegen
-- Auth guard & App guard functions
-- Packages dir & scaffolding cli for easy internal packages
 
 ### Included Aliases
 
