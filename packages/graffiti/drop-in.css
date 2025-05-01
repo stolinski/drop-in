@@ -30,10 +30,10 @@
 	--vs-l: 2rem;
 
 	/* Border Radius */
-	--rad-xs: 2px;
-	--rad-s: 4px;
-	--rad-m: 8px;
-	--rad-l: 16px;
+	--br-xs: 2px;
+	--br-s: 4px;
+	--br-m: 8px;
+	--br-l: 16px;
 
 	/* Padding */
 	--pad-xs: 2px;
@@ -43,14 +43,14 @@
 
 	/* Shadow */
 	--shadow-color: 0deg 0% 0%;
-	--bs-s: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
+	--s-s: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
 		0.8px 1.3px 1.7px -1.2px hsl(var(--shadow-color) / 0.3),
 		1.9px 3.1px 4.1px -2.5px hsl(var(--shadow-color) / 0.3);
-	--bs-m: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.32),
+	--s-m: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.32),
 		1.6px 2.6px 3.4px -0.8px hsl(var(--shadow-color) / 0.32),
 		3.9px 6.4px 8.4px -1.7px hsl(var(--shadow-color) / 0.32),
 		9.6px 15.5px 20.5px -2.5px hsl(var(--shadow-color) / 0.32);
-	--bs-l: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
+	--s-l: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
 		2.7px 4.4px 5.8px -0.4px hsl(var(--shadow-color) / 0.3),
 		4.9px 8px 10.6px -0.7px hsl(var(--shadow-color) / 0.3),
 		8.1px 13.1px 17.3px -1.1px hsl(var(--shadow-color) / 0.3),
@@ -67,11 +67,11 @@
 	--teal: #a0dcc8;
 	--blue: #0001fb;
 
-	--fg: light-dark(#000, #fff);
-	--bg: light-dark(#fff, #000);
+	--c-fg: light-dark(#000, #fff);
+	--c-bg: light-dark(#fff, #000);
 
-	--tint-or-shade: color-mix(in oklab, var(--fg), transparent 95%);
-	--tint-or-shade-harder: color-mix(in oklab, var(--fg), transparent 90%);
+	--tint-or-shade: color-mix(in oklab, var(--c-fg), transparent 95%);
+	--tint-or-shade-harder: color-mix(in oklab, var(--c-fg), transparent 90%);
 
 	/* Fluid Type */
 	--font-size-min: 16;
@@ -240,11 +240,16 @@ select {
 button,
 .button {
 	cursor: pointer;
-	background: var(--bg);
-	color: var(--fg);
+	background: var(--c-bg);
+	color: var(--c-fg);
 	border: solid 1px var(--tint-or-shade);
-	border-radius: var(--rad-s);
+	border-radius: var(--br-s);
 	padding: var(--pad-s) var(--pad-l);
+}
+
+label {
+	display: block;
+	font-size: var(--fs-xs);
 }
 
 /* UTILITIES */
@@ -287,8 +292,17 @@ button,
 }
 
 .row {
-	margin-block: var(--vs-l);
+	margin-block: var(--vs-m);
 }
+
+.circle {
+	--size: 40px;
+	border-radius: var(--size);
+	padding: 0;
+	width: var(--size);
+	height: var(--size);
+}
+
 /* END UTILITIES */
 
 /* LAYOUT */
@@ -432,12 +446,12 @@ button,
 
 /* Share */
 .di-dialog {
-	border-radius: var(--rad-m);
+	border-radius: var(--br-m);
 	max-width: 60ch;
 	border: none;
 	padding: var(--pad-m);
 	position: relative;
-	box-shadow: var(--bs-l);
+	box-shadow: var(--s-l);
 	&::backdrop {
 		background-color: rgb(0 0 0 / 0.5);
 		backdrop-filter: blur(5px);
@@ -455,9 +469,9 @@ button,
 }
 .di-drawer {
 	border: none;
-	border-radius: var(--rad-m);
+	border-radius: var(--br-m);
 	padding: var(--pad-m);
-	box-shadow: var(--bs-l);
+	box-shadow: var(--s-l);
 	&::backdrop {
 		background-color: rgb(0 0 0 / 0.5);
 		backdrop-filter: blur(5px);
@@ -482,9 +496,9 @@ button,
 
 /* Menu */
 .di-menu {
-	background: var(--bg);
-	box-shadow: var(--bs-m);
-	border-radius: var(--rad-m);
+	background: var(--c-bg);
+	box-shadow: var(--s-m);
+	border-radius: var(--br-m);
 	padding: var(--pad-s);
 	flex-direction: column;
 	border: solid 1px var(--tint);
@@ -498,12 +512,13 @@ button,
 	button,
 	a {
 		line-height: 1;
+		text-decoration: none;
 		background: transparent;
-		color: var(--fg);
+		color: var(--c-fg);
 		gap: 10px;
 		padding: var(--pad-s);
 		align-items: center;
-		border-radius: var(--rad-s);
+		border-radius: var(--br-s);
 		border: none;
 		width: 100%;
 		display: flex;
@@ -515,9 +530,9 @@ button,
 }
 
 .di-toast-slice {
-	background: var(--bg);
-	box-shadow: var(--bs-m);
-	border-radius: var(--rad-s);
+	background: var(--c-bg);
+	box-shadow: var(--s-m);
+	border-radius: var(--br-s);
 	padding: var(--pad-m) var(--pad-l);
 	flex-direction: column;
 	border: solid 1px var(--tint);

@@ -1,34 +1,31 @@
 import { InferSelectModel } from 'drizzle-orm';
 import { pgTable, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
 
-// Define the 'user' table with a fixed schema
-export const user = pgTable('user', {
-	id: varchar('id').primaryKey(), // 21 is a common length for nanoid
+export const user_details = {
+	id: varchar().primaryKey(), // 21 is a common length for nanoid
 	email: varchar('email', { length: 255 }).notNull().unique(),
 	password_hash: varchar('password_hash', { length: 255 }).notNull(),
-	created_at: timestamp('created_at').defaultNow().notNull(),
-	updated_at: timestamp('updated_at').defaultNow().notNull(),
-	verified: boolean('verified').notNull().default(false),
+	created_at: timestamp().defaultNow().notNull(),
+	updated_at: timestamp().defaultNow().notNull(),
+	verified: boolean().notNull().default(false),
 	verification_token: varchar('verification_token', { length: 255 }),
-});
+};
+
+// Define the 'user' table with a fixed schema
+export const user = pgTable('user', user_details);
 
 export type User = InferSelectModel<typeof user>;
 
-export const refresh_tokens = pgTable('refresh_token', {
-	id: varchar('id').primaryKey(),
-	user_id: varchar('user_id')
+export const refresh_tokens_details = {
+	id: varchar().primaryKey(),
+	user_id: varchar()
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
 	token: varchar('token', { length: 255 }).notNull(),
-	created_at: timestamp('created_at').defaultNow().notNull(),
-	expires_at: timestamp('expires_at').notNull(),
-});
+	created_at: timestamp().defaultNow().notNull(),
+	expires_at: timestamp().notNull(),
+};
 
-// Define the 'profile' table, which can be extended by consumers
-export const profile = pgTable('profile', {
-	id: varchar('id').primaryKey(),
-	user_id: varchar('user_id')
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	// Additional fields can be added here by consumers
-});
+export const refresh_tokens = pgTable('refresh_token', refresh_tokens_details);
+
+export type RefreshToken = InferSelectModel<typeof refresh_tokens>;

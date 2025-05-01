@@ -1,0 +1,54 @@
+{
+	"dependencies": {
+		"@drop-in/beeper": "workspace:^",
+		"@drop-in/decks": "workspace:^",
+		"@drop-in/graffiti": "^0.3.4",
+		"@drop-in/pass": "workspace:^",
+		"@drop-in/plugin": "workspace:^",
+		"@rocicorp/zero": "^0.18.2025042300",
+		"drizzle-orm": "^0.43.1",
+		"nanoid": "^5.1.5",
+		"pg": "^8.15.6",
+		"pocketbase": "^0.26.0",
+		"zero-svelte": "^0.3.3"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^6.0.0",
+		"@sveltejs/kit": "^2.20.7",
+		"@sveltejs/vite-plugin-svelte": "^5.0.3",
+		"@types/pg": "^8.11.14",
+		"@typescript-eslint/eslint-plugin": "^8.31.0",
+		"@typescript-eslint/parser": "^8.31.0",
+		"drizzle-kit": "^0.31.0",
+		"pocketbase-typegen": "^1.2.1",
+		"prettier": "^3.5.3",
+		"prettier-plugin-svelte": "^3.3.3",
+		"svelte": "^5.28.2",
+		"svelte-check": "^4.1.6",
+		"svelte-preprocess": "^6.0.2",
+		"tslib": "^2.8.1",
+		"typescript": "^5.8.3",
+		"vite": "^6.3.3"
+	},
+	"engines": {
+		"node": ">20.11.1"
+	},
+	"name": "dropin-survey",
+	"scripts": {
+		"build": "vite build",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+		"dev": "vite dev",
+		"format": "prettier --write --plugin-search-dir=. .",
+		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+		"make-package": "node ./src/packages/@drop-in/tools/package.js",
+		"package": "svelte-kit package",
+		"prepare": "svelte-kit sync",
+		"preview": "svelte-kit preview",
+		"types": "pocketbase-typegen --env --out ./src/types/pocketbase.ts",
+		"zero:server": "npx zero-cache -p src/schema.ts",
+		"db:change": "drizzle-kit generate; drizzle-kit migrate; pnpm exec zero-build-schema -p 'src/schema.ts'; rm /tmp/zerotest-sync-replica.db*;"
+	},
+	"type": "module",
+	"version": "0.0.4"
+}

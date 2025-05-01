@@ -1,17 +1,30 @@
 {
-	"name": "@drop-in/email",
-	"version": "0.0.3",
+	"name": "@drop-in/beeper",
+	"version": "0.0.13",
 	"description": "Your beeper",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"dev": "tsc --watch",
+		"build": "tsc",
+		"package": "tsc",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"ebuild": "esbuild src/index.ts --bundle --platform=node --format=esm --outdir=dist --external:pg --external:crypto --external:bcryptjs --external:fs --external:path --external:os --external:util --external:events"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"nodemailer": "^6.9.15",
-		"@drop-in/plugin": "^0.0.1",
-		"@types/nodemailer": "^6.4.16"
+		"@types/nodemailer": "^6.4.17",
+		"nodemailer": "^6.10.1"
 	}
 }

@@ -1,0 +1,17 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"tasks": {
+		"package": {
+			"dependsOn": ["^package"],
+			"outputs": ["dist/**", ".svelte-kit/**", "build/**", ".vercel/**"]
+		},
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**", ".svelte-kit/**", "build/**", ".vercel/**"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		}
+	}
+}

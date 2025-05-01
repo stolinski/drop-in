@@ -30,9 +30,9 @@
 
 <style>
 	.di-toast-slice {
-		background: var(--bg);
-		box-shadow: var(--bs-m);
-		border-radius: var(--rad-s);
+		background: var(--c-bg);
+		box-shadow: var(--s-m);
+		border-radius: var(--br-s);
 		padding: var(--pad-m) var(--pad-l);
 		flex-direction: column;
 		border: solid 1px var(--tint);

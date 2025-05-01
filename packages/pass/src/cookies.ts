@@ -22,4 +22,7 @@ export const cookie_options = {
 export const jwt_cookie_options = {
 	path: '/',
 	maxAge: 60 * 60 * 24 * 7,
+	httpOnly: false,
+	sameSite: 'strict',
+	secure: true,
 } as const;

@@ -1,26 +1,33 @@
 {
 	"name": "@drop-in/plugin",
-	"version": "0.0.1",
+	"version": "0.0.10",
 	"description": "",
 	"types": "global.d.ts",
 	"type": "module",
 	"exports": {
-		"./global": {
-			"default": "./global.d.ts"
-		},
 		".": {
 			"types": "./dist/index.js",
 			"default": "./dist/index.js"
+		},
+		"./hook": {
+			"types": "./dist/hook.js",
+			"default": "./dist/hook.js"
 		}
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"dev": "tsc --watch",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc",
+		"package": "tsc"
 	},
 	"keywords": [],
 	"author": "Scott Tolinski",
 	"license": "ISC",
 	"devDependencies": {
-		"typescript": "^5.6.3",
-		"vite": "^5.4.8"
+		"typescript": "^5.8.3",
+		"vite": "^6.3.3"
+	},
+	"dependencies": {
+		"@sveltejs/kit": "^2.20.7"
 	}
 }

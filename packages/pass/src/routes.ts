@@ -1,52 +1,69 @@
 import type { RequestEvent, Handle } from '@sveltejs/kit';
-import { sign_up } from './sign_up';
-import { login } from './login';
-import { logout } from './logout';
+import { sign_up } from './sign_up.js';
+import { login } from './login.js';
+import { logout } from './logout.js';
 import { parseFormData } from 'parse-nested-form-data';
-import { cookie_options, jwt_cookie_options } from './cookies';
-import { create_expiring_auth_digest } from './utils';
+import { cookie_options, jwt_cookie_options } from './cookies.js';
+import { create_expiring_auth_digest } from './utils.js';
 import { eq } from 'drizzle-orm';
-import { db } from './db';
-import { user } from './schema';
+import { db } from './db.js';
+import { user } from './schema.js';
+import { send_verification_email } from './email.js';
 
 type FormData = {
 	email?: string;
 	password?: string;
+	user_id?: string;
+	token?: string;
+	expire?: number;
 };
 
 export async function sign_up_route(event: RequestEvent, data: FormData) {
 	if (!data.email || !data.password) {
 		return new Response(JSON.stringify({ error: 'Email and password are required' }), {
 			status: 400,
-		});
-	}
-	const sign_up_response = await sign_up(data.email, data.password);
-	if (sign_up_response?.refresh_token && sign_up_response?.jwt) {
-		const { refresh_token, jwt } = sign_up_response;
-
-		event.cookies.set('refresh_token', refresh_token, cookie_options);
-		event.cookies.set('jwt', jwt, jwt_cookie_options);
-
-		return new Response('Success', {
-			status: 200,
 			headers: {
-				'Content-Type': 'text/plain',
+				'Content-Type': 'application/json',
 			},
 		});
 	}
-	return new Response('Failed', {
+	const sign_up_response = await sign_up(data.email, data.password);
+
+	if (sign_up_response?.refresh_token && sign_up_response?.jwt) {
+		const { refresh_token, jwt } = sign_up_response;
+		const refresh_token_cookie = event.cookies.serialize(
+			'refresh_token',
+			refresh_token,
+			cookie_options,
+		);
+
+		return new Response(JSON.stringify({ status: 'success', jwt }), {
+			status: 200,
+			headers: {
+				'Content-Type': 'application/json',
+				'Set-Cookie': refresh_token_cookie,
+			},
+		});
+	}
+	return new Response(JSON.stringify({ status: 'error', error: 'Signup Failed' }), {
 		status: 400,
 		headers: {
-			'Content-Type': 'text/plain',
+			'Content-Type': 'application/json',
 		},
 	});
 }
 
 export async function login_route(event: RequestEvent, data: FormData) {
 	if (!data.email || !data.password) {
-		return new Response(JSON.stringify({ error: 'Email and password are required' }), {
-			status: 400,
-		});
+		return new Response(
+			JSON.stringify({ status: 'error', error: 'Email and password are required' }),
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				status: 400,
+			},
+		);
 	}
 
 	const login_response = await login(data.email, data.password);
@@ -54,37 +71,55 @@ export async function login_route(event: RequestEvent, data: FormData) {
 	if (login_response?.refresh_token && login_response?.jwt) {
 		const { refresh_token, jwt } = login_response;
 
-		event.cookies.set('refresh_token', refresh_token, cookie_options);
-		event.cookies.set('jwt', jwt, jwt_cookie_options);
+		const refresh_token_cookie = event.cookies.serialize(
+			'refresh_token',
+			refresh_token,
+			cookie_options,
+		);
 
-		return new Response('Success', {
+		return new Response(JSON.stringify({ status: 'success', jwt }), {
 			status: 200,
 			headers: {
-				'Content-Type': 'text/plain',
+				'Content-Type': 'application/json',
+				'Set-Cookie': refresh_token_cookie,
 			},
 		});
 	}
-	return new Response('Failed', {
+	return new Response(JSON.stringify({ status: 'error', error: 'Login Failed' }), {
 		status: 400,
 		headers: {
-			'Content-Type': 'text/plain',
+			'Content-Type': 'application/json',
 		},
 	});
 }
 
 export async function logout_route(event: RequestEvent) {
 	// Get the refresh_token from the request
-	const refresh_token = event.request.headers.get('refresh_token');
+	const refresh_token = event.cookies.get('refresh_token');
+	const jwt = event.cookies.get('jwt');
 
-	await logout(refresh_token);
+	if (!refresh_token || !jwt) {
+		return new Response('No refresh token or JWT found', {
+			status: 400,
+		});
+	}
 
-	event.cookies.delete('refresh_token', cookie_options);
-	event.cookies.delete('jwt', jwt_cookie_options);
+	await logout(refresh_token, jwt);
+
+	const refresh_token_cookie = event.cookies.serialize('refresh_token', '', {
+		...cookie_options,
+		maxAge: 0,
+	});
+	const jwt_cookie = event.cookies.serialize('jwt', '', {
+		...jwt_cookie_options,
+		maxAge: 0,
+	});
 
 	return new Response('Success', {
 		status: 200,
 		headers: {
 			'Content-Type': 'text/plain',
+			'Set-Cookie': `${refresh_token_cookie}, ${jwt_cookie}`,
 		},
 	});
 }
@@ -97,16 +132,17 @@ export async function logout_route(event: RequestEvent) {
  * @returns The response object
  */
 export async function verify_email_route(event: RequestEvent, data: FormData) {
-	// Get toke from query params.
-	const verification_token = event.url.searchParams.get('token');
-	const email = event.url.searchParams.get('email');
-	const expire = parseInt(event.url.searchParams.get('expire') || '0', 10);
+	const verification_token = data.token;
+	const email = data.email;
+	const expire = data.expire;
+
 	if (!verification_token || !email || !expire) {
 		return new Response('Invalid token', {
 			status: 400,
 		});
 	}
 	const test_token = create_expiring_auth_digest(email, expire);
+	console.log('test_token', test_token);
 	if (verification_token !== test_token) {
 		return new Response('Invalid token', {
 			status: 400,
@@ -124,12 +160,32 @@ export async function verify_email_route(event: RequestEvent, data: FormData) {
 		.set({ verified: true, verification_token: null })
 		.where(eq(user.email, email))
 		.execute();
+
 	// Redirect to home.
 	return new Response('Success', {
 		status: 302,
 		headers: {
 			Location: '/',
 		},
+	});
+}
+
+export async function send_verify_email_route(event: RequestEvent, data: FormData) {
+	const user_id = data.user_id;
+	if (!user_id) {
+		return new Response('User ID is required', {
+			status: 400,
+		});
+	}
+	try {
+		await send_verification_email(user_id);
+	} catch (error) {
+		return new Response('Error', {
+			status: 500,
+		});
+	}
+	return new Response('Success', {
+		status: 200,
 	});
 }
 
@@ -144,22 +200,28 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 	const { url } = event;
 
 	// Check if the URL matches your auth routes
-	if (url.pathname.startsWith('/auth')) {
+	if (url.pathname.startsWith('/api/auth')) {
 		// Make a clone to prevent error in already read body
 		const request_2 = event.request.clone();
-		// Get form data
-		const form_data = await request_2.formData();
-		// Parse that ish
-		const data = parseFormData(form_data);
+		let data = {};
+		// Check if the content type is multipart/form-data
+		if (request_2.headers.get('content-type')?.includes('multipart/form-data')) {
+			// Get form data
+			const form_data = await request_2.formData();
+			// Parse that ish
+			data = parseFormData(form_data);
+		}
 
-		if (url.pathname === '/auth/login') {
+		if (url.pathname === '/api/auth/login') {
 			return login_route(event, data);
-		} else if (url.pathname === '/auth/register') {
+		} else if (url.pathname === '/api/auth/register') {
 			return sign_up_route(event, data);
-		} else if (url.pathname === '/auth/logout') {
+		} else if (url.pathname === '/api/auth/logout') {
 			return logout_route(event);
-		} else if (url.pathname === '/auth/verify-email') {
+		} else if (url.pathname === '/api/auth/verify-email') {
 			return verify_email_route(event, data);
+		} else if (url.pathname === '/api/auth/send-verify-email') {
+			return send_verify_email_route(event, data);
 		}
 		// Return 404 for unhandled auth routes
 		return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404 });
@@ -169,4 +231,4 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-// TODO verify email route
+// TODO magic link auth?

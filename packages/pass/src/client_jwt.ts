@@ -3,7 +3,7 @@
 
 import { decodeJwt } from 'jose';
 import Cookies from 'js-cookie';
-import { JWTPayload } from './jwt';
+import { JWTPayload } from './jwt.js';
 
 export function get_jwt(): JWTPayload | undefined {
 	const token = get_raw_jwt();
@@ -33,5 +33,10 @@ function delete_cookie(name: string) {
 
 // Just a better named version of get_jwt for the client facing code
 export function get_login() {
-	return get_jwt();
+	const jwt = get_raw_jwt();
+	const payload = get_jwt();
+	return {
+		sub: payload?.sub,
+		jwt,
+	};
 }

@@ -11,17 +11,17 @@
 // Routes
 // This might be the most interesting part, because we'll import all of the login routes and use them as a hook in the client's hooks.server.ts
 // See pass_routes() for the central station of auth routes.
-export * from './routes';
+export * from './routes.js';
 
 // We also export all of the functions that are consumed by routes if you'd like to make your own routes.
 
 // Functions for creating an account
-export * from './sign_up';
+export * from './sign_up.js';
 
 // Functions for logging in
-export * from './login';
+export * from './login.js';
 // Functions for logging out
-export * from './logout';
+export * from './logout.js';
 
 // Methods for resetting password
 // export * from './reset_password';

@@ -7,7 +7,7 @@
 		name,
 		vert = 'BOTTOM',
 		horizontal = 'LEFT',
-		button_class = ''
+		button_class = 'di-menu-button'
 	}: {
 		children: Snippet;
 		button: Snippet;
@@ -49,7 +49,7 @@
 	});
 </script>
 
-<div style="position: relative; ">
+<div class="di-menu-container" style="position: relative;">
 	<div bind:this={trigger}>
 		<button class={button_class} popovertarget={name}>
 			{@render button()}

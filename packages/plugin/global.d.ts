@@ -1,36 +1,17 @@
-export interface DropInConfig {
-	auth: {
-		jwt_secret?: string;
-	};
-	email?: {
-		host: string;
-		port: number;
-		secure?: boolean;
-		from?: string;
-		auth?: {
-			user: string;
-			pass: string;
+declare global {
+	var DROP_IN: {
+		email: {
+			host?: string;
+			port?: number;
+			secure?: boolean;
+			from?: string;
 		};
-	};
-	db: {
-		url: string;
-	};
-	app: {
-		public: {
+		app: {
 			url: string;
 			name: string;
 			route: string;
 		};
 	};
-}
-
-declare global {
-	module globalThis {
-		var drop_in_config: DropInConfig;
-	}
-	module global {
-		var drop_in_config: DropInConfig;
-	}
 }
 
 export {};

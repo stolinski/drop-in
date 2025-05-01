@@ -1,33 +1,59 @@
 {
 	"name": "@drop-in/pass",
-	"version": "0.0.1",
+	"version": "0.0.34",
 	"description": "Your drop-in season pass. aka Auth",
 	"main": "dist/index.js",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./client": {
+			"types": "./dist/client/index.d.ts",
+			"default": "./dist/client/index.js"
+		},
+		"./schema": {
+			"types": "./dist/schema.d.ts",
+			"default": "./dist/schema.js"
+		},
+		"./routes": {
+			"types": "./dist/routes.d.ts",
+			"default": "./dist/routes.js"
+		}
+	},
+	"files": [
+		"dist/"
+	],
 	"scripts": {
+		"dev": "tsc --watch",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"prepublish": "tsc",
-		"build": "tsc"
+		"build": "tsc",
+		"package": "tsc",
+		"ebuild": "esbuild src/index.ts --bundle --platform=node --format=esm --outdir=dist --external:pg --external:crypto --external:bcryptjs --external:fs --external:path --external:os --external:util --external:events"
 	},
 	"author": "Scott Tolinski",
 	"license": "ISC",
 	"dependencies": {
-		"@drop-in/email": "^0.0.3",
-		"@types/pg": "^8.11.10",
-		"bcryptjs": "^2.4.3",
-		"drizzle-orm": "^0.34.1",
-		"jose": "^5.9.3",
+		"@drop-in/beeper": "^0.0.13",
+		"bcryptjs": "^3.0.2",
+		"drizzle-orm": "^0.43.1",
+		"jose": "^6.0.10",
 		"js-cookie": "^3.0.5",
 		"jsonwebtoken": "^9.0.2",
-		"nanoid": "^5.0.7",
+		"nanoid": "^5.1.5",
 		"parse-nested-form-data": "^1.0.0",
-		"pg": "^8.13.0",
-		"postgres": "^3.4.4",
-		"typescript": "^5.6.3"
+		"pg": "^8.15.6",
+		"postgres": "^3.4.5",
+		"typescript": "^5.8.3"
 	},
 	"devDependencies": {
-		"@types/bcryptjs": "^2.4.6",
+		"@sveltejs/kit": "^2.20.7",
+		"@types/bcrypt": "^5.0.2",
+		"@types/bcryptjs": "^3.0.0",
 		"@types/js-cookie": "^3.0.6",
-		"@types/jsonwebtoken": "^9.0.6",
-		"@sveltejs/kit": "^2.6.4"
+		"@types/jsonwebtoken": "^9.0.9",
+		"@types/pg": "^8.11.14"
 	}
 }

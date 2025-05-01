@@ -1,6 +1,8 @@
 {
 	"author": "Scott Tolinski",
-	"bin": "bin.js",
+	"bin": {
+		"graffiti": "bin.js"
+	},
 	"description": "A dope package to theme @drop-in",
 	"exports": {
 		".": "./drop-in.css",
@@ -17,7 +19,8 @@
 	"name": "@drop-in/graffiti",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "node build.js"
+		"build": "node build.js",
+		"package": "node build.js"
 	},
 	"type": "module",
 	"version": "0.3.4",
