@@ -1,4 +1,5 @@
 {
+	"private": true,
 	"dependencies": {
 		"@drop-in/beeper": "workspace:^",
 		"@drop-in/decks": "workspace:^",
@@ -49,5 +50,5 @@
 		"dev:db-down": "docker compose --env-file .env -f ./docker/docker-compose.yml down"
 	},
 	"type": "module",
-	"version": "0.0.4"
+	"version": "0.0.5"
 }

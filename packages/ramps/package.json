@@ -1,6 +1,9 @@
 {
 	"name": "@drop-in/ramps",
-	"version": "0.0.1",
+	"version": "0.0.2",
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
