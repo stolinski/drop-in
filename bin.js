@@ -14,7 +14,9 @@ import fs from 'node:fs';
  * Reads the version from package.json
  * @type {string}
  */
-const { version } = JSON.parse(fs.readFileSync(new URL('package.json', import.meta.url), 'utf-8'));
+/** @type {{ name?: string, version?: string, dependencies?: Record<string, string>, devDependencies?: Record<string, string> }} */
+const package_json_content = JSON.parse(fs.readFileSync(new URL('package.json', import.meta.url), 'utf-8'));
+const version = package_json_content.version;
 
 /**
  * Project name from CLI argument or user prompt.
@@ -32,6 +34,13 @@ if (!app_name) {
 	const inputCwd = await p.text({
 		message: 'Enter project name:',
 	});
+
+	if (typeof inputCwd !== 'string') {
+		// Handle cancellation or unexpected input
+		console.error('Invalid project name input.');
+		p.cancel('Operation cancelled.');
+		process.exit(1);
+	}
 	app_name = to_valid_package_name(inputCwd);
 }
 
@@ -117,15 +126,73 @@ function to_valid_package_name(name) {
 }
 
 /**
- * Replaces the "name" property in the package.json file.
+ * Gets versions of packages within the local /packages directory.
+ * @returns {Record<string, string>} A map of package names to versions.
+ */
+function get_local_package_versions() {
+	const packagesDir = dist('packages');
+	if (!fs.existsSync(packagesDir)) {
+		console.warn('Local packages directory not found, cannot determine local package versions.');
+		return {};
+	}
+
+	/** @type {Record<string, string>} */
+	const versions = {};
+	const packageSubDirs = fs.readdirSync(packagesDir, { withFileTypes: true })
+		.filter(dirent => dirent.isDirectory())
+		.map(dirent => dirent.name);
+
+	for (const dirName of packageSubDirs) {
+		const packageJsonPath = path.join(packagesDir, dirName, 'package.json');
+		if (fs.existsSync(packageJsonPath)) {
+			try {
+				const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+				if (packageJson.name && packageJson.version) {
+					versions[packageJson.name] = packageJson.version;
+				}
+			} catch (err) {
+				// Type guard for error message
+				const message = err instanceof Error ? err.message : String(err);
+				console.warn(`Failed to parse package.json in ${dirName}: ${message}`);
+			}
+		}
+	}
+	return versions;
+}
+
+const local_package_versions = get_local_package_versions();
+
+/**
+ * Updates the package.json file in the target directory.
+ * Sets the package name and updates @drop-in/* dependency versions.
  * @param {string} cwd - Current working directory.
  * @param {string} newName - The new package name.
+ * @param {Record<string, string>} root_versions - Versions from the root package.json.
  */
-function replacePackageName(cwd, newName) {
+function update_package_json(cwd, newName, root_versions) {
 	const packageJsonPath = path.join(cwd, 'package.json');
+	if (!fs.existsSync(packageJsonPath)) {
+		console.warn(`Target package.json not found at ${packageJsonPath}`);
+		return;
+	}
 	const packageJson = fs.readFileSync(packageJsonPath, 'utf8');
 	const packageData = JSON.parse(packageJson);
-	packageData.name = newName;
+
+	// Set package name
+	packageData.name = to_valid_package_name(newName);
+
+	// Update @drop-in dependencies
+	const depTypes = ['dependencies', 'devDependencies'];
+	depTypes.forEach(depType => {
+		if (packageData[depType]) {
+			for (const dep in packageData[depType]) {
+				if (dep.startsWith('@drop-in/') && root_versions[dep]) {
+					packageData[depType][dep] = root_versions[dep];
+				}
+			}
+		}
+	});
+
 	const updatedPackageJson = JSON.stringify(packageData, null, 2);
 	fs.writeFileSync(packageJsonPath, updatedPackageJson, 'utf8');
 }
@@ -163,20 +230,13 @@ function write_template_files(template, name, cwd) {
 	copy(path.join(templateDir, 'example.env'), path.join(cwd, '.env'));
 
 	// Read template's package.json
+	// const templatePackageJsonPath = path.join(templateDir, 'package.json');
 	// const templatePackageJson = JSON.parse(fs.readFileSync(templatePackageJsonPath, 'utf8'));
 
-	// Copy any @drop-in packages from root
-	// const dropInDependencies = Object.keys(templatePackageJson.dependencies || {}).filter((dep) =>
-	// 	dep.startsWith('@drop-in/'),
-	// );
-	// dropInDependencies.forEach((dep) => {
-	// 	const packageName = dep.replace('@drop-in/', '');
-	// 	const sourcePath = dist(`packages/${packageName}`);
-	// 	const destPath = path.join(cwd, 'src', 'packages', packageName);
-	// 	copy(sourcePath, destPath);
-	// });
+	// Update package.json name and dependency versions
+	update_package_json(cwd, name, local_package_versions);
 
-	replacePackageName(cwd, to_valid_package_name(name));
+	// Update app_name in settings.ts if it exists
 	replaceAppName(cwd, name);
 }
 
