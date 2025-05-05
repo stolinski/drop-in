@@ -4,7 +4,7 @@ import { refresh_tokens } from './schema.js';
 import { generate_token } from './utils.js';
 import { nanoid } from 'nanoid';
 import { eq, and } from 'drizzle-orm';
-import { jwt_cookie_options } from './cookies.js';
+import { cookie_options } from './cookies.js';
 
 // Creates a refresh token record
 export async function create_refresh_token(user_id: string): Promise<string> {
@@ -21,7 +21,7 @@ export async function create_refresh_token(user_id: string): Promise<string> {
 				id: token_id,
 				user_id,
 				token: hashed_token,
-				expires_at: new Date(Date.now() + jwt_cookie_options.maxAge),
+				expires_at: new Date(Date.now() + cookie_options.maxAge * 1000),
 			})
 			.execute();
 	} catch (e) {
@@ -48,7 +48,7 @@ export async function refresh_refresh_token(refresh_token: string): Promise<stri
 
 	await db
 		.update(refresh_tokens)
-		.set({ expires_at: new Date(Date.now() + jwt_cookie_options.maxAge) })
+		.set({ expires_at: new Date(Date.now() + cookie_options.maxAge * 1000) })
 		.where(eq(refresh_tokens.id, token_id));
 
 	return refresh_token;

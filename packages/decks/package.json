@@ -3,7 +3,7 @@
 		"@oddbird/popover-polyfill": "^0.5.2"
 	},
 	"devDependencies": {
-		"@drop-in/graffiti": "^0.3.4",
+		"@drop-in/graffiti": "workspace:^",
 		"@sveltejs/adapter-auto": "^6.0.0",
 		"@sveltejs/kit": "^2.20.7",
 		"@sveltejs/package": "^2.3.11",

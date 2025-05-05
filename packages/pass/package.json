@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/pass",
-	"version": "0.0.34",
+	"version": "0.0.35",
 	"description": "Your drop-in season pass. aka Auth",
 	"main": "dist/index.js",
 	"type": "module",
@@ -36,7 +36,7 @@
 	"author": "Scott Tolinski",
 	"license": "ISC",
 	"dependencies": {
-		"@drop-in/beeper": "^0.0.13",
+		"@drop-in/beeper": "workspace:^",
 		"bcryptjs": "^3.0.2",
 		"drizzle-orm": "^0.43.1",
 		"jose": "^6.0.10",

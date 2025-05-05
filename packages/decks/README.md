@@ -1,3 +1,5 @@
+# Deprecated in favor of eventually moving to web awesome with a web awesome theme
+
 # @drop-in/decks
 
 Decks is a ui component library that doesn't depend on dependencies or css frameworks to function. They are also deeply committed to using browser standards and APIs before custom JavaScript. Add your own theme, or use `@drop-in/graffiti` to style your decks.

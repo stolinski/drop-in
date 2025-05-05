@@ -35,6 +35,7 @@
 	},
 	"name": "z",
 	"scripts": {
+		"start": "vite dev & pnpm dev:zero-cache & pnpm dev:db-up",
 		"build": "vite build",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",

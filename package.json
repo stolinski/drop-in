@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/new",
-	"version": "0.0.25",
+	"version": "0.0.3",
 	"description": "A SvelteKit Svelte 5 PocketBase Starter Kit with a CLI",
 	"bin": "bin.js",
 	"scripts": {
@@ -33,6 +33,7 @@
 		"sst": "^3.13.19"
 	},
 	"devDependencies": {
+		"@changesets/cli": "^2.29.2",
 		"eslint": "^9.25.1",
 		"eslint-config-prettier": "^10.1.2",
 		"eslint-plugin-svelte": "^3.5.1",
