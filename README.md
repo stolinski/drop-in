@@ -45,20 +45,6 @@ $types: 'src/types';
 $utils: 'src/utilities';
 ```
 
-### Commands
-
-#### make-package
-
-Usage: `npm run make-package`
-
-Follow the wizard to create a new package. This will add a new package starter to the local packages folder /src/packages. This will also add "@org-name/your-package-name": "workspace:^", to your package.json file
-
-#### types
-
-Usage: `npm run types`
-
-Generate types for pocketbase to be used throughout project. Requires all env vars to be correctly set.
-
 ### FAQ
 
 #### What is Zero?

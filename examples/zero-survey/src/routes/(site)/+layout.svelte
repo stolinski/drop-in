@@ -6,7 +6,7 @@
 	let { children } = $props();
 </script>
 
-<!-- Delete me once you set your Pocketbase URL var -->
+<!-- Delete me once you set your  URL var -->
 {#if !PUBLIC_SERVER}
 	<p style="text-align: center; background: lightpink; margin: 0; padding: 10px;">
 		!IMPORTANT: You need to set the PUBLIC_SERVER environment variable in "/.env". This is the URL

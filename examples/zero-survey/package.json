@@ -9,7 +9,6 @@
 		"drizzle-orm": "^0.43.1",
 		"nanoid": "^5.1.5",
 		"pg": "^8.15.6",
-		"pocketbase": "^0.26.0",
 		"zero-svelte": "^0.3.3"
 	},
 	"devDependencies": {
@@ -20,7 +19,6 @@
 		"@typescript-eslint/eslint-plugin": "^8.31.0",
 		"@typescript-eslint/parser": "^8.31.0",
 		"drizzle-kit": "^0.31.0",
-		"pocketbase-typegen": "^1.2.1",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.3.3",
 		"svelte": "^5.28.2",
@@ -45,7 +43,6 @@
 		"package": "svelte-kit package",
 		"prepare": "svelte-kit sync",
 		"preview": "svelte-kit preview",
-		"types": "pocketbase-typegen --env --out ./src/types/pocketbase.ts",
 		"zero:server": "npx zero-cache -p src/schema.ts",
 		"db:change": "drizzle-kit generate; drizzle-kit migrate; pnpm exec zero-build-schema -p 'src/schema.ts'; rm /tmp/zerotest-sync-replica.db*;"
 	},

@@ -1,4 +1,4 @@
 {
-	"description": "An app with auth, SSR for the landing pages, CSR for the app pages",
-	"title": "Drop-In PocketBase"
+	"description": "An app with built in auth, email sending, drizzle for ORM and local first sync via Zero",
+	"title": "Local First with Zero"
 }

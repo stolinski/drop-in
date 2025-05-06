@@ -47,7 +47,8 @@
 		"dev": "vite dev",
 		"dev:zero-cache": "zero-cache-dev -p src/schema.ts",
 		"dev:db-up": "docker compose --env-file .env -f ./docker/docker-compose.yml up",
-		"dev:db-down": "docker compose --env-file .env -f ./docker/docker-compose.yml down"
+		"dev:db-down": "docker compose --env-file .env -f ./docker/docker-compose.yml down",
+		"schema:generate": "drizzle-zero generate --format"
 	},
 	"type": "module",
 	"version": "0.0.5"
