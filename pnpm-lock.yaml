@@ -43,18 +43,6 @@ importers:
         specifier: ^6.3.3
         version: 6.3.3(@types/node@22.15.2)(tsx@4.19.3)
 
-  docs:
-    dependencies:
-      '@astrojs/starlight':
-        specifier: ^0.34.2
-        version: 0.34.2(astro@5.7.10(@types/node@22.15.2)(encoding@0.1.13)(rollup@4.40.0)(tsx@4.19.3)(typescript@5.8.3))
-      astro:
-        specifier: ^5.6.1
-        version: 5.7.10(@types/node@22.15.2)(encoding@0.1.13)(rollup@4.40.0)(tsx@4.19.3)(typescript@5.8.3)
-      sharp:
-        specifier: ^0.32.5
-        version: 0.32.6
-
   packages/beeper:
     dependencies:
       '@types/nodemailer':
@@ -124,6 +112,18 @@ importers:
       vite:
         specifier: ^6.3.3
         version: 6.3.3(@types/node@22.15.2)(tsx@4.19.3)
+
+  packages/docs:
+    dependencies:
+      '@astrojs/starlight':
+        specifier: ^0.34.2
+        version: 0.34.2(astro@5.7.10(@types/node@22.15.2)(encoding@0.1.13)(rollup@4.40.0)(tsx@4.19.3)(typescript@5.8.3))
+      astro:
+        specifier: ^5.6.1
+        version: 5.7.10(@types/node@22.15.2)(encoding@0.1.13)(rollup@4.40.0)(tsx@4.19.3)(typescript@5.8.3)
+      sharp:
+        specifier: ^0.32.5
+        version: 0.32.6
 
   packages/graffiti:
     publishDirectory: .
