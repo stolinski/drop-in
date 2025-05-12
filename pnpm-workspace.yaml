@@ -3,4 +3,3 @@ packages:
   - 'packages/**'
   - 'templates/**'
   - 'demos/**'
-  - 'docs/**'

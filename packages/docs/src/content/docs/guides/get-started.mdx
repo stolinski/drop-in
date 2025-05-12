@@ -1,0 +1,102 @@
+---
+title: Getting Started
+description: How to use Drop In
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. Create a new Drop In Project
+
+   <Tabs syncKey="pkg">
+
+   <TabItem label="npm">
+
+   ```sh
+   npx @drop-in/new
+   ```
+
+   </TabItem>
+
+   <TabItem label="pnpm">
+
+   ```sh
+   pnpx @drop-in/new
+   ```
+
+   </TabItem>
+
+   </Tabs>
+
+2. Install package
+
+3. Create Postgres DB
+
+   Either get connection string, or spin up a local PG db.
+
+4. Start Docker
+
+5. Add Required ENV vars
+
+   ```env
+   # This is the server of the local zero cache server, usually will be http://127.0.0.1:4848 unless you have changed it.
+   PUBLIC_SERVER=http://127.0.0.1:4848
+
+   # Database URL, should be your postgres database
+   DATABASE_URL=""
+
+   # \* These must be the same so that zero can verify the JWT
+   # \* Generate a random string.
+   JWT_SECRET=""
+   ZERO_JWT_SECRET=""
+
+   # \* These are needed for Zero Cache
+   # In the future we will support other types of upstreams besides PG
+   ZERO_UPSTREAM_DB = ""
+
+   # A separate Postgres database we use to store CVRs. CVRs (client view records)
+   # keep track of which clients have which data. This is how we know what diff to
+   # send on reconnect. It can be same database as above, but in production it
+   # can make sense to have it be separate to scale them seperately.
+   ZERO_CVR_DB = ""
+
+   # Yet another Postgres database which we used to store a replication log.
+   ZERO_CHANGE_DB = ""
+
+   # Uniquely identifies a single instance of the zero-cache service.
+   REPLICA_ID = "r1"
+
+   # Place to store the SQLite data zero-cache maintains. This can be lost, but if
+   # it is, zero-cache will have to re-replicate next time it starts up.
+   ZERO_REPLICA_FILE = "/tmp/dropin-sync-replica.db"
+
+   # Logging level for zero-cache service.
+   ZERO_LOG_LEVEL = "debug"
+   ```
+
+6. Start the app
+
+   <Tabs syncKey="start">
+
+   <TabItem label="npm">
+
+   ```sh
+   npm run start
+   ```
+
+   </TabItem>
+
+   <TabItem label="pnpm">
+
+   ```sh
+   pnpm start
+   ```
+
+   </TabItem>
+
+   </Tabs>
+
+</Steps>
+
+Do you have an idea on how to make this all smoother? Are you a Docker pro who wants to tune up our docker-compose.yml, please submit a PR.

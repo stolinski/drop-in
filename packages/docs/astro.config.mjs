@@ -26,8 +26,20 @@ export default defineConfig({
 					],
 				},
 				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
+					label: '@drop-in/pass',
+					autogenerate: { directory: 'pass' },
+				},
+				{
+					label: '@drop-in/beeper',
+					autogenerate: { directory: 'beeper' },
+				},
+				{
+					label: '@drop-in/ramps',
+					autogenerate: { directory: 'ramps' },
+				},
+				{
+					label: '@drop-in/plugin',
+					autogenerate: { directory: 'plugin' },
 				},
 			],
 		}),
