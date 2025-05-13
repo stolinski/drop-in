@@ -29,7 +29,7 @@ This is a WIP. In the near future, the primary template will be local first via 
   - Dialog based modals and drawers
   - Popover base menues
 - Elements @drop-in/ramps
-  - Customizable tmeplates that you can pull into your project
+  - Customizable templates that you can pull into your project
 - Aliases and structure
 - Drizzle based server schema / migrations with Zero Drizzle connection for a one time schema authoring experience.
 - Auth via @drop-in/pass
