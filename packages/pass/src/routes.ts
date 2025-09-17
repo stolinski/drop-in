@@ -9,6 +9,8 @@ import { eq } from 'drizzle-orm';
 import { db } from './db.js';
 import { user } from './schema.js';
 import { send_verification_email } from './email.js';
+import { authenticate_user } from './authenticate.js';
+import { get_user_by_id } from './find_user.js';
 
 type FormData = {
 	email?: string;
@@ -36,13 +38,15 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 			refresh_token,
 			cookie_options,
 		);
+		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
-		return new Response(JSON.stringify({ status: 'success', jwt }), {
+		return new Response(JSON.stringify({ status: 'success', user: sign_up_response.user }), {
 			status: 200,
-			headers: {
-				'Content-Type': 'application/json',
-				'Set-Cookie': refresh_token_cookie,
-			},
+			headers: [
+				['Content-Type', 'application/json'],
+				['Set-Cookie', refresh_token_cookie],
+				['Set-Cookie', jwt_cookie],
+			],
 		});
 	}
 	return new Response(JSON.stringify({ status: 'error', error: 'Signup Failed' }), {
@@ -76,13 +80,15 @@ export async function login_route(event: RequestEvent, data: FormData) {
 			refresh_token,
 			cookie_options,
 		);
+		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
-		return new Response(JSON.stringify({ status: 'success', jwt }), {
+		return new Response(JSON.stringify({ status: 'success', user: login_response.user }), {
 			status: 200,
-			headers: {
-				'Content-Type': 'application/json',
-				'Set-Cookie': refresh_token_cookie,
-			},
+			headers: [
+				['Content-Type', 'application/json'],
+				['Set-Cookie', refresh_token_cookie],
+				['Set-Cookie', jwt_cookie],
+			],
 		});
 	}
 	return new Response(JSON.stringify({ status: 'error', error: 'Login Failed' }), {
@@ -117,10 +123,11 @@ export async function logout_route(event: RequestEvent) {
 
 	return new Response('Success', {
 		status: 200,
-		headers: {
-			'Content-Type': 'text/plain',
-			'Set-Cookie': `${refresh_token_cookie}, ${jwt_cookie}`,
-		},
+		headers: [
+			['Content-Type', 'text/plain'],
+			['Set-Cookie', refresh_token_cookie],
+			['Set-Cookie', jwt_cookie],
+		],
 	});
 }
 
@@ -189,6 +196,37 @@ export async function send_verify_email_route(event: RequestEvent, data: FormDat
 	});
 }
 
+export async function me_route(event: RequestEvent) {
+	const auth_result = await authenticate_user(event.cookies);
+	
+	if (!auth_result) {
+		return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+			status: 401,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+
+	const user_data = await get_user_by_id(auth_result.user_id);
+	
+	if (!user_data) {
+		return new Response(JSON.stringify({ error: 'User not found' }), {
+			status: 404,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+	}
+
+	return new Response(JSON.stringify({ user: user_data }), {
+		status: 200,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+}
+
 /**
  * Handles the authentication routes.
  *
@@ -218,6 +256,8 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 			return sign_up_route(event, data);
 		} else if (url.pathname === '/api/auth/logout') {
 			return logout_route(event);
+		} else if (url.pathname === '/api/auth/me') {
+			return me_route(event);
 		} else if (url.pathname === '/api/auth/verify-email') {
 			return verify_email_route(event, data);
 		} else if (url.pathname === '/api/auth/send-verify-email') {

@@ -5,24 +5,21 @@
 // I'm wondering if we should have it longer, like a week. LMK what you think.
 
 // Used for the refresh token
-// Longer maxAge, currently at 60 days. I dunno, when I think about mobile apps,
-// If I go to use them after 60 days, they don't usually make me sign in again.
-// But maybe they do, LMK what you think.
+// Set to 1 month (30 days) as requested
 export const cookie_options = {
 	httpOnly: true,
 	secure: true,
 	path: '/',
 	sameSite: 'strict',
-	maxAge: 60 * 60 * 24 * 60,
+	maxAge: 60 * 60 * 24 * 30, // 30 days
 } as const;
 
-// The jwt cookie
-// This is the jwt access token, it's very short lived, like 1 week.
-// Could be shorter. See above note.
+// The jwt cookie (access token)
+// Short-lived (15 minutes) for security, HttpOnly to prevent XSS
 export const jwt_cookie_options = {
 	path: '/',
-	maxAge: 60 * 60 * 24 * 7,
-	httpOnly: false,
+	maxAge: 60 * 15, // 15 minutes
+	httpOnly: true,
 	sameSite: 'strict',
 	secure: true,
 } as const;

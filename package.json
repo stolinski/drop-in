@@ -14,7 +14,12 @@
 		"decks:dev": "pnpm -F @drop-in/decks run dev",
 		"decks:package": "pnpm -F @drop-in/decks package",
 		"template:z:dev": "pnpm -F z run dev",
-		"template:base:dev": "pnpm -F base run dev"
+		"template:base:dev": "pnpm -F base run dev",
+		"changeset": "changeset",
+		"changeset:version": "changeset version",
+		"changeset:publish": "changeset publish",
+		"release": "pnpm run package && pnpm changeset:publish",
+		"release:preview": "pnpm changeset:version && pnpm run package"
 	},
 	"type": "module",
 	"keywords": [

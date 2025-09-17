@@ -14,7 +14,7 @@ export async function create_jwt(user_id: string) {
 
 	return new SignJWT(jwtPayload)
 		.setProtectedHeader({ alg: 'HS256' })
-		.setExpirationTime('30days')
+		.setExpirationTime('15m')
 		.sign(new TextEncoder().encode(process.env.JWT_SECRET));
 }
 

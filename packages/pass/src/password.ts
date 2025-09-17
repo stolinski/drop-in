@@ -35,32 +35,58 @@ export async function verify_password(
 	storedHash: string,
 	userId: string,
 ): Promise<boolean> {
-	// Attempt the new method: bcrypt(password)
-	const isMatchNew = await compare(enteredPassword, storedHash);
-	if (isMatchNew) {
-		console.log('Password verified using the NEW hashing method.');
-		return true;
+	try {
+		// Attempt the new method: bcrypt(password)
+		const isMatchNew = await compare(enteredPassword, storedHash);
+		if (isMatchNew) {
+			console.log('Password verified using the NEW hashing method.');
+			return true;
+		}
+
+		// If the new method fails, attempt the old method: bcrypt(sha256(password))
+		const sha256Hash = sha256(enteredPassword);
+		const isMatchOld = await compare(sha256Hash, storedHash);
+		if (isMatchOld) {
+			console.log(
+				'Password verified using the OLD hashing method. Attempting to rehash with the NEW method.',
+			);
+
+			try {
+				// Rehash the password using the new method
+				const newHashedPassword = await hash_n_salt_password(enteredPassword);
+
+				// Update the user's password hash in the database
+				const updateSuccess = await update_user_password(userId, newHashedPassword);
+
+				if (updateSuccess) {
+					console.log('Password successfully rehashed and updated to the NEW method.');
+				} else {
+					console.warn(
+						'Password verification succeeded but conversion to new method failed. User can still log in.',
+					);
+				}
+			} catch (error) {
+				console.error('Error during password rehashing process:', error);
+				console.warn(
+					'Password verification succeeded but conversion failed. User can still log in.',
+				);
+			}
+
+			// Return true regardless of conversion success - the old password was valid
+			return true;
+		}
+
+		// If both methods fail, authentication fails
+		console.log('Password verification failed using both methods.');
+		return false;
+	} catch (error) {
+		console.error('Unexpected error during password verification:', error);
+		if (error instanceof Error) {
+			console.error('Error details:', error.message);
+			console.error('Stack trace:', error.stack);
+		}
+		return false;
 	}
-
-	// If the new method fails, attempt the old method: bcrypt(sha256(password))
-	const sha256Hash = sha256(enteredPassword);
-	const isMatchOld = await compare(sha256Hash, storedHash);
-	if (isMatchOld) {
-		console.log('Password verified using the OLD hashing method. Rehashing with the NEW method.');
-
-		// Rehash the password using the new method
-		const newHashedPassword = await hash_n_salt_password(enteredPassword);
-
-		// Update the user's password hash in the database
-		await update_user_password(userId, newHashedPassword);
-		console.log('Password rehashed and updated to the NEW method.');
-
-		return true;
-	}
-
-	// If both methods fail, authentication fails
-	console.log('Password verification failed using both methods.');
-	return false;
 }
 
 /**
@@ -68,11 +94,24 @@ export async function verify_password(
  *
  * @param userId - The ID of the user.
  * @param newHashedPassword - The new bcrypt hash of the password.
+ * @returns Promise<boolean> - Returns true if update succeeded, false otherwise.
  */
-async function update_user_password(userId: string, newHashedPassword: string): Promise<void> {
-	await db
-		.update(user)
-		.set({ password_hash: newHashedPassword })
-		.where(eq(user.id, userId))
-		.execute();
+async function update_user_password(userId: string, newHashedPassword: string): Promise<boolean> {
+	try {
+		const result = await db
+			.update(user)
+			.set({ password_hash: newHashedPassword })
+			.where(eq(user.id, userId))
+			.execute();
+
+		console.log('Password successfully updated for user:', userId);
+		return true;
+	} catch (error) {
+		console.error('Failed to update password hash for user:', userId, error);
+		// Log the specific error details for debugging
+		if (error instanceof Error) {
+			console.error('Error details:', error.message);
+		}
+		return false;
+	}
 }

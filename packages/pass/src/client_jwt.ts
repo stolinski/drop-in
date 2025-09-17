@@ -1,42 +1,42 @@
 // Client JWT utilities
-// These are jwt utilities that the client or the server can use, but they don't leak anything from the server.
+// These utilities are deprecated since JWT is now HttpOnly for security.
+// Use server-side session data or /api/auth/me endpoint instead.
 
 import { decodeJwt } from 'jose';
-import Cookies from 'js-cookie';
 import { JWTPayload } from './jwt.js';
 
+/**
+ * @deprecated JWT is now HttpOnly and cannot be read client-side.
+ * Use event.locals.user on the server or call /api/auth/me instead.
+ */
 export function get_jwt(): JWTPayload | undefined {
-	const token = get_raw_jwt();
-	if (!token) {
-		return undefined;
-	}
-	const payload = decodeJwt(token);
-	const currentTime = Math.floor(Date.now() / 1000);
-	if (payload.exp && payload.exp < currentTime) {
-		return undefined;
-	}
-
-	return payload as JWTPayload;
+	console.warn('get_jwt() is deprecated. JWT is now HttpOnly. Use server-side session or /api/auth/me instead.');
+	return undefined;
 }
 
+/**
+ * @deprecated JWT is now HttpOnly and cannot be read client-side.
+ */
 export function get_raw_jwt() {
-	return Cookies.get('jwt');
+	console.warn('get_raw_jwt() is deprecated. JWT is now HttpOnly and cannot be accessed client-side.');
+	return undefined;
 }
 
+/**
+ * @deprecated JWT clearing is now handled server-side via logout endpoint.
+ */
 export function clear_jwt() {
-	delete_cookie('jwt');
+	console.warn('clear_jwt() is deprecated. JWT clearing is handled server-side via logout.');
 }
 
-function delete_cookie(name: string) {
-	Cookies.remove(name);
-}
-
-// Just a better named version of get_jwt for the client facing code
+/**
+ * @deprecated Use server-side session data or /api/auth/me endpoint instead.
+ * Returns null as JWT is no longer readable client-side.
+ */
 export function get_login() {
-	const jwt = get_raw_jwt();
-	const payload = get_jwt();
+	console.warn('get_login() is deprecated. Use server-side session or /api/auth/me instead.');
 	return {
-		sub: payload?.sub,
-		jwt,
+		sub: undefined,
+		jwt: undefined,
 	};
 }

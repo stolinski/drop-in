@@ -21,8 +21,11 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"ebuild": "esbuild src/index.ts --bundle --platform=node --format=esm --outdir=dist --external:pg --external:crypto --external:bcryptjs --external:fs --external:path --external:os --external:util --external:events"
 	},
-	"author": "",
+	"author": "Scott Tolinski",
 	"license": "ISC",
+	"publishConfig": {
+		"access": "public"
+	},
 	"dependencies": {
 		"@types/nodemailer": "^6.4.17",
 		"nodemailer": "^6.10.1"

@@ -1,25 +1,11 @@
 /* Typeography */
 :root {
-	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial,
-		sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif,
+		'Apple Color Emoji', 'Segoe UI Emoji';
 
 	--min-vw: 360;
 	--max-vw: 800;
-
-	/* Deprecated	- use --fs: 1 instead */
-	/* Fluid Type */
-	--fs-xxxs: clamp(0.45rem, 0.305882vi + 0.37rem, 0.58rem);
-	--fs-xxs: clamp(0.56rem, 0.376471vi + 0.47rem, 0.72rem);
-	--fs-xs: clamp(0.7rem, 0.470588vi + 0.58rem, 0.9rem);
-	--fs-base: clamp(0.88rem, 0.588235vi + 0.73rem, 1.13rem);
-	--fs-s: clamp(1.09rem, 0.752941vi + 0.9rem, 1.41rem);
-	--fs-m: clamp(1.37rem, 0.917647vi + 1.14rem, 1.76rem);
-	--fs-l: clamp(1.71rem, 1.152941vi + 1.42rem, 2.2rem);
-	--fs-xl: clamp(2.14rem, 1.435294vi + 1.78rem, 2.75rem);
-	--fs-xxl: clamp(2.67rem, 1.788235vi + 2.22rem, 3.43rem);
-	--fs-xxxl: clamp(3.34rem, 2.235294vi + 2.78rem, 4.29rem);
-	--fs-xxxxl: clamp(4.17rem, 2.8vi + 3.47rem, 5.36rem);
-	/* END Deprecated Fluid Type */
 
 	--line-height: calc(2px + 2ex + 2px);
 
@@ -43,14 +29,17 @@
 
 	/* Shadow */
 	--shadow-color: 0deg 0% 0%;
-	--s-s: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
+	--s-s:
+		0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
 		0.8px 1.3px 1.7px -1.2px hsl(var(--shadow-color) / 0.3),
 		1.9px 3.1px 4.1px -2.5px hsl(var(--shadow-color) / 0.3);
-	--s-m: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.32),
+	--s-m:
+		0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.32),
 		1.6px 2.6px 3.4px -0.8px hsl(var(--shadow-color) / 0.32),
 		3.9px 6.4px 8.4px -1.7px hsl(var(--shadow-color) / 0.32),
 		9.6px 15.5px 20.5px -2.5px hsl(var(--shadow-color) / 0.32);
-	--s-l: 0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
+	--s-l:
+		0.5px 0.8px 1.1px hsl(var(--shadow-color) / 0.3),
 		2.7px 4.4px 5.8px -0.4px hsl(var(--shadow-color) / 0.3),
 		4.9px 8px 10.6px -0.7px hsl(var(--shadow-color) / 0.3),
 		8.1px 13.1px 17.3px -1.1px hsl(var(--shadow-color) / 0.3),
@@ -428,6 +417,17 @@ label {
 
 :where(h1, h2, h3, h4, h5, h6) {
 	view-transition-name: var(--transition-name);
+}
+
+.stack {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+:is(.stack) > * {
+	margin-block: 0;
+	margin-inline: 0;
 }
 /* END LAYOUT */
 

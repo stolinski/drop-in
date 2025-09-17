@@ -8,8 +8,13 @@ export async function logout(refresh_token: string, jwt: string): Promise<void> 
 	const payload = await verify_access_token(jwt);
 	const user_id = payload.sub;
 
-	db.delete(refresh_tokens).where(
-		and(eq(refresh_tokens.id, token_id), eq(refresh_tokens.user_id, user_id)),
-	);
-	return;
+	try {
+		await db
+			.delete(refresh_tokens)
+			.where(and(eq(refresh_tokens.id, token_id), eq(refresh_tokens.user_id, user_id)))
+			.execute();
+	} catch (error) {
+		console.error('Failed to invalidate refresh token during logout:', error);
+		throw new Error('Logout failed: Unable to invalidate refresh token');
+	}
 }

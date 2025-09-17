@@ -27,7 +27,8 @@
 	],
 	"scripts": {
 		"dev": "tsc --watch",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "vitest --run",
+		"test:watch": "vitest",
 		"prepublish": "tsc",
 		"build": "tsc",
 		"package": "tsc",
@@ -35,6 +36,9 @@
 	},
 	"author": "Scott Tolinski",
 	"license": "ISC",
+	"publishConfig": {
+		"access": "public"
+	},
 	"dependencies": {
 		"@drop-in/beeper": "workspace:^",
 		"bcryptjs": "^3.0.2",
@@ -54,6 +58,7 @@
 		"@types/bcryptjs": "^3.0.0",
 		"@types/js-cookie": "^3.0.6",
 		"@types/jsonwebtoken": "^9.0.9",
-		"@types/pg": "^8.11.14"
+		"@types/pg": "^8.11.14",
+		"vitest": "^3.2.4"
 	}
 }

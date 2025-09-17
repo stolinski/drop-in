@@ -1,3 +1,5 @@
+import type { User } from './schema.js';
+
 declare global {
 	const DROP_IN: {
 		email: {
@@ -12,6 +14,11 @@ declare global {
 			route: string;
 		};
 	};
+	namespace App {
+		interface Locals {
+			user?: Partial<User>;
+		}
+	}
 }
 
 export {};

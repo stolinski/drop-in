@@ -13,6 +13,9 @@
 // See pass_routes() for the central station of auth routes.
 export * from './routes.js';
 
+// Session management - NEW: for populating event.locals with user data
+export * from './session.js';
+
 // We also export all of the functions that are consumed by routes if you'd like to make your own routes.
 
 // Functions for creating an account
@@ -22,6 +25,9 @@ export * from './sign_up.js';
 export * from './login.js';
 // Functions for logging out
 export * from './logout.js';
+
+// Authentication helpers
+export * from './authenticate.js';
 
 // Methods for resetting password
 // export * from './reset_password';
