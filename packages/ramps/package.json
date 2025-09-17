@@ -37,8 +37,8 @@
 		"svelte": "^5.0.0"
 	},
 	"dependencies": {
-		"@drop-in/decks": "workspace:^",
-		"@drop-in/pass": "workspace:^"
+		"@drop-in/decks": "^0.0.15",
+		"@drop-in/pass": "^0.0.36"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.8",

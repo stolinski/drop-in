@@ -36,7 +36,7 @@
 	"author": "Scott Tolinski",
 	"license": "ISC",
 	"dependencies": {
-		"@drop-in/beeper": "workspace:^",
+		"@drop-in/beeper": "^0.0.13",
 		"bcryptjs": "^3.0.2",
 		"drizzle-orm": "^0.43.1",
 		"jose": "^6.0.10",
