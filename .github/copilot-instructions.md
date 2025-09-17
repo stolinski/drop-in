@@ -36,11 +36,19 @@ Always reference these instructions first and fallback to search or bash command
 ### Generated App Validation
 After creating a new app with the CLI:
 1. `cd <app-name>`
-2. `pnpm install` -- takes 45 seconds for first install
+2. `pnpm install` -- takes 23 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
 3. Set up environment variables in `.env` (copy from `example.env`)
 4. Required env vars: `DATABASE_URL`, `JWT_SECRET`, `ZERO_JWT_SECRET`
-5. Test development server: `pnpm run dev` (should start on localhost with random port)
+5. Test development server: `pnpm run dev` (starts on random port like http://localhost:4444)
 6. Test type checking: `pnpm run check` (may show config-related errors in fresh apps)
+7. ALWAYS test at least one complete user scenario: verify the dev server starts and serves content
+
+### Manual Testing Scenarios
+When making changes to the framework:
+1. **CLI Generation Test**: Create a new app and verify it generates without errors
+2. **Development Workflow**: Start dev server and verify it serves the application UI
+3. **Build Validation**: Run package builds to ensure no breaking changes
+4. **Documentation**: Verify docs build and serve correctly
 
 ### Linting and Formatting
 - Individual packages have lint/format commands: `pnpm run lint`, `pnpm run format`
@@ -80,8 +88,8 @@ Generated apps include:
 ### Timing Expectations
 - `pnpm install`: ~45 seconds. NEVER CANCEL. Set timeout to 120+ seconds.
 - `pnpm package`: ~45 seconds. NEVER CANCEL. Set timeout to 120+ seconds.
-- `pnpm docs:build`: ~15 seconds. Set timeout to 30+ seconds.
-- Generated app `pnpm install`: ~45 seconds. Set timeout to 120+ seconds.
+- `pnpm docs:build`: ~14 seconds. Set timeout to 30+ seconds.
+- Generated app `pnpm install`: ~23 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
 - Dev server startup: ~2-3 seconds.
 
 ### Known Issues
