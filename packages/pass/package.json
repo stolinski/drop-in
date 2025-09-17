@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/pass",
-	"version": "0.0.36",
+	"version": "0.1.0",
 	"description": "Your drop-in season pass. aka Auth",
 	"main": "dist/index.js",
 	"type": "module",

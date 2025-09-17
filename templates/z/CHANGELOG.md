@@ -1,5 +1,13 @@
 # z
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies
+  - @drop-in/pass@0.1.0
+  - @drop-in/ramps@0.0.3
+
 ## 0.0.5
 
 ### Patch Changes

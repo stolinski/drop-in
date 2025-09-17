@@ -1,5 +1,11 @@
 # @drop-in/pass
 
+## 0.1.0
+
+### Minor Changes
+
+- Add comprehensive testing suite and complete documentation
+
 ## 0.0.36
 
 ### Patch Changes
