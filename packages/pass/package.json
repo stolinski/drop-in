@@ -1,8 +1,9 @@
 {
 	"name": "@drop-in/pass",
-	"version": "0.1.0",
+	"version": "0.1.2",
 	"description": "Your drop-in season pass. aka Auth",
 	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"type": "module",
 	"exports": {
 		".": {
@@ -40,7 +41,7 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@drop-in/beeper": "workspace:^",
+		"@drop-in/beeper": "^0.0.13",
 		"bcryptjs": "^3.0.2",
 		"drizzle-orm": "^0.43.1",
 		"jose": "^6.0.10",
@@ -55,7 +56,6 @@
 	"devDependencies": {
 		"@sveltejs/kit": "^2.20.7",
 		"@types/bcrypt": "^5.0.2",
-		"@types/bcryptjs": "^3.0.0",
 		"@types/js-cookie": "^3.0.6",
 		"@types/jsonwebtoken": "^9.0.9",
 		"@types/pg": "^8.11.14",

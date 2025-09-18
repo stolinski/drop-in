@@ -40,7 +40,7 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 		);
 		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
-		return new Response(JSON.stringify({ status: 'success', user: sign_up_response.user }), {
+		return new Response(JSON.stringify({ status: 'success', user: sign_up_response.user, jwt }), {
 			status: 200,
 			headers: [
 				['Content-Type', 'application/json'],
@@ -82,7 +82,7 @@ export async function login_route(event: RequestEvent, data: FormData) {
 		);
 		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
-		return new Response(JSON.stringify({ status: 'success', user: login_response.user }), {
+		return new Response(JSON.stringify({ status: 'success', user: login_response.user, jwt }), {
 			status: 200,
 			headers: [
 				['Content-Type', 'application/json'],
