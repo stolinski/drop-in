@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/pass",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"description": "Your drop-in season pass. aka Auth",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -41,7 +41,6 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@drop-in/beeper": "^0.0.13",
 		"bcryptjs": "^3.0.2",
 		"drizzle-orm": "^0.43.1",
 		"jose": "^6.0.10",

@@ -5,7 +5,7 @@ description: A reference page for Pass, the Drop In auth.
 
 ## What is @drop-in/pass?
 
-This is the auth package for Drop In. It's JWT based and uses a Drizzle Schema to manage migrations and data for logins and profiles.
+This is the authentication package for Drop In. It's JWT-based and uses a Drizzle Schema to manage migrations and data for logins and profiles. **As of the latest version, Pass is runtime-agnostic** and works in Node.js, Cloudflare Workers, Deno, Bun, and other environments.
 
 ## How does it work?
 
@@ -27,7 +27,31 @@ Don't delete these if you would like Pass to work.
 
 `pass_routes` is a set of routes to handle the server response for logging in, out, signing up, resetting password and verifying email. This means you don't need to add or manage any server side routes for `@drop-in/pass`.
 
-## How do I login / signup ect
+## Email Configuration
+
+Pass requires email functionality for user verification and password resets. **You must configure an email provider** in your `drop-in.config.js`:
+
+```js
+// drop-in.config.js
+export default {
+  email: {
+    from: 'noreply@yourdomain.com',
+    sendEmail: async ({ to, subject, html, from }) => {
+      // Your email implementation here
+      // Works with any provider: Resend, SendGrid, MailChannels, SMTP, etc.
+    },
+  },
+  app: {
+    url: 'https://yourdomain.com',
+    name: 'Your App',
+    route: '/dashboard'
+  }
+};
+```
+
+For detailed email setup instructions and provider examples, see the [Email Configuration Guide](/pass/email-setup).
+
+## How do I login / signup etc
 
 Inside of `/src/routes/(site)/auth` you will find a number of routes for all auth functions.
 
@@ -90,6 +114,37 @@ This includes a function that handles all login logic. You can customize this lo
 
 `<Signup ...>` is the template, it comes from `@drop-in/ramps`. To access these templates and customize them use the "pick" command (coming soon).
 
+## Runtime Compatibility
+
+Pass now works in any JavaScript runtime:
+
+- ✅ **Node.js**: Traditional server deployments
+- ✅ **Cloudflare Workers**: Edge computing platform  
+- ✅ **Deno**: Modern JavaScript runtime
+- ✅ **Bun**: Fast JavaScript runtime
+- ✅ **Vercel Edge Functions**: Serverless edge computing
+- ✅ **Netlify Edge Functions**: Distributed serverless
+
+This is possible because Pass no longer has hard dependencies on Node.js-specific modules like nodemailer.
+
+## API Routes
+
+Pass automatically provides these authentication endpoints:
+
+- `POST /api/auth/register` - User signup
+- `POST /api/auth/login` - User login  
+- `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user
+- `POST /api/auth/verify-email` - Verify email address
+- `POST /api/auth/send-verify-email` - Send verification email
+
+These are handled automatically by the `pass_routes` hook.
+
 ## That's it
 
-You shouldn't need to customize too much more other than the redirect logic or pick a template and tweak the html or css.
+You shouldn't need to customize too much more other than:
+- Configure your email provider in `drop-in.config.js`
+- Customize the redirect logic in auth components
+- Pick and tweak templates from `@drop-in/ramps`
+
+For email setup, see the [Email Configuration Guide](/pass/email-setup).

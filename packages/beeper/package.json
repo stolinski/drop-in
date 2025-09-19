@@ -1,6 +1,6 @@
 {
 	"name": "@drop-in/beeper",
-	"version": "0.0.13",
+	"version": "0.0.14",
 	"description": "Your beeper",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",

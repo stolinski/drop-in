@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"@drop-in/beeper": "workspace:^",
 		"@drop-in/decks": "workspace:^",
 		"@drop-in/graffiti": "^0.3.4",
 		"@drop-in/pass": "workspace:^",

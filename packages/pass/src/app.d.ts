@@ -1,11 +1,22 @@
 import type { User } from './schema.js';
 
+type EmailCallback = (options: {
+	to: string;
+	subject: string;
+	html: string;
+	from?: string;
+}) => Promise<void> | void;
+
 declare global {
 	const DROP_IN: {
-		email: {
+		email?: {
+			// Legacy config (deprecated but still supported)
 			host?: string;
 			port?: number;
 			secure?: boolean;
+			from?: string;
+			// New callback-based config
+			sendEmail?: EmailCallback;
 			from?: string;
 		};
 		app: {

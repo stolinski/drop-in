@@ -32,8 +32,8 @@ This is a WIP. In the near future, the primary template will be local first via 
   - Customizable templates that you can pull into your project
 - Aliases and structure
 - Drizzle based server schema / migrations with Zero Drizzle connection for a one time schema authoring experience.
-- Auth via @drop-in/pass
-- Email via @drop-in/beeper
+- Auth via @drop-in/pass (runtime agnostic - works in Node.js, Cloudflare Workers, etc.)
+- Email flexibility - configure any email provider (Resend, SendGrid, MailChannels, SMTP, etc.)
 
 ### Included Aliases
 

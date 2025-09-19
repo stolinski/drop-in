@@ -4,7 +4,6 @@ import { create_expiring_auth_digest } from './utils.js';
 import { db } from './db.js';
 import { user } from './schema.js';
 import { eq } from 'drizzle-orm';
-import { beeper } from '@drop-in/beeper';
 
 export function create_password_link(email: string): string {
 	const expirationTimestamp = Date.now() + 1000 * 60 * 60 * 24;
@@ -13,10 +12,37 @@ export function create_password_link(email: string): string {
 	return `${DROP_IN.app.url}/set-password?email=${URIEncodedEmail}&key=${authDigest}&expire=${expirationTimestamp}`;
 }
 
+async function send_email(options: {
+	to: string;
+	subject: string;
+	html: string;
+	from?: string;
+}) {
+	// Use user-provided email callback if available
+	if (DROP_IN.email?.sendEmail) {
+		try {
+			await DROP_IN.email.sendEmail(options);
+			return;
+		} catch (error) {
+			console.error('Error sending email via user callback:', error);
+			throw error;
+		}
+	}
+
+	// Fallback to console logging for development
+	console.log(
+		'📧 Email would be sent (no email callback configured):',
+		`To: ${options.to}`,
+		`Subject: ${options.subject}`,
+		`From: ${options.from || DROP_IN.email?.from || 'noreply@example.com'}`,
+		`Body: ${options.html}`
+	);
+}
+
 export async function send_reset_password_email(email: string) {
 	const set_password_url = create_password_link(email);
-	// Send email with code
-	beeper.send({
+	
+	await send_email({
 		to: email,
 		subject: `${DROP_IN.app.name} Reset Email`,
 		html: `<p>  
@@ -28,6 +54,7 @@ export async function send_reset_password_email(email: string) {
           ensure that your account is kept secure.</p>
 		<p> <a href="${set_password_url}">Reset Password</a></p>
 		`,
+		from: DROP_IN.email?.from,
 	});
 }
 
@@ -40,12 +67,13 @@ export async function send_verification_email(user_id: string) {
 
 	const verification_link = `${DROP_IN.app.url}/verify-email?token=${verification_token}&email=${URIEncodedEmail}&expire=${expirationTimestamp}`;
 
-	await beeper.send({
+	await send_email({
 		to: email,
 		subject: `${DROP_IN.app.name} Verify Email`,
 		html: `<p>Please click the following link to verify your email:</p>
            <p><a href="${verification_link}">${verification_link}</a></p>
            <p>If you did not request this verification, please ignore this email.</p>`,
+		from: DROP_IN.email?.from,
 	});
 
 	// Store the verification token in the database for later verification

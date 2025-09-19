@@ -75,7 +75,15 @@ import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
    ZERO_LOG_LEVEL = "debug"
    ```
 
-6. Start the app
+6. Configure Email Provider
+
+   For authentication features (email verification, password reset), you'll need to configure an email provider in your `drop-in.config.js`. 
+   
+   During development, emails will be logged to the console if no provider is configured.
+   
+   See the [Email Configuration Guide](/pass/email-setup) for detailed setup instructions with different providers (Resend, SendGrid, MailChannels, SMTP, etc.).
+
+7. Start the app
 
    <Tabs syncKey="start">
 

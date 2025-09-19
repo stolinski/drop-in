@@ -2,13 +2,14 @@
 
 > Your drop-in season pass. aka Auth
 
-A secure, modern authentication library for SvelteKit applications with HttpOnly JWT cookies, refresh token rotation, and comprehensive session management.
+A secure, modern authentication library for SvelteKit applications with HttpOnly JWT cookies, refresh token rotation, and comprehensive session management. **Runtime agnostic** - works in Node.js, Cloudflare Workers, Deno, Bun, and other environments.
 
 ## ✨ Features
 
 - 🔒 **Secure by default** - HttpOnly cookies, CSRF protection, bcrypt password hashing
 - 🔄 **Automatic token refresh** - Transparent JWT renewal with refresh token rotation
-- 📧 **Email verification** - Built-in email verification workflow
+- 📧 **Email verification** - Built-in email verification workflow with flexible provider configuration
+- 🌐 **Runtime agnostic** - Works in Node.js, Cloudflare Workers, Deno, Bun, and other environments
 - 🏗️ **SvelteKit optimized** - Native hooks integration and SSR support
 - 📊 **Session management** - Server-side user context and authentication state
 - 🧪 **Well tested** - 66+ tests covering all core functionality
@@ -32,6 +33,48 @@ DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
 JWT_SECRET="your-secret-key-here"
 ```
 
+### Email Configuration
+
+Configure your email provider in `drop-in.config.js`:
+
+```javascript
+// For Cloudflare Workers with Resend
+const sendEmail = async ({ to, subject, html, from }) => {
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ to, subject, html, from }),
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Failed to send email: ${response.statusText}`);
+  }
+};
+
+export default {
+  email: {
+    from: 'noreply@yourdomain.com',
+    sendEmail,
+  },
+  app: {
+    url: 'https://yourdomain.com',
+    name: 'Your App',
+    route: '/dashboard'
+  }
+};
+```
+
+**Supported email providers:**
+- **Resend** - Modern email API, perfect for Cloudflare Workers
+- **MailChannels** - Free email sending for Cloudflare Workers  
+- **SendGrid** - Reliable email delivery service
+- **SMTP** - Traditional email with `@drop-in/beeper` for Node.js
+
+See [Email Configuration Guide](https://your-docs-url/pass/email-setup) for detailed examples.
+
 ### Basic Setup
 
 1. **Configure your hooks** (`src/hooks.server.ts`):
@@ -46,25 +89,20 @@ export const handle = sequence(
 );
 ```
 
-2. **Configure global settings** (`app.html` or environment):
+2. **Configure global settings** (`drop-in.config.js`):
 
 ```typescript
-// Global configuration (required for email features)
-declare global {
-  const DROP_IN: {
-    email: {
-      host?: string;
-      port?: number;
-      secure?: boolean;
-      from?: string;
-    };
-    app: {
-      url: string;
-      name: string;
-      route: string;
-    };
-  };
-}
+export default {
+  email: {
+    from: 'noreply@yourdomain.com',
+    sendEmail: yourEmailFunction, // Your email implementation
+  },
+  app: {
+    url: 'https://yourdomain.com',
+    name: 'Your App Name',
+    route: '/dashboard'
+  }
+};
 ```
 
 ### Usage
@@ -247,11 +285,17 @@ export const jwt_cookie_options = {
 DATABASE_URL="postgresql://..."
 JWT_SECRET="your-jwt-secret"
 
-# Optional (for email features)
+# Optional email API keys (choose one based on your provider)
+RESEND_API_KEY="re_your_api_key"           # For Resend
+SENDGRID_API_KEY="SG.your_api_key"         # For SendGrid
+# MailChannels requires no API key for Cloudflare Workers
+
+# Legacy SMTP settings (if using @drop-in/beeper)
 EMAIL_HOST="smtp.gmail.com"
 EMAIL_PORT="587"
 EMAIL_SECURE="true"
-EMAIL_FROM="noreply@yourapp.com"
+EMAIL_USER="your-email@gmail.com"
+EMAIL_PASSWORD="your-app-password"
 ```
 
 ## 🧪 Testing
@@ -338,9 +382,15 @@ npm run dev
 - Check database schema is properly set up
 
 **Email verification not working**
-- Configure `DROP_IN` global variable
-- Set up email service credentials
+- Configure email provider in `drop-in.config.js` with your `sendEmail` callback
+- Set up email service credentials (API keys) in environment variables
 - Check spam/junk folders
+- Verify your email provider configuration is correct
+
+**Runtime compatibility issues**
+- Ensure your email implementation uses only Web APIs (fetch, etc.) for Cloudflare Workers
+- For Node.js SMTP, use `@drop-in/beeper` as your email callback
+- Avoid Node.js-specific modules in Cloudflare Workers environments
 
 ### Debug Mode
 

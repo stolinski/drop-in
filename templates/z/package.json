@@ -1,7 +1,6 @@
 {
 	"private": true,
 	"dependencies": {
-		"@drop-in/beeper": "workspace:^",
 		"@drop-in/decks": "workspace:^",
 		"@drop-in/graffiti": "workspace:^",
 		"@drop-in/pass": "workspace:^",
