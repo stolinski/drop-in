@@ -154,9 +154,6 @@ importers:
       pg:
         specifier: ^8.15.6
         version: 8.15.6
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.5
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -259,9 +256,6 @@ importers:
 
   templates/z:
     dependencies:
-      '@drop-in/beeper':
-        specifier: workspace:^
-        version: link:../../packages/beeper
       '@drop-in/decks':
         specifier: workspace:^
         version: link:../../packages/decks
