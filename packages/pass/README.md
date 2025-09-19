@@ -35,6 +35,8 @@ JWT_SECRET="your-secret-key-here"
 
 ### Email Configuration
 
+Password reset links are generated using `create_password_link(email)` and include query params: `email`, `key` (token), and `expire` (timestamp). The default expiration is 24 hours. The reset endpoint expects these parameters.
+
 Configure your email provider in `drop-in.config.js`:
 
 ```javascript
@@ -76,6 +78,8 @@ export default {
 See [Email Configuration Guide](https://your-docs-url/pass/email-setup) for detailed examples.
 
 ### Basic Setup
+
+Note: Signing up (`POST /api/auth/register`) automatically triggers a verification email in the background. The response is not delayed by email sending; failures are logged and do not block signup.
 
 1. **Configure your hooks** (`src/hooks.server.ts`):
 
@@ -216,6 +220,16 @@ Logs out the current user.
 
 **Returns:** `Promise<Response>`
 
+#### `pass.requestPasswordReset(email: string)`
+Requests a password reset email. Always returns success to avoid user enumeration.
+
+**Returns:** `Promise<Response>`
+
+#### `pass.resetPassword(email: string, token: string, expire: number, password: string)`
+Completes password reset. On success, sets HttpOnly cookies for JWT and refresh token.
+
+**Returns:** `Promise<Response>`
+
 #### `pass.me()`
 Gets current authenticated user information.
 
@@ -248,11 +262,13 @@ console.log(event.locals.user); // User object or undefined
 The library automatically handles these routes when using `pass_routes`:
 
 - `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration  
+- `POST /api/auth/register` - User registration (auto-sends verification email; non-blocking)
 - `POST /api/auth/logout` - User logout
 - `GET /api/auth/me` - Get current user
 - `POST /api/auth/verify-email` - Email verification
 - `POST /api/auth/send-verify-email` - Send verification email
+- `POST /api/auth/forgot-password` - Request password reset (always returns success)
+- `POST /api/auth/reset-password` - Complete password reset and sign in
 
 ## 🔧 Configuration
 
@@ -381,8 +397,8 @@ npm run dev
 - Ensure PostgreSQL is running and accessible
 - Check database schema is properly set up
 
-**Email verification not working**
-- Configure email provider in `drop-in.config.js` with your `sendEmail` callback
+**Email verification not working or no email received**
+- Configure email provider in `drop-in.config.js` with your `sendEmail` callback (signup triggers verification automatically)
 - Set up email service credentials (API keys) in environment variables
 - Check spam/junk folders
 - Verify your email provider configuration is correct

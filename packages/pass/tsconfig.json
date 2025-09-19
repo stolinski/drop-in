@@ -14,5 +14,6 @@
 		"sourceMap": true,
 		"allowSyntheticDefaultImports": true
 	},
-	"include": ["src/**/*"]
+	"include": ["src/**/*"],
+	"exclude": ["src/**/*.test.ts"]
 }

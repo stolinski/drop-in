@@ -30,7 +30,7 @@ export * from './logout.js';
 export * from './authenticate.js';
 
 // Methods for resetting password
-// export * from './reset_password';
+export * from './reset_password.js';
 
 // Methods for deleting account
 // Methods for updating account

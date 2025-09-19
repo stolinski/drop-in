@@ -83,9 +83,11 @@ class User {
 			body: formData,
 		});
 	}
-	resetPassword(token: string, password: string) {
+	resetPassword(email: string, token: string, expire: number, password: string) {
 		const formData = new FormData();
+		formData.append('email', email);
 		formData.append('token', token);
+		formData.append('expire', expire.toString());
 		formData.append('password', password);
 		return fetch('/api/auth/reset-password', {
 			method: 'POST',

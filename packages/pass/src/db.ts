@@ -2,7 +2,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from './schema.js';
 import pg from 'pg';
-import { Resource } from 'sst';
+
 
 // The db connection
 // We use drizzle to connect to the database
@@ -13,7 +13,7 @@ import { Resource } from 'sst';
 // But tbh not sure how much of a problem that is. LMK what you think. The goal is to make the user do a little bit of work as possible
 // To get up and running.
 if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL required');
-console.log('DEBUG: db-connection - ', process.env.DATABASE_URL);
+if (process.env.DEBUG) console.log('DEBUG: db-connection - ', process.env.DATABASE_URL);
 
 const pool = new pg.Pool({
 	connectionString: process.env.DATABASE_URL,

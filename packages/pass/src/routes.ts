@@ -11,6 +11,7 @@ import { user } from './schema.js';
 import { send_verification_email } from './email.js';
 import { authenticate_user } from './authenticate.js';
 import { get_user_by_id } from './find_user.js';
+import { request_password_reset, reset_password } from './reset_password.js';
 
 type FormData = {
 	email?: string;
@@ -39,6 +40,14 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 			cookie_options,
 		);
 		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
+
+		const newUserId = sign_up_response.user?.id;
+		if (newUserId) {
+			// Fire-and-forget verification email; do not block signup
+			Promise.resolve(send_verification_email(newUserId)).catch((e) =>
+				console.warn('Failed to send verification email:', e),
+			);
+		}
 
 		return new Response(JSON.stringify({ status: 'success', user: sign_up_response.user, jwt }), {
 			status: 200,
@@ -149,7 +158,7 @@ export async function verify_email_route(event: RequestEvent, data: FormData) {
 		});
 	}
 	const test_token = create_expiring_auth_digest(email, expire);
-	console.log('test_token', test_token);
+	if (process.env.DEBUG) console.log('DEBUG: verify-email test_token', test_token);
 	if (verification_token !== test_token) {
 		return new Response('Invalid token', {
 			status: 400,
@@ -227,6 +236,58 @@ export async function me_route(event: RequestEvent) {
 	});
 }
 
+export async function forgot_password_route(event: RequestEvent, data: FormData) {
+	const email = data.email;
+	if (!email) {
+		return new Response(JSON.stringify({ error: 'Email is required' }), {
+			status: 400,
+			headers: { 'Content-Type': 'application/json' },
+		});
+	}
+	await request_password_reset(email);
+	return new Response(JSON.stringify({ status: 'success' }), {
+		status: 200,
+		headers: { 'Content-Type': 'application/json' },
+	});
+}
+
+export async function reset_password_route(event: RequestEvent, data: FormData) {
+	const email = data.email;
+	const token = data.token;
+	const expire = data.expire;
+	const password = data.password;
+
+	if (!email || !token || !expire || !password) {
+		return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+			status: 400,
+			headers: { 'Content-Type': 'application/json' },
+		});
+	}
+
+	const result = await reset_password(email, token, Number(expire), password);
+	if (!result) {
+		return new Response(JSON.stringify({ error: 'Password reset failed' }), {
+			status: 400,
+			headers: { 'Content-Type': 'application/json' },
+		});
+	}
+
+	const refresh_token_cookie = event.cookies.serialize('refresh_token', result.refresh_token, cookie_options);
+	const jwt_cookie = event.cookies.serialize('jwt', result.jwt, jwt_cookie_options);
+
+	return new Response(
+		JSON.stringify({ status: 'success', user: result.user, jwt: result.jwt }),
+		{
+			status: 200,
+			headers: [
+				['Content-Type', 'application/json'],
+				['Set-Cookie', refresh_token_cookie],
+				['Set-Cookie', jwt_cookie],
+			],
+		},
+	);
+}
+
 /**
  * Handles the authentication routes.
  *
@@ -262,6 +323,10 @@ export const pass_routes: Handle = async ({ event, resolve }) => {
 			return verify_email_route(event, data);
 		} else if (url.pathname === '/api/auth/send-verify-email') {
 			return send_verify_email_route(event, data);
+		} else if (url.pathname === '/api/auth/forgot-password') {
+			return forgot_password_route(event, data);
+		} else if (url.pathname === '/api/auth/reset-password') {
+			return reset_password_route(event, data);
 		}
 		// Return 404 for unhandled auth routes
 		return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404 });
