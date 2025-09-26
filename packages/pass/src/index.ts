@@ -10,7 +10,7 @@
 
 // Routes
 // This might be the most interesting part, because we'll import all of the login routes and use them as a hook in the client's hooks.server.ts
-// See pass_routes() for the central station of auth routes.
+// See create_pass_routes(db) for the central station of auth routes.
 export * from './routes.js';
 
 // Session management - NEW: for populating event.locals with user data
@@ -31,6 +31,8 @@ export * from './authenticate.js';
 
 // Methods for resetting password
 export * from './reset_password.js';
+
+// DB injection helpers via factories; direct set_db is intentionally not exported
 
 // Methods for deleting account
 // Methods for updating account

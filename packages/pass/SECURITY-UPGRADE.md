@@ -13,7 +13,7 @@ This upgrade implements a more secure authentication pattern using HttpOnly cook
 ### 📡 **API Changes**
 - **New endpoint**: `GET /api/auth/me` - Returns current user information
 - **Updated login/signup**: Now sets JWT cookies server-side instead of returning JWT in response
-- **Session management**: New `populate_user_session()` and `session_handle` for server-side user context
+- **Session management**: New `populate_user_session()` and `create_session_handle(db)` for server-side user context
 
 ### 🚫 **Deprecated Client-Side JWT Functions**
 These functions now show warnings and return undefined:
@@ -30,12 +30,12 @@ These functions now show warnings and return undefined:
 Add session population to your `hooks.server.ts`:
 
 ```typescript
-import { pass_routes, session_handle } from '@drop-in/pass';
+import { create_pass_routes, create_session_handle } from '@drop-in/pass';
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle = sequence(
-  session_handle,  // NEW: Populates event.locals.user
-  pass_routes
+  create_session_handle(db),  // NEW: Populates event.locals.user
+  create_pass_routes(db)
 );
 ```
 
@@ -167,7 +167,7 @@ try {
 ```typescript
 import { populate_user_session } from '@drop-in/pass';
 
-// Manual session population (if not using session_handle)
-await populate_user_session(event);
+// Manual session population (if not using create_session_handle)
+await populate_user_session(db, event);
 console.log(event.locals.user); // User data or undefined
 ```

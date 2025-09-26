@@ -1,5 +1,21 @@
 # @drop-in/pass
 
+## Unreleased
+
+### Breaking Changes
+
+- Server helpers now require a `db` parameter. Update usages to `authenticate_user(db, cookies)`, `populate_user_session(db, event)`, and similar helpers.
+  - This aligns with DI-only design via `create_session_handle(db)` and `create_pass_routes(db)`.
+
+### Docs
+
+- Clarify DI-only database usage; all server APIs require injecting your Drizzle instance via `create_session_handle(db)` and `create_pass_routes(db)`.
+- Update README, LOCALS-SETUP-GUIDE, and SECURITY-UPGRADE to use factory names consistently.
+
+### Internal
+
+- Remove unused global DB proxy pattern from docs and comments; DI-only design confirmed across codebase.
+
 ## 0.3.0
 
 ### Minor Changes

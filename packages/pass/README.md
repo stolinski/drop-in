@@ -25,13 +25,87 @@ npm install @drop-in/pass
 
 ### Database Setup
 
-Set up your PostgreSQL database and add the connection string to your environment:
+Database is provided via dependency injection only.
+
+- Create a Drizzle instance in your app.
+- Pass it to our SvelteKit handle factories.
 
 ```bash
 # .env
 DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
 JWT_SECRET="your-secret-key-here"
 ```
+
+Database is provided via dependency injection only; pass your Drizzle instance to create_session_handle(db) and create_pass_routes(db) as shown below.
+
+#### Injecting your Drizzle instance
+
+Use our factories in `hooks.server.ts` (or equivalent) to inject your Drizzle instance before requests hit auth routes.
+
+Example with Node Postgres Pool (Node runtimes):
+
+```ts
+// src/hooks.server.ts (or your server init)
+import { create_pass_routes, create_session_handle } from '@drop-in/pass';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import pg from 'pg';
+import * as schema from '@drop-in/pass/schema';
+import { sequence } from '@sveltejs/kit/hooks';
+
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const drizzleDb = drizzle(pool, { schema });
+
+export const handle = sequence(
+  create_session_handle(drizzleDb),
+  create_pass_routes(drizzleDb)
+);
+```
+
+Example with Cloudflare Hyperdrive (Workers):
+
+```ts
+// src/hooks.server.ts (Cloudflare Workers)
+import { create_pass_routes, create_session_handle } from '@drop-in/pass';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import * as schema from '@drop-in/pass/schema';
+import { sequence } from '@sveltejs/kit/hooks';
+
+export const handle: Handle = async ({ event, resolve }) => {
+  const env = event.platform?.env as any;
+  const sql = postgres(env.DATABASE_URL, { prepare: true }); // via Hyperdrive
+  const db = drizzle(sql, { schema });
+  const chain = sequence(
+    create_session_handle(db),
+    create_pass_routes(db)
+  );
+  return chain({ event, resolve });
+};
+```
+
+Example with Neon (serverless):
+
+```ts
+// src/hooks.server.ts (Neon serverless)
+import { create_pass_routes, create_session_handle } from '@drop-in/pass';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
+import * as schema from '@drop-in/pass/schema';
+import { sequence } from '@sveltejs/kit/hooks';
+
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql, { schema });
+
+export const handle = sequence(
+  create_session_handle(db),
+  create_pass_routes(db)
+);
+```
+
+Notes:
+- Instantiate Drizzle per process/request-lifetime depending on your runtime model.
+- In development, you can enable debug logs with `DEBUG` or `NODE_ENV !== 'production'`.
+- All server APIs accept a `db` instance via factory functions; you control how and where Drizzle is instantiated.
 
 ### Email Configuration
 
@@ -84,12 +158,18 @@ Note: Signing up (`POST /api/auth/register`) automatically triggers a verificati
 1. **Configure your hooks** (`src/hooks.server.ts`):
 
 ```typescript
-import { pass_routes, session_handle } from '@drop-in/pass';
+import { create_pass_routes, create_session_handle } from '@drop-in/pass';
 import { sequence } from '@sveltejs/kit/hooks';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import pg from 'pg';
+import * as schema from '@drop-in/pass/schema';
+
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const db = drizzle(pool, { schema });
 
 export const handle = sequence(
-  session_handle,  // Populates event.locals.user automatically
-  pass_routes      // Handles auth routes (/api/auth/*)
+  create_session_handle(db),  // Populates event.locals.user automatically
+  create_pass_routes(db)      // Handles auth routes (/api/auth/*)
 );
 ```
 
@@ -166,7 +246,7 @@ export async function load({ locals }) {
 import { authenticate_user } from '@drop-in/pass';
 
 export async function GET({ cookies }) {
-  const auth = await authenticate_user(cookies);
+  const auth = await authenticate_user(db, cookies);
   
   if (!auth) {
     return new Response('Unauthorized', { status: 401 });
@@ -239,27 +319,27 @@ Gets current authenticated user information.
 
 ### Server API
 
-#### `authenticate_user(cookies: Cookies)`
+#### `authenticate_user(db: DrizzleDb, cookies: Cookies)`
 Manually authenticate a user from cookies.
 
 ```typescript
-const auth = await authenticate_user(cookies);
+const auth = await authenticate_user(db, cookies);
 if (auth) {
   console.log('User ID:', auth.user_id);
 }
 ```
 
-#### `populate_user_session(event: RequestEvent)`
+#### `populate_user_session(db: DrizzleDb, event: RequestEvent)`
 Manually populate `event.locals.user` with authenticated user data.
 
 ```typescript
-await populate_user_session(event);
+await populate_user_session(db, event);
 console.log(event.locals.user); // User object or undefined
 ```
 
 ### Built-in Routes
 
-The library automatically handles these routes when using `pass_routes`:
+The library automatically handles these routes when using `create_pass_routes(db)`:
 
 - `POST /api/auth/login` - User login
 - `POST /api/auth/register` - User registration (auto-sends verification email; non-blocking)
@@ -336,7 +416,7 @@ npm run test:watch  # Watch mode
 
 If you're upgrading from a version that used readable JWTs:
 
-1. **Update hooks.server.ts** to include `session_handle`
+1. **Update hooks.server.ts** to include `create_session_handle(db)`
 2. **Replace client-side JWT reading** with server-side `locals.user` or `pass.me()`
 3. **Remove manual cookie handling** - all cookie management is now automatic
 

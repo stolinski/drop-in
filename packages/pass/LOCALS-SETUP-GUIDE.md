@@ -17,16 +17,16 @@ This is the **critical step** that populates `event.locals.user`:
 
 ```typescript
 // src/hooks.server.ts
-import { pass_routes, session_handle } from '@drop-in/pass';
+import { create_pass_routes, create_session_handle } from '@drop-in/pass';
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle = sequence(
-  session_handle,  // 🔥 THIS IS REQUIRED - populates event.locals.user
-  pass_routes      // Handles auth routes (/api/auth/*)
+  create_session_handle(db),  // 🔥 THIS IS REQUIRED - populates event.locals.user
+  create_pass_routes(db)      // Handles auth routes (/api/auth/*)
 );
 ```
 
-⚠️ **Order matters**: `session_handle` must come before `pass_routes`
+⚠️ **Order matters**: `create_session_handle(db)` must come before `create_pass_routes(db)`
 
 ### 2. Verify TypeScript Types (Optional but Recommended)
 
@@ -56,7 +56,7 @@ export {};
 // src/routes/+layout.server.ts
 export async function load({ locals }) {
   return {
-    user: locals.user // Automatically populated by session_handle
+    user: locals.user // Automatically populated by create_session_handle(db)
   };
 }
 ```
@@ -182,14 +182,14 @@ export const userStore = new UserStore();
 **Solution**: Check your `hooks.server.ts` setup:
 
 ```typescript
-// ❌ Wrong - missing session_handle
-export const handle = pass_routes;
+// ❌ Wrong - missing create_session_handle
+export const handle = create_pass_routes(db);
 
 // ❌ Wrong - wrong order
-export const handle = sequence(pass_routes, session_handle);
+export const handle = sequence(create_pass_routes(db), create_session_handle(db));
 
 // ✅ Correct
-export const handle = sequence(session_handle, pass_routes);
+export const handle = sequence(create_session_handle(db), create_pass_routes(db));
 ```
 
 ### Issue: User logged in but `locals.user` still undefined
@@ -213,7 +213,7 @@ export const handle = sequence(session_handle, pass_routes);
    import { authenticate_user } from '@drop-in/pass';
    
    export async function load({ cookies }) {
-     const auth = await authenticate_user(cookies);
+     const auth = await authenticate_user(db, cookies);
      console.log('Auth result:', auth);
      return {};
    }
@@ -246,12 +246,12 @@ Here's a complete working setup with modern Svelte 5:
 
 ### `src/hooks.server.ts`
 ```typescript
-import { pass_routes, session_handle } from '@drop-in/pass';
+import { create_pass_routes, create_session_handle } from '@drop-in/pass';
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle = sequence(
-  session_handle,
-  pass_routes
+  create_session_handle(db),
+  create_pass_routes(db)
 );
 ```
 
@@ -374,8 +374,8 @@ export async function load({ locals }) {
 
 If locals is still empty, check each of these:
 
-- [ ] `session_handle` is imported and used in hooks.server.ts
-- [ ] `session_handle` comes before `pass_routes` in the sequence
+- [ ] `create_session_handle(db)` is imported and used in hooks.server.ts
+- [ ] `create_session_handle(db)` comes before `create_pass_routes(db)` in the sequence
 - [ ] JWT and refresh_token cookies are being set (check browser dev tools)
 - [ ] Database connection is working
 - [ ] User exists in database with correct ID
@@ -403,9 +403,9 @@ If you're still experiencing problems:
    import { authenticate_user, get_user_by_id } from '@drop-in/pass';
    
    export async function load({ cookies }) {
-     const auth = await authenticate_user(cookies);
+     const auth = await authenticate_user(db, cookies);
      if (auth) {
-       const user = await get_user_by_id(auth.user_id);
+       const user = await get_user_by_id(db, auth.user_id);
        console.log('Manual auth result:', { auth, user });
      }
      return {};
