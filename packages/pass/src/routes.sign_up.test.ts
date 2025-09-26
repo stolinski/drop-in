@@ -29,11 +29,12 @@ describe('sign_up_route', () => {
   it('returns 400 when email or password is missing', async () => {
     const { sign_up_route } = await import('./routes.js');
     const event: any = { cookies: createMockCookies(), request: new Request('http://localhost') };
+    const db: any = {};
 
-    const res1 = await sign_up_route(event, { email: 'test@example.com' } as any);
+    const res1 = await sign_up_route(db, event, { email: 'test@example.com' } as any);
     expect(res1.status).toBe(400);
 
-    const res2 = await sign_up_route(event, { password: 'password123' } as any);
+    const res2 = await sign_up_route(db, event, { password: 'password123' } as any);
     expect(res2.status).toBe(400);
   });
 
@@ -50,8 +51,9 @@ describe('sign_up_route', () => {
 
     const cookies = createMockCookies();
     const event: any = { cookies, request: new Request('http://localhost') };
+    const db: any = {};
 
-    const res = await sign_up_route(event, { email: 'test@example.com', password: 'password123' });
+    const res = await sign_up_route(db, event, { email: 'test@example.com', password: 'password123' });
 
     expect(res.status).toBe(200);
     const json = await res.json();
@@ -64,7 +66,7 @@ describe('sign_up_route', () => {
     expect(cookies.serialize).toHaveBeenCalledWith('jwt', 'jwt-token', expect.any(Object));
 
     // Verification email triggered with correct user id
-    expect(send_verification_email).toHaveBeenCalledWith('u1');
+    expect(send_verification_email).toHaveBeenCalledWith(db, 'u1');
   });
 
   it('returns 400 when signup fails', async () => {
@@ -74,7 +76,8 @@ describe('sign_up_route', () => {
     (sign_up as any).mockResolvedValue(null);
 
     const event: any = { cookies: createMockCookies(), request: new Request('http://localhost') };
-    const res = await sign_up_route(event, { email: 'test@example.com', password: 'password123' });
+    const db: any = {};
+    const res = await sign_up_route(db, event, { email: 'test@example.com', password: 'password123' });
 
     expect(res.status).toBe(400);
     const body = await res.json();

@@ -24,22 +24,7 @@ vi.mock('./token.js', () => ({
 	create_refresh_token: vi.fn().mockResolvedValue('refresh-token'),
 }));
 
-vi.mock('./db.js', () => ({
-	db: {
-		update: vi.fn(() => ({
-			set: vi.fn(() => ({
-				where: vi.fn(() => ({
-					execute: vi.fn(),
-				})),
-			})),
-		})),
-		delete: vi.fn(() => ({
-			where: vi.fn(() => ({
-				execute: vi.fn(),
-			})),
-		})),
-	},
-}));
+
 
 describe('request_password_reset', () => {
 	beforeEach(() => {
@@ -53,9 +38,10 @@ describe('request_password_reset', () => {
 
 		(get_full_user_by_email as any).mockResolvedValue({ id: 'u1', email: 'test@example.com' });
 
-		await request_password_reset('Test@Example.com');
+		const db: any = {};
+		await request_password_reset(db, 'Test@Example.com');
 
-		expect(get_full_user_by_email).toHaveBeenCalledWith('test@example.com');
+		expect(get_full_user_by_email).toHaveBeenCalledWith(db, 'test@example.com');
 		expect(send_reset_password_email).toHaveBeenCalledWith('test@example.com');
 	});
 
@@ -66,7 +52,8 @@ describe('request_password_reset', () => {
 
 		(get_full_user_by_email as any).mockResolvedValue(null);
 
-		await expect(request_password_reset('nobody@example.com')).resolves.toBeUndefined();
+		const db: any = {};
+		await expect(request_password_reset(db, 'nobody@example.com')).resolves.toBeUndefined();
 		expect(send_reset_password_email).not.toHaveBeenCalled();
 	});
 
@@ -74,7 +61,8 @@ describe('request_password_reset', () => {
 		const { request_password_reset } = await import('./reset_password.js');
 		const { get_full_user_by_email } = await import('./find_user.js');
 
-		await request_password_reset('invalid-email');
+		const db: any = {};
+		await request_password_reset(db, 'invalid-email');
 		expect(get_full_user_by_email).not.toHaveBeenCalled();
 	});
 
@@ -84,7 +72,8 @@ describe('request_password_reset', () => {
 
 		(get_full_user_by_email as any).mockRejectedValue(new Error('db failed'));
 
-		await expect(request_password_reset('test@example.com')).resolves.toBeUndefined();
+		const db: any = {};
+		await expect(request_password_reset(db, 'test@example.com')).resolves.toBeUndefined();
 	});
 });
 
@@ -95,20 +84,23 @@ describe('reset_password', () => {
 
 	it('returns null for invalid email', async () => {
 		const { reset_password } = await import('./reset_password.js');
-		const result = await reset_password('bad', 't', Date.now() + 1000, 'password123');
+		const db: any = {};
+		const result = await reset_password(db, 'bad', 't', Date.now() + 1000, 'password123');
 		expect(result).toBeNull();
 	});
 
 	it('returns null for invalid password', async () => {
 		const { reset_password } = await import('./reset_password.js');
-		const result = await reset_password('test@example.com', 't', Date.now() + 1000, '123');
+		const db: any = {};
+		const result = await reset_password(db, 'test@example.com', 't', Date.now() + 1000, '123');
 		expect(result).toBeNull();
 	});
 
 	it('returns null for mismatched token', async () => {
 		const { reset_password } = await import('./reset_password.js');
 		const expire = Date.now() + 1000 * 60;
-		const result = await reset_password('test@example.com', 'wrong-token', expire, 'password123');
+		const db: any = {};
+		const result = await reset_password(db, 'test@example.com', 'wrong-token', expire, 'password123');
 		expect(result).toBeNull();
 	});
 
@@ -118,7 +110,8 @@ describe('reset_password', () => {
 		// token matches but expired
 		const { create_expiring_auth_digest } = await import('./utils.js');
 		const token = create_expiring_auth_digest('test@example.com', expire);
-		const result = await reset_password('test@example.com', token, expire, 'password123');
+		const db: any = {};
+		const result = await reset_password(db, 'test@example.com', token, expire, 'password123');
 		expect(result).toBeNull();
 	});
 
@@ -131,14 +124,15 @@ describe('reset_password', () => {
 
 		(get_full_user_by_email as any).mockResolvedValue(null);
 
-		const result = await reset_password('test@example.com', token, expire, 'password123');
+		const db: any = {};
+		const result = await reset_password(db, 'test@example.com', token, expire, 'password123');
 		expect(result).toBeNull();
 	});
 
 	it('updates password, invalidates tokens, and returns new credentials', async () => {
 		const { reset_password } = await import('./reset_password.js');
 		const { get_full_user_by_email } = await import('./find_user.js');
-		const { db } = await import('./db.js');
+		const db: any = {};
 		const { create_expiring_auth_digest } = await import('./utils.js');
 		const { hash_n_salt_password } = await import('./password.js');
 		const { create_jwt } = await import('./jwt.js');
@@ -166,7 +160,7 @@ describe('reset_password', () => {
 		const deleteWhere = vi.fn().mockReturnValue({ execute: deleteExecute });
 		(db.delete as any) = vi.fn().mockReturnValue({ where: deleteWhere });
 
-		const result = await reset_password(email, token, expire, 'password123');
+		const result = await reset_password(db, email, token, expire, 'password123');
 
 		expect(hash_n_salt_password).toHaveBeenCalledWith('password123');
 		expect(updateSet).toHaveBeenCalled();
@@ -174,7 +168,7 @@ describe('reset_password', () => {
 		expect(deleteWhere).toHaveBeenCalled();
 		expect(deleteExecute).toHaveBeenCalled();
 		expect(create_jwt).toHaveBeenCalledWith('user123');
-		expect(create_refresh_token).toHaveBeenCalledWith('user123');
+		expect(create_refresh_token).toHaveBeenCalledWith(db, 'user123');
 		expect(result).toEqual({
 			user: expect.objectContaining({ id: 'user123', email: normalized }),
 			jwt: 'jwt-token',

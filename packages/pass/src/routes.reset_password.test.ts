@@ -25,8 +25,9 @@ describe('forgot_password_route', () => {
 	it('returns 400 when email is missing', async () => {
 		const { forgot_password_route } = await import('./routes.js');
 		const event: any = { cookies: createMockCookies() };
+		const db: any = {};
 
-		const res = await forgot_password_route(event, {} as any);
+		const res = await forgot_password_route(db, event, {} as any);
 		expect(res.status).toBe(400);
 		const body = await res.json();
 		expect(body.error).toBe('Email is required');
@@ -36,12 +37,13 @@ describe('forgot_password_route', () => {
 		const { forgot_password_route } = await import('./routes.js');
 		const { request_password_reset } = await import('./reset_password.js');
 		const event: any = { cookies: createMockCookies() };
+		const db: any = {};
 
-		const res = await forgot_password_route(event, { email: 'test@example.com' });
+		const res = await forgot_password_route(db, event, { email: 'test@example.com' });
 		expect(res.status).toBe(200);
 		const body = await res.json();
 		expect(body.status).toBe('success');
-		expect(request_password_reset).toHaveBeenCalledWith('test@example.com');
+		expect(request_password_reset).toHaveBeenCalledWith(db, 'test@example.com');
 	});
 });
 
@@ -53,8 +55,9 @@ describe('reset_password_route', () => {
 	it('returns 400 when required fields are missing', async () => {
 		const { reset_password_route } = await import('./routes.js');
 		const event: any = { cookies: createMockCookies() };
+		const db: any = {};
 
-		const res = await reset_password_route(event, { email: 'a@example.com' } as any);
+		const res = await reset_password_route(db, event, { email: 'a@example.com' } as any);
 		expect(res.status).toBe(400);
 		const body = await res.json();
 		expect(body.error).toBe('Missing required fields');
@@ -65,8 +68,9 @@ describe('reset_password_route', () => {
 		const { reset_password } = await import('./reset_password.js');
 		(reset_password as any).mockResolvedValue(null);
 		const event: any = { cookies: createMockCookies() };
+		const db: any = {};
 
-		const res = await reset_password_route(event, {
+		const res = await reset_password_route(db, event, {
 			email: 'test@example.com',
 			token: 't',
 			expire: Date.now() + 1000,
@@ -83,6 +87,7 @@ describe('reset_password_route', () => {
 		const { reset_password } = await import('./reset_password.js');
 		const cookies = createMockCookies();
 		const event: any = { cookies };
+		const db: any = {};
 
 		(reset_password as any).mockResolvedValue({
 			user: { id: 'u1', email: 'test@example.com' },
@@ -90,7 +95,7 @@ describe('reset_password_route', () => {
 			refresh_token: 'refresh-token',
 		});
 
-		const res = await reset_password_route(event, {
+		const res = await reset_password_route(db, event, {
 			email: 'test@example.com',
 			token: 't',
 			expire: Date.now() + 1000,

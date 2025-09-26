@@ -1,13 +1,12 @@
 import crypto from 'crypto';
-import { db } from './db.js';
 import { refresh_tokens } from './schema.js';
 import { generate_token } from './utils.js';
 import { nanoid } from 'nanoid';
 import { eq, and } from 'drizzle-orm';
 import { cookie_options } from './cookies.js';
 
-// Creates a refresh token record
-export async function create_refresh_token(user_id: string): Promise<string> {
+// Creates a refresh token record using Drizzle (Postgres)
+export async function create_refresh_token(db: any, user_id: string): Promise<string> {
 	const token_id = nanoid();
 	const token_secret = generate_token();
 
@@ -31,7 +30,7 @@ export async function create_refresh_token(user_id: string): Promise<string> {
 	return refresh_token;
 }
 
-export async function delete_refresh_token(token_id: string): Promise<void> {
+export async function delete_refresh_token(db: any, token_id: string): Promise<void> {
 	try {
 		await db.delete(refresh_tokens).where(eq(refresh_tokens.id, token_id));
 	} catch (e) {
@@ -40,12 +39,11 @@ export async function delete_refresh_token(token_id: string): Promise<void> {
 }
 
 // Updates the refresh token expiration
-export async function refresh_refresh_token(refresh_token: string): Promise<string> {
+export async function refresh_refresh_token(db: any, refresh_token: string): Promise<string> {
 	const [token_id, token_secret] = refresh_token.split(':');
 	if (!token_id || !token_secret) {
 		throw new Error('Invalid refresh token');
 	}
-
 	await db
 		.update(refresh_tokens)
 		.set({ expires_at: new Date(Date.now() + cookie_options.maxAge * 1000) })
@@ -54,8 +52,9 @@ export async function refresh_refresh_token(refresh_token: string): Promise<stri
 	return refresh_token;
 }
 
-// Verifies the refresh token, returns the user_id and email if valid
+// Verifies the refresh token, returns the user_id if valid
 export async function verify_refresh_token(
+	db: any,
 	refresh_token: string,
 ): Promise<{ user_id: string } | null> {
 	const [token_id, token_secret] = refresh_token.split(':');
@@ -69,22 +68,9 @@ export async function verify_refresh_token(
 		.select()
 		.from(refresh_tokens)
 		.where(and(eq(refresh_tokens.id, token_id), eq(refresh_tokens.token, hashed_token)));
-
-	if (!stored_token) {
-		return null;
-	}
-
-	const { expires_at, token, user_id } = stored_token;
-	// Compare the hashes
-	if (hashed_token !== token) {
-		// Handle invalid token
-		return null;
-	}
-	// Check for token expiration
-	if (new Date() > expires_at) {
-		// Handle expired token
-		return null;
-	}
-
+	if (!stored_token) return null;
+	const { expires_at, token, user_id } = stored_token as any;
+	if (hashed_token !== token) return null;
+	if (new Date() > expires_at) return null;
 	return { user_id };
 }

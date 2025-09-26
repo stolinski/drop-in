@@ -1,5 +1,12 @@
 # @drop-in/ramps
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [933cef1]
+  - @drop-in/pass@0.4.0
+
 ## 0.0.3
 
 ### Patch Changes

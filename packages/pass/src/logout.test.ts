@@ -1,26 +1,18 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { logout } from './logout.js';
-import { db } from './db.js';
 import { verify_access_token } from './jwt.js';
 
-// Mock the database and JWT verification
-vi.mock('./db.js', () => ({
-	db: {
-		delete: vi.fn(() => ({
-			where: vi.fn(() => ({
-				execute: vi.fn(),
-			})),
-		})),
-	},
-}));
-
+// Mock JWT verification
 vi.mock('./jwt.js', () => ({
 	verify_access_token: vi.fn(),
 }));
 
 describe('logout function', () => {
+	let db: any;
+
 	beforeEach(() => {
 		vi.clearAllMocks();
+		db = {};
 	});
 
 	it('should execute database delete operation to invalidate refresh token', async () => {
@@ -33,11 +25,11 @@ describe('logout function', () => {
 		const mockWhere = vi.fn().mockReturnValue({ execute: mockExecute });
 		const mockDelete = vi.fn().mockReturnValue({ where: mockWhere });
 
-		(db.delete as any) = mockDelete;
+		db.delete = mockDelete;
 		(verify_access_token as any).mockResolvedValue(mockPayload);
 
 		// Act
-		await logout(mockRefreshToken, mockJwt);
+		await logout(db, mockRefreshToken, mockJwt);
 
 		// Assert
 		expect(verify_access_token).toHaveBeenCalledWith(mockJwt);
@@ -56,11 +48,11 @@ describe('logout function', () => {
 		const mockWhere = vi.fn().mockReturnValue({ execute: mockExecute });
 		const mockDelete = vi.fn().mockReturnValue({ where: mockWhere });
 
-		(db.delete as any) = mockDelete;
+		db.delete = mockDelete;
 		(verify_access_token as any).mockResolvedValue(mockPayload);
 
 		// Act & Assert
-		await expect(logout(mockRefreshToken, mockJwt)).rejects.toThrow(
+		await expect(logout(db, mockRefreshToken, mockJwt)).rejects.toThrow(
 			'Logout failed: Unable to invalidate refresh token',
 		);
 		expect(mockExecute).toHaveBeenCalled();
@@ -76,11 +68,11 @@ describe('logout function', () => {
 		const mockWhere = vi.fn().mockReturnValue({ execute: mockExecute });
 		const mockDelete = vi.fn().mockReturnValue({ where: mockWhere });
 
-		(db.delete as any) = mockDelete;
+		db.delete = mockDelete;
 		(verify_access_token as any).mockResolvedValue(mockPayload);
 
 		// Act
-		await logout(mockRefreshToken, mockJwt);
+		await logout(db, mockRefreshToken, mockJwt);
 
 		// Assert
 		expect(verify_access_token).toHaveBeenCalledWith(mockJwt);

@@ -1,5 +1,4 @@
 import { eq } from 'drizzle-orm';
-import { db } from './db.js';
 import { refresh_tokens, user, type User } from './schema.js';
 import { get_full_user_by_email } from './find_user.js';
 import { create_jwt } from './jwt.js';
@@ -12,12 +11,12 @@ import { send_reset_password_email } from './email.js';
  * Initiates a password reset by sending a reset email if the user exists.
  * Always resolves successfully to avoid user enumeration.
  */
-export async function request_password_reset(email: string): Promise<void> {
+export async function request_password_reset(db: any, email: string): Promise<void> {
 	const normalized = normalize_email(email);
 	if (!is_valid_email(normalized)) return; // Silently ignore invalid emails
 
 	try {
-		const existing = await get_full_user_by_email(normalized);
+		const existing = await get_full_user_by_email(db, normalized);
 		if (!existing) return; // Do not reveal user existence
 		await send_reset_password_email(normalized);
 	} catch (e) {
@@ -37,6 +36,7 @@ export type ResetPasswordResult = {
  * On success, updates the password, invalidates existing refresh tokens and signs in the user.
  */
 export async function reset_password(
+	db: any,
 	email: string,
 	token: string,
 	expire: number,
@@ -51,7 +51,7 @@ export async function reset_password(
 	if (token !== expected) return null;
 	if (Date.now() > Number(expire)) return null;
 
-	const existing = await get_full_user_by_email(normalized);
+	const existing = await get_full_user_by_email(db, normalized);
 	if (!existing?.id) return null;
 
 	// Hash the new password
@@ -69,7 +69,7 @@ export async function reset_password(
 
 	// Sign in: new jwt and refresh token
 	const jwt = await create_jwt(existing.id);
-	const refresh_token = await create_refresh_token(existing.id);
+	const refresh_token = await create_refresh_token(db, existing.id);
 
 	const public_user: Partial<User> = {
 		id: existing.id,

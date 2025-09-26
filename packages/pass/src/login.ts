@@ -6,11 +6,13 @@ import { create_refresh_token } from './token.js';
 /**
  * Logs in a user with the given email and password.
  *
+ * @param db - Drizzle instance
  * @param email - The email of the user
  * @param password - The password of the user
  * @returns The user object, JWT, and refresh token if successful, null otherwise
  */
 export async function login(
+	db: any,
 	email: string,
 	password: string,
 ): Promise<{
@@ -20,7 +22,7 @@ export async function login(
 } | null> {
 	try {
 		// Check if a user exists with that email
-		const user = await get_full_user_by_email(email);
+		const user = await get_full_user_by_email(db, email);
 
 		if (!user) {
 			console.log('User not found');
@@ -28,7 +30,7 @@ export async function login(
 		}
 
 		// Is the password correct?
-		const is_verified = await verify_password(password, user.password_hash, user.id);
+		const is_verified = await verify_password(db, password, user.password_hash, user.id);
 		// If the password is not correct, return null
 		if (!is_verified) {
 			console.log('Password verification failed.');
@@ -37,7 +39,7 @@ export async function login(
 
 		// Create a JWT and refresh_token
 		const jwt = await create_jwt(user.id);
-		const refresh_token: string = await create_refresh_token(user.id);
+		const refresh_token: string = await create_refresh_token(db, user.id);
 
 		return {
 			user,

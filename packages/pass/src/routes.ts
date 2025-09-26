@@ -6,14 +6,13 @@ import { parseFormData } from 'parse-nested-form-data';
 import { cookie_options, jwt_cookie_options } from './cookies.js';
 import { create_expiring_auth_digest } from './utils.js';
 import { eq } from 'drizzle-orm';
-import { db } from './db.js';
 import { user } from './schema.js';
 import { send_verification_email } from './email.js';
 import { authenticate_user } from './authenticate.js';
 import { get_user_by_id } from './find_user.js';
 import { request_password_reset, reset_password } from './reset_password.js';
 
-type FormData = {
+export type FormData = {
 	email?: string;
 	password?: string;
 	user_id?: string;
@@ -21,7 +20,7 @@ type FormData = {
 	expire?: number;
 };
 
-export async function sign_up_route(event: RequestEvent, data: FormData) {
+export async function sign_up_route(db: any, event: RequestEvent, data: FormData) {
 	if (!data.email || !data.password) {
 		return new Response(JSON.stringify({ error: 'Email and password are required' }), {
 			status: 400,
@@ -30,21 +29,17 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 			},
 		});
 	}
-	const sign_up_response = await sign_up(data.email, data.password);
+	const sign_up_response = await sign_up(db, data.email, data.password);
 
 	if (sign_up_response?.refresh_token && sign_up_response?.jwt) {
 		const { refresh_token, jwt } = sign_up_response;
-		const refresh_token_cookie = event.cookies.serialize(
-			'refresh_token',
-			refresh_token,
-			cookie_options,
-		);
+		const refresh_token_cookie = event.cookies.serialize('refresh_token', refresh_token, cookie_options);
 		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
 		const newUserId = sign_up_response.user?.id;
 		if (newUserId) {
 			// Fire-and-forget verification email; do not block signup
-			Promise.resolve(send_verification_email(newUserId)).catch((e) =>
+			Promise.resolve(send_verification_email(db, newUserId)).catch((e) =>
 				console.warn('Failed to send verification email:', e),
 			);
 		}
@@ -66,7 +61,7 @@ export async function sign_up_route(event: RequestEvent, data: FormData) {
 	});
 }
 
-export async function login_route(event: RequestEvent, data: FormData) {
+export async function login_route(db: any, event: RequestEvent, data: FormData) {
 	if (!data.email || !data.password) {
 		return new Response(
 			JSON.stringify({ status: 'error', error: 'Email and password are required' }),
@@ -79,16 +74,12 @@ export async function login_route(event: RequestEvent, data: FormData) {
 		);
 	}
 
-	const login_response = await login(data.email, data.password);
+	const login_response = await login(db, data.email, data.password);
 
 	if (login_response?.refresh_token && login_response?.jwt) {
 		const { refresh_token, jwt } = login_response;
 
-		const refresh_token_cookie = event.cookies.serialize(
-			'refresh_token',
-			refresh_token,
-			cookie_options,
-		);
+		const refresh_token_cookie = event.cookies.serialize('refresh_token', refresh_token, cookie_options);
 		const jwt_cookie = event.cookies.serialize('jwt', jwt, jwt_cookie_options);
 
 		return new Response(JSON.stringify({ status: 'success', user: login_response.user, jwt }), {
@@ -108,7 +99,7 @@ export async function login_route(event: RequestEvent, data: FormData) {
 	});
 }
 
-export async function logout_route(event: RequestEvent) {
+export async function logout_route(db: any, event: RequestEvent) {
 	// Get the refresh_token from the request
 	const refresh_token = event.cookies.get('refresh_token');
 	const jwt = event.cookies.get('jwt');
@@ -119,7 +110,7 @@ export async function logout_route(event: RequestEvent) {
 		});
 	}
 
-	await logout(refresh_token, jwt);
+	await logout(db, refresh_token, jwt);
 
 	const refresh_token_cookie = event.cookies.serialize('refresh_token', '', {
 		...cookie_options,
@@ -147,7 +138,7 @@ export async function logout_route(event: RequestEvent) {
  * @param data - The form data
  * @returns The response object
  */
-export async function verify_email_route(event: RequestEvent, data: FormData) {
+export async function verify_email_route(db: any, event: RequestEvent, data: FormData) {
 	const verification_token = data.token;
 	const email = data.email;
 	const expire = data.expire;
@@ -186,7 +177,7 @@ export async function verify_email_route(event: RequestEvent, data: FormData) {
 	});
 }
 
-export async function send_verify_email_route(event: RequestEvent, data: FormData) {
+export async function send_verify_email_route(db: any, _event: RequestEvent, data: FormData) {
 	const user_id = data.user_id;
 	if (!user_id) {
 		return new Response('User ID is required', {
@@ -194,7 +185,7 @@ export async function send_verify_email_route(event: RequestEvent, data: FormDat
 		});
 	}
 	try {
-		await send_verification_email(user_id);
+		await send_verification_email(db, user_id);
 	} catch (error) {
 		return new Response('Error', {
 			status: 500,
@@ -205,9 +196,9 @@ export async function send_verify_email_route(event: RequestEvent, data: FormDat
 	});
 }
 
-export async function me_route(event: RequestEvent) {
-	const auth_result = await authenticate_user(event.cookies);
-	
+export async function me_route(db: any, event: RequestEvent) {
+	const auth_result = await authenticate_user(db, event.cookies);
+
 	if (!auth_result) {
 		return new Response(JSON.stringify({ error: 'Not authenticated' }), {
 			status: 401,
@@ -217,8 +208,8 @@ export async function me_route(event: RequestEvent) {
 		});
 	}
 
-	const user_data = await get_user_by_id(auth_result.user_id);
-	
+	const user_data = await get_user_by_id(db, auth_result.user_id);
+
 	if (!user_data) {
 		return new Response(JSON.stringify({ error: 'User not found' }), {
 			status: 404,
@@ -236,7 +227,7 @@ export async function me_route(event: RequestEvent) {
 	});
 }
 
-export async function forgot_password_route(event: RequestEvent, data: FormData) {
+export async function forgot_password_route(db: any, _event: RequestEvent, data: FormData) {
 	const email = data.email;
 	if (!email) {
 		return new Response(JSON.stringify({ error: 'Email is required' }), {
@@ -244,14 +235,14 @@ export async function forgot_password_route(event: RequestEvent, data: FormData)
 			headers: { 'Content-Type': 'application/json' },
 		});
 	}
-	await request_password_reset(email);
+	await request_password_reset(db, email);
 	return new Response(JSON.stringify({ status: 'success' }), {
 		status: 200,
 		headers: { 'Content-Type': 'application/json' },
 	});
 }
 
-export async function reset_password_route(event: RequestEvent, data: FormData) {
+export async function reset_password_route(db: any, event: RequestEvent, data: FormData) {
 	const email = data.email;
 	const token = data.token;
 	const expire = data.expire;
@@ -264,7 +255,7 @@ export async function reset_password_route(event: RequestEvent, data: FormData) 
 		});
 	}
 
-	const result = await reset_password(email, token, Number(expire), password);
+	const result = await reset_password(db, email, token, Number(expire), password);
 	if (!result) {
 		return new Response(JSON.stringify({ error: 'Password reset failed' }), {
 			status: 400,
@@ -289,51 +280,48 @@ export async function reset_password_route(event: RequestEvent, data: FormData) 
 }
 
 /**
- * Handles the authentication routes.
- *
- * @param event - The event object
- * @param resolve - The resolve function
- * @returns The response object
+ * Create a SvelteKit handle that wires up auth routes using the provided db instance.
  */
-export const pass_routes: Handle = async ({ event, resolve }) => {
-	const { url } = event;
+export function create_pass_routes(db: any): Handle {
+	const handle: Handle = async ({ event, resolve }) => {
+		const { url } = event;
 
-	// Check if the URL matches your auth routes
-	if (url.pathname.startsWith('/api/auth')) {
-		// Make a clone to prevent error in already read body
-		const request_2 = event.request.clone();
-		let data = {};
-		// Check if the content type is multipart/form-data
-		if (request_2.headers.get('content-type')?.includes('multipart/form-data')) {
-			// Get form data
-			const form_data = await request_2.formData();
-			// Parse that ish
-			data = parseFormData(form_data);
+		// Check if the URL matches your auth routes
+		if (url.pathname.startsWith('/api/auth')) {
+			// Make a clone to prevent error in already read body
+			const request_2 = event.request.clone();
+			let data: Record<string, any> = {};
+			// Check if the content type is multipart/form-data
+			if (request_2.headers.get('content-type')?.includes('multipart/form-data')) {
+				// Get form data
+				const form_data = await request_2.formData();
+				// Parse that ish
+				data = parseFormData(form_data) as any;
+			}
+
+			if (url.pathname === '/api/auth/login') {
+				return login_route(db, event, data);
+			} else if (url.pathname === '/api/auth/register') {
+				return sign_up_route(db, event, data);
+			} else if (url.pathname === '/api/auth/logout') {
+				return logout_route(db, event);
+			} else if (url.pathname === '/api/auth/me') {
+				return me_route(db, event);
+			} else if (url.pathname === '/api/auth/verify-email') {
+				return verify_email_route(db, event, data);
+			} else if (url.pathname === '/api/auth/send-verify-email') {
+				return send_verify_email_route(db, event, data);
+			} else if (url.pathname === '/api/auth/forgot-password') {
+				return forgot_password_route(db, event, data);
+			} else if (url.pathname === '/api/auth/reset-password') {
+				return reset_password_route(db, event, data);
+			}
+			// Return 404 for unhandled auth routes
+			return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404 });
 		}
 
-		if (url.pathname === '/api/auth/login') {
-			return login_route(event, data);
-		} else if (url.pathname === '/api/auth/register') {
-			return sign_up_route(event, data);
-		} else if (url.pathname === '/api/auth/logout') {
-			return logout_route(event);
-		} else if (url.pathname === '/api/auth/me') {
-			return me_route(event);
-		} else if (url.pathname === '/api/auth/verify-email') {
-			return verify_email_route(event, data);
-		} else if (url.pathname === '/api/auth/send-verify-email') {
-			return send_verify_email_route(event, data);
-		} else if (url.pathname === '/api/auth/forgot-password') {
-			return forgot_password_route(event, data);
-		} else if (url.pathname === '/api/auth/reset-password') {
-			return reset_password_route(event, data);
-		}
-		// Return 404 for unhandled auth routes
-		return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404 });
-	}
-
-	// If it's not an auth route, continue with the next handler
-	return resolve(event);
-};
-
-// TODO magic link auth?
+		// If it's not an auth route, continue with the next handler
+		return resolve(event);
+	};
+	return handle;
+}

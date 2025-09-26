@@ -23,8 +23,11 @@ vi.mock('./cookies.js', () => ({
 }));
 
 describe('authenticate_user', () => {
+	let db: any;
+
 	beforeEach(() => {
 		vi.clearAllMocks();
+		db = {};
 	});
 
 	it('should authenticate with valid JWT', async () => {
@@ -41,7 +44,7 @@ describe('authenticate_user', () => {
 			exp: Math.floor(Date.now() / 1000) + 900, // 15 minutes from now
 		});
 
-		const result = await authenticate_user(mockCookies as any);
+		const result = await authenticate_user(db, mockCookies as any);
 
 		expect(result).toEqual({ user_id: 'user123' });
 		expect(verify_access_token).toHaveBeenCalledWith('valid-jwt-token');
@@ -65,10 +68,10 @@ describe('authenticate_user', () => {
 		
 		(verify_refresh_token as any).mockResolvedValue({ user_id: 'user123' });
 
-		const result = await authenticate_user(mockCookies as any);
+		const result = await authenticate_user(db, mockCookies as any);
 
 		expect(result).toEqual({ user_id: 'user123' });
-		expect(verify_refresh_token).toHaveBeenCalledWith('valid-refresh-token');
+		expect(verify_refresh_token).toHaveBeenCalledWith(db, 'valid-refresh-token');
 		expect(mockCookies.set).toHaveBeenCalledTimes(2); // Set new JWT and refresh token
 	});
 
@@ -85,16 +88,16 @@ describe('authenticate_user', () => {
 		(verify_access_token as any).mockRejectedValue(new Error('Invalid token'));
 		(verify_refresh_token as any).mockResolvedValue({ user_id: 'user123' });
 
-		const result = await authenticate_user(mockCookies as any);
+		const result = await authenticate_user(db, mockCookies as any);
 
 		expect(result).toEqual({ user_id: 'user123' });
-		expect(verify_refresh_token).toHaveBeenCalledWith('valid-refresh-token');
+		expect(verify_refresh_token).toHaveBeenCalledWith(db, 'valid-refresh-token');
 	});
 
 	it('should return null when no tokens are present', async () => {
 		mockCookies.get.mockReturnValue(undefined);
 
-		const result = await authenticate_user(mockCookies as any);
+		const result = await authenticate_user(db, mockCookies as any);
 
 		expect(result).toBeNull();
 	});
@@ -112,7 +115,7 @@ describe('authenticate_user', () => {
 		(verify_access_token as any).mockRejectedValue(new Error('Invalid token'));
 		(verify_refresh_token as any).mockResolvedValue(null);
 
-		const result = await authenticate_user(mockCookies as any);
+		const result = await authenticate_user(db, mockCookies as any);
 
 		expect(result).toBeNull();
 	});
@@ -127,7 +130,7 @@ describe('authenticate_user', () => {
 		
 		(verify_refresh_token as any).mockResolvedValue({ user_id: 'user123' });
 
-		const result = await authenticate_user(mockCookies as any);
+		const result = await authenticate_user(db, mockCookies as any);
 
 		expect(result).toEqual({ user_id: 'user123' });
 	});

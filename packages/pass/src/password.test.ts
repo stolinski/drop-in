@@ -1,24 +1,18 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { hash_n_salt_password, verify_password } from './password.js';
 
-// Mock dependencies
-vi.mock('./db.js', () => ({
-	db: {
-		update: vi.fn(() => ({
-			set: vi.fn(() => ({
-				where: vi.fn(() => ({
-					execute: vi.fn(),
-				})),
-			})),
-		})),
-	},
-}));
-
 vi.mock('./schema.js', () => ({
 	user: {},
 }));
 
 describe('Password utilities', () => {
+	let db: any;
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		db = {};
+	});
+
 	describe('hash_n_salt_password', () => {
 		it('should hash a password', async () => {
 			const password = 'testpassword123';
@@ -44,7 +38,7 @@ describe('Password utilities', () => {
 			const password = 'testpassword123';
 			const hashedPassword = await hash_n_salt_password(password);
 			
-			const isValid = await verify_password(password, hashedPassword, 'user123');
+			const isValid = await verify_password(db, password, hashedPassword, 'user123');
 			
 			expect(isValid).toBe(true);
 		});
@@ -54,13 +48,13 @@ describe('Password utilities', () => {
 			const wrongPassword = 'wrongpassword';
 			const hashedPassword = await hash_n_salt_password(password);
 			
-			const isValid = await verify_password(wrongPassword, hashedPassword, 'user123');
+			const isValid = await verify_password(db, wrongPassword, hashedPassword, 'user123');
 			
 			expect(isValid).toBe(false);
 		});
 
 		it('should handle verification errors gracefully', async () => {
-			const isValid = await verify_password('password', 'invalid-hash', 'user123');
+			const isValid = await verify_password(db, 'password', 'invalid-hash', 'user123');
 			
 			expect(isValid).toBe(false);
 		});
@@ -70,17 +64,18 @@ describe('Password utilities', () => {
 			const password = 'testpassword123';
 			const hashedPassword = await hash_n_salt_password(password);
 			
-			const { db } = await import('./db.js');
 			const mockExecute = vi.fn().mockResolvedValue([]);
-			(db.update as any).mockReturnValue({
-				set: vi.fn().mockReturnValue({
-					where: vi.fn().mockReturnValue({
-						execute: mockExecute,
+			db = {
+				update: vi.fn().mockReturnValue({
+					set: vi.fn().mockReturnValue({
+						where: vi.fn().mockReturnValue({
+							execute: mockExecute,
+						}),
 					}),
 				}),
-			});
+			};
 
-			const isValid = await verify_password(password, hashedPassword, 'user123');
+			const isValid = await verify_password(db, password, hashedPassword, 'user123');
 			
 			expect(isValid).toBe(true);
 		});

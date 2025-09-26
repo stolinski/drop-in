@@ -1,9 +1,8 @@
 import { and, eq } from 'drizzle-orm';
 import { refresh_tokens } from './schema.js';
-import { db } from './db.js';
 import { verify_access_token } from './jwt.js';
 
-export async function logout(refresh_token: string, jwt: string): Promise<void> {
+export async function logout(db: any, refresh_token: string, jwt: string): Promise<void> {
 	const token_id = refresh_token.split(':')[0];
 	const payload = await verify_access_token(jwt);
 	const user_id = payload.sub;

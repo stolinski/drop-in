@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid';
-import { db } from './db.js';
 import { get_full_user_by_email } from './find_user.js';
 import { create_jwt } from './jwt.js';
 import { hash_n_salt_password } from './password.js';
@@ -8,6 +7,7 @@ import { check_is_password_valid, is_valid_email, normalize_email } from './util
 import { create_refresh_token } from './token.js';
 
 export async function sign_up(
+	db: any,
 	email: string,
 	password: string,
 ): Promise<{
@@ -27,7 +27,7 @@ export async function sign_up(
 
 	try {
 		// Check if user exists
-		const userExists = await get_full_user_by_email(normalizedEmail);
+		const userExists = await get_full_user_by_email(db, normalizedEmail);
 
 		if (userExists) {
 			throw new Error('User already exists');
@@ -37,12 +37,12 @@ export async function sign_up(
 		const passwordBcrypt: string = await hash_n_salt_password(password);
 
 		// Create new user
-		const new_user = await create_user(normalizedEmail, passwordBcrypt);
+		const new_user = await create_user(db, normalizedEmail, passwordBcrypt);
 
 		if (new_user?.id && new_user?.email) {
 			const jwt = await create_jwt(new_user.id);
 
-			const refresh_token: string = await create_refresh_token(new_user.id);
+			const refresh_token: string = await create_refresh_token(db, new_user.id);
 
 			return {
 				user: new_user,
@@ -63,11 +63,12 @@ export async function sign_up(
 /**
  * Creates a new user in the database.
  *
+ * @param db - Drizzle instance
  * @param email - The email of the user
  * @param hashedPassword - The hashed password of the user
  * @returns The new user object
  */
-export async function create_user(email: string, hashedPassword: string): Promise<Partial<User>> {
+export async function create_user(db: any, email: string, hashedPassword: string): Promise<Partial<User>> {
 	const [new_user] = await db
 		.insert(user)
 		.values({

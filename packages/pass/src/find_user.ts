@@ -1,20 +1,21 @@
 import { eq } from 'drizzle-orm';
 import { refresh_tokens, user, User } from './schema.js';
-import { db } from './db.js';
 
 /**
  * Fetches all user data by their email. Do not use for
  *
+ * @param db - Drizzle instance
  * @param email - The email of the user
  * @returns The user object if found, undefined otherwise
  */
-export async function get_full_user_by_email(email: string): Promise<User | undefined> {
+export async function get_full_user_by_email(db: any, email: string): Promise<User | undefined> {
 	return db.query.user.findFirst({
 		where: eq(user.email, email),
 	});
 }
 
 export async function get_user_by_email(
+	db: any,
 	email: string,
 	full = false,
 ): Promise<Partial<User> | undefined> {
@@ -39,10 +40,11 @@ export async function get_user_by_email(
 /**
  * Fetches a user by their ID.
  *
+ * @param db - Drizzle instance
  * @param id - The ID of the user
  * @returns The user object if found, undefined otherwise
  */
-export async function get_user_by_id(id: string | number): Promise<Partial<User> | undefined> {
+export async function get_user_by_id(db: any, id: string | number): Promise<Partial<User> | undefined> {
 	return db.query.user.findFirst({
 		where: eq(user.id, id as any),
 		columns: {
@@ -58,10 +60,12 @@ export async function get_user_by_id(id: string | number): Promise<Partial<User>
 /**
  * Fetches a user by their refresh token.
  *
+ * @param db - Drizzle instance
  * @param refresh_token - The refresh token
  * @returns The user object if found with a valid session, null otherwise
  */
 export async function get_user_by_refresh_token(
+	db: any,
 	refresh_token: string,
 ): Promise<Partial<User> | null> {
 	const result = await db.query.refresh_tokens.findFirst({

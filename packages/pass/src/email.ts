@@ -1,7 +1,6 @@
 /// <reference path="./app.d.ts" />
 
 import { create_expiring_auth_digest } from './utils.js';
-import { db } from './db.js';
 import { user } from './schema.js';
 import { eq } from 'drizzle-orm';
 
@@ -58,7 +57,7 @@ export async function send_reset_password_email(email: string) {
 	});
 }
 
-export async function send_verification_email(user_id: string) {
+export async function send_verification_email(db: any, user_id: string) {
 	const expirationTimestamp = Date.now() + 1000 * 60 * 60 * 24;
 	const found_user = await db.select().from(user).where(eq(user.id, user_id)).execute();
 	const email = found_user[0].email;

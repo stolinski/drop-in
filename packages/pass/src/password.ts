@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { sha256 } from './utils.js';
-import { db } from './db.js';
 import { user } from './schema.js';
 import { eq } from 'drizzle-orm';
 const { compare, genSalt, hash } = bcrypt;
@@ -31,6 +30,7 @@ export const hash_n_salt_password = async (password: string): Promise<string> =>
  * @returns A boolean indicating whether the password is valid.
  */
 export async function verify_password(
+	db: any,
 	enteredPassword: string,
 	storedHash: string,
 	userId: string,
@@ -56,7 +56,7 @@ export async function verify_password(
 				const newHashedPassword = await hash_n_salt_password(enteredPassword);
 
 				// Update the user's password hash in the database
-				const updateSuccess = await update_user_password(userId, newHashedPassword);
+				const updateSuccess = await update_user_password(db, userId, newHashedPassword);
 
 				if (updateSuccess) {
 					console.log('Password successfully rehashed and updated to the NEW method.');
@@ -96,7 +96,7 @@ export async function verify_password(
  * @param newHashedPassword - The new bcrypt hash of the password.
  * @returns Promise<boolean> - Returns true if update succeeded, false otherwise.
  */
-async function update_user_password(userId: string, newHashedPassword: string): Promise<boolean> {
+async function update_user_password(db: any, userId: string, newHashedPassword: string): Promise<boolean> {
 	try {
 		const result = await db
 			.update(user)
