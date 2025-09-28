@@ -1,5 +1,11 @@
 # @drop-in/pass
 
+## 0.4.1
+
+### Patch Changes
+
+- Fix sourcemap warnings by embedding sources in maps and publishing `src/` so debuggers can resolve original TypeScript in production.
+
 ## 0.4.0
 
 ### Minor Changes

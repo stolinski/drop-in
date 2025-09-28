@@ -50,5 +50,5 @@
 		"schema:generate": "drizzle-zero generate --format"
 	},
 	"type": "module",
-	"version": "0.0.8"
+	"version": "0.0.9"
 }

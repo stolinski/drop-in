@@ -12,6 +12,7 @@
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,
+		"inlineSources": true,
 		"allowSyntheticDefaultImports": true
 	},
 	"include": ["src/**/*"],
