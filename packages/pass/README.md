@@ -12,7 +12,7 @@ A secure, modern authentication library for SvelteKit applications with HttpOnly
 - 🌐 **Runtime agnostic** - Works in Node.js, Cloudflare Workers, Deno, Bun, and other environments
 - 🏗️ **SvelteKit optimized** - Native hooks integration and SSR support
 - 📊 **Session management** - Server-side user context and authentication state
-- 🧪 **Well tested** - 66+ tests covering all core functionality
+- 🧪 **Well tested** - 86+ tests covering all core functionality
 - 📝 **TypeScript first** - Full type safety throughout
 
 ## 🚀 Quick Start
@@ -261,8 +261,8 @@ export async function GET({ cookies }) {
 ## 🛡️ Security Features
 
 ### HttpOnly Cookies
-- **Access tokens** are HttpOnly, secure, and short-lived (15 minutes)
-- **Refresh tokens** are HttpOnly, secure, and long-lived (30 days)
+- **Access tokens** are HttpOnly, secure, and long-lived (90 days)
+- **Refresh tokens** are HttpOnly, secure, and long-lived (90 days)
 - **SameSite=strict** protection against CSRF attacks
 - **Automatic token refresh** happens transparently
 
@@ -361,13 +361,13 @@ export const cookie_options = {
   secure: true,
   path: '/',
   sameSite: 'strict' as const,
-  maxAge: 60 * 60 * 24 * 30, // 30 days
+  maxAge: 60 * 60 * 24 * 90, // 90 days
 };
 
 // JWT settings
 export const jwt_cookie_options = {
   path: '/',
-  maxAge: 60 * 15, // 15 minutes
+  maxAge: 60 * 60 * 24 * 90, // 90 days
   httpOnly: true,
   sameSite: 'strict' as const,
   secure: true,

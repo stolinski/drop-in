@@ -14,59 +14,93 @@
 		cancel_class,
 		confirm_text = 'Ok',
 		confirm_class,
-		on_cancel = () => null,
-		on_confirm
+		backdrop_click = true,
+		// Component callback props (Svelte 5):
+		open,
+		close,
+		cancel,
+		confirm
 	}: {
 		dialog?: HTMLDialogElement;
 		title: string;
 		children: Snippet;
 		buttons?: boolean;
 		active?: boolean;
-		show_button: boolean;
+		show_button?: boolean;
 		button_text?: string;
 		title_element?: 'h3' | 'h4' | 'h5' | 'h6';
 		cancel_text?: string;
 		cancel_class?: string;
 		confirm_text?: string;
 		confirm_class?: string;
-		on_cancel?: () => void;
-		on_confirm?: () => void;
+		backdrop_click?: boolean;
+		open?: () => void;
+		close?: () => void;
+		cancel?: () => void;
+		confirm?: () => void;
 	} = $props();
 
-	function close() {
-		on_cancel?.();
-		dialog.close();
+	function handleCancel() {
+		cancel?.();
+		dialog?.close();
 	}
-	function confirm() {
-		on_confirm?.();
-		dialog.close();
+	function handleConfirm() {
+		confirm?.();
+		dialog?.close();
+	}
+
+	function onDialogClosed() {
+		active = false;
+		close?.();
+	}
+
+	function onDialogCanceled() {
+		cancel?.();
+		// native cancel will close the dialog; no need to call close() here
+	}
+
+	function onBackdropClick(e: MouseEvent) {
+		if (!backdrop_click) return;
+		if (e.target === dialog) {
+			// clicking the backdrop should behave like cancel
+			handleCancel();
+		}
 	}
 
 	$effect(() => {
-		dialog.addEventListener('close', () => {
-			active = false;
-		});
+		if (!dialog) return;
+		dialog.addEventListener('close', onDialogClosed);
+		dialog.addEventListener('cancel', onDialogCanceled);
+		dialog.addEventListener('click', onBackdropClick);
 		if (active) {
-			dialog.showModal();
+			if (!dialog.open) dialog.showModal();
+			open?.();
 		} else {
-			dialog.close();
+			if (dialog.open) dialog.close();
 		}
+		return () => {
+			dialog?.removeEventListener('close', onDialogClosed);
+			dialog?.removeEventListener('cancel', onDialogCanceled);
+			dialog?.removeEventListener('click', onBackdropClick);
+		};
 	});
 </script>
 
 {#if show_button}
-	<button class="share" onclick={() => dialog.showModal()}>{button_text}</button>
+	<button class="share" type="button" onclick={() => (active = true)}>{button_text}</button>
 {/if}
 
-<dialog bind:this={dialog} class="di-dialog">
+<dialog bind:this={dialog} class="di-dialog" aria-label={title}>
 	{#if title}<svelte:element this={title_element}>{title}</svelte:element>{/if}
-	<button onclick={close} class="di-dialog-close">×</button>
+	<button type="button" onclick={handleCancel} class="di-dialog-close" aria-label="Close dialog"
+		>×</button
+	>
 	<section class="di-dialog-content">
 		{@render children()}
 		{#if buttons}
 			<div class="di-dialog-buttons">
-				<button class={cancel_class} onclick={close}>{cancel_text}</button>
-				<button class={confirm_class} onclick={confirm}>{confirm_text}</button>
+				<button type="button" class={cancel_class} onclick={handleCancel}>{cancel_text}</button>
+				<button type="button" class={confirm_class} onclick={handleConfirm}>{confirm_text}</button>
 			</div>
 		{/if}
 	</section>

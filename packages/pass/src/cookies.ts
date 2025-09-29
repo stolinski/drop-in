@@ -5,20 +5,20 @@
 // I'm wondering if we should have it longer, like a week. LMK what you think.
 
 // Used for the refresh token
-// Set to 1 month (30 days) as requested
+// Set to 90 days as requested
 export const cookie_options = {
 	httpOnly: true,
 	secure: true,
 	path: '/',
 	sameSite: 'strict',
-	maxAge: 60 * 60 * 24 * 30, // 30 days
+	maxAge: 60 * 60 * 24 * 90, // 90 days
 } as const;
 
 // The jwt cookie (access token)
-// Short-lived (15 minutes) for security, HttpOnly to prevent XSS
+// Extended to 90 days for long-lived sessions
 export const jwt_cookie_options = {
 	path: '/',
-	maxAge: 60 * 15, // 15 minutes
+	maxAge: 60 * 60 * 24 * 90, // 90 days
 	httpOnly: true,
 	sameSite: 'strict',
 	secure: true,

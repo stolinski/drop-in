@@ -1,21 +1,21 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 
-	const {
-		onclick,
+	let {
 		attempts = 2,
 		text = 'Are you sure?',
 		inline_warning = true,
 		action_class = 'warning-btn',
 		class: _class,
+		confirm,
 		...rest
 	}: {
-		onclick: () => unknown;
 		attempts?: number;
 		text?: string;
 		inline_warning?: boolean;
 		action_class?: string;
 		class?: string;
+		confirm?: () => void;
 	} = $props();
 
 	let attempt_count = $state(0);
@@ -24,7 +24,7 @@
 
 	function attempt() {
 		if (one_more_left) {
-			onclick();
+			confirm?.();
 			attempt_count = 0;
 		} else {
 			attempt_count += 1;
@@ -33,7 +33,7 @@
 </script>
 
 <div class="di-are-you-sure class={_class}">
-	<button {rest} onclick={attempt} class={one_more_left ? action_class : ''}>{text}</button>
+	<button {...rest} onclick={attempt} class={one_more_left ? action_class : ''}>{text}</button>
 	{#if attempt_count !== 0}
 		<span transition:fade>
 			Press {remaining} more time{one_more_left ? '' : 's'}.

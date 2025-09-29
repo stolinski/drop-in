@@ -1,22 +1,24 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte';
 	import { spring } from 'svelte/motion';
-	import { pannable } from './pannable';
+	import { pannable } from './pannable.js';
 
 	let {
 		dialog = $bindable(),
 		children,
 		active = $bindable(false),
 		button_text = 'Open',
-		onclose = () => {},
-		show_button = $bindable(false)
+		show_button = $bindable(false),
+		open,
+		close
 	} = $props<{
 		dialog?: HTMLDialogElement;
 		children: Snippet;
 		active?: boolean;
 		show_button?: boolean;
 		button_text?: string;
-		onclose: () => void;
+		open?: () => void;
+		close?: () => void;
 	}>();
 
 	const coords = spring(
@@ -39,24 +41,24 @@
 	}
 
 	function handlePanEnd() {
-		console.log('panend');
 		coords.stiffness = 0.2;
 		coords.damping = 0.4;
 		coords.set({ x: 0, y: 0 });
 	}
 
-	function close() {
+	function closeDialog() {
 		coords.set({ x: 0, y: window.innerHeight });
 		setTimeout(() => {
 			dialog.close();
-			onclose();
+			close?.();
 		}, 200);
 	}
 
-	function open() {
+	function openDialog() {
 		dialog.showModal();
 		tick();
 		coords.set({ x: 0, y: 0 });
+		open?.();
 	}
 
 	function toggle() {
@@ -68,11 +70,23 @@
 	}
 
 	$effect(() => {
+		if (!dialog) return;
+		const onStart = (e: Event) => handlePanStart();
+		const onMove = (e: Event) => handlePanMove(e as CustomEvent);
+		const onEnd = (e: Event) => handlePanEnd();
+		dialog.addEventListener('panstart', onStart as EventListener);
+		dialog.addEventListener('panmove', onMove as EventListener);
+		dialog.addEventListener('panend', onEnd as EventListener);
 		if (active) {
-			open();
+			openDialog();
 		} else {
-			close();
+			closeDialog();
 		}
+		return () => {
+			dialog?.removeEventListener('panstart', onStart as EventListener);
+			dialog?.removeEventListener('panmove', onMove as EventListener);
+			dialog?.removeEventListener('panend', onEnd as EventListener);
+		};
 	});
 </script>
 
@@ -86,9 +100,6 @@
 	style="translate:
 	0px {$coords.y}px;"
 	bind:this={dialog}
-	onpanstart={handlePanStart}
-	onpanmove={handlePanMove}
-	onpanend={handlePanEnd}
 	use:pannable
 	class="di-drawer"
 >

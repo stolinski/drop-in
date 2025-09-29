@@ -29,6 +29,10 @@
 					pr's to improve them. I'd like to keep them as opinionated, drop-in style elements, rather
 					than a deep customizable framework.
 				</p>
+				<p>
+					Accessibility: See the repo-wide checklist at <code>planning/a11y-checklist.md</code> and
+					Phase 1 tasks in <code>planning/phases/phase_1.md</code>.
+				</p>
 
 				<div class="row">
 					<h2 class="fs-l">Accordion</h2>
@@ -41,11 +45,19 @@
 				<div class="row">
 					<h2 class="fs-l">Dialog</h2>
 					<Dialog title="This is a fake form" show_button={true}>
-						<p>This is a dialog, it's basically just a modal alert.</p>
+						<form onsubmit={(e) => e.preventDefault()}>
+							<label for="name1">Name</label>
+							<input id="name1" name="name1" type="text" />
+							<button type="submit">Submit</button>
+						</form>
 					</Dialog>
 					<button onclick={() => (dialog_open = true)}>Dialog show_button false</button>
 					<Dialog title="This is a fake form" show_button={false} bind:active={dialog_open}>
-						<p>This is a dialog, it's basically just a modal alert.</p>
+						<form onsubmit={(e) => e.preventDefault()}>
+							<label for="email1">Email</label>
+							<input id="email1" name="email1" type="email" />
+							<button type="button" onclick={() => (dialog_open = false)}>Close</button>
+						</form>
 					</Dialog>
 				</div>
 
@@ -56,7 +68,7 @@
 						show_button={true}
 						button_text="Open Drawer"
 						bind:active={drawer_open}
-						onclose={() => {
+						close={() => {
 							console.log('closing');
 						}}
 					>
@@ -71,7 +83,7 @@
 
 				<div class="row">
 					<h2 class="fs-l">Are you sure? - Confirmation Button</h2>
-					<AreYouSure onclick={() => alert('Doing whatever')} />
+					<AreYouSure confirm={() => alert('Doing whatever')} />
 				</div>
 
 				<div class="row">
@@ -87,6 +99,7 @@
 				<div class="row">
 					<h2 class="fs-l">Share</h2>
 					<Share
+						show_button={true}
 						url="https://svelte.dev"
 						title="Svelte"
 						text="Check out Svelte"

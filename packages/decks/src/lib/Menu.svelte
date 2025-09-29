@@ -60,7 +60,12 @@
 		bind:this={menu}
 		id={name}
 		class="di-menu"
-		onclick={(e) => menu.hidePopover()}
+		role="menu"
+		tabindex="-1"
+		onclick={() => menu?.hidePopover()}
+		onkeydown={(e) => {
+			if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') menu?.hidePopover();
+		}}
 	>
 		<div class="di-menu-inner">
 			{@render children()}

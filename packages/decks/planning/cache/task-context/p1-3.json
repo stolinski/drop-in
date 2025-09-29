@@ -1,0 +1,34 @@
+{
+	"task_id": "p1-3",
+	"phase": 1,
+	"prepared_at": "2025-09-29T00:00:00.000Z",
+	"last_completed": { "task_id": "p1-2", "phase": 1, "completed_at": "2025-09-28T00:00:00.000Z" },
+	"files": [
+		{ "path": "src/lib/Dialog.svelte", "mtimeMs": 1759167217368.4023 },
+		{ "path": "src/lib/Drawer.svelte", "mtimeMs": 1759167863358.2888 },
+		{ "path": "src/lib/Menu.svelte", "mtimeMs": 1759158125360.9368 },
+		{ "path": "src/lib/Share.svelte", "mtimeMs": 1726700392088.4023 },
+		{ "path": "src/lib/AreYouSure.svelte", "mtimeMs": 1759156951005.8184 },
+		{ "path": "src/lib/Accordion.svelte", "mtimeMs": 1759156951002.022 },
+		{ "path": "src/lib/Pill.svelte", "mtimeMs": 1745612292974.0115 },
+		{ "path": "src/lib/Pills.svelte", "mtimeMs": 1724161902741.7458 },
+		{ "path": "src/lib/toast/Toast.svelte", "mtimeMs": 1759167184336.0889 },
+		{ "path": "src/lib/toast/index.ts", "mtimeMs": 1759167178902.5195 },
+		{ "path": "src/lib/toast/ToastSlice.svelte", "mtimeMs": 1745612301529.1895 },
+		{ "path": "src/lib/toast/toaster.svelte.ts", "mtimeMs": 1726255080160.2412 },
+		{ "path": "src/lib/a11y/scrollLock.ts", "mtimeMs": 1759089230347.6724 },
+		{ "path": "src/lib/a11y/escape.ts", "mtimeMs": 1759089225302.1704 },
+		{ "path": "src/lib/a11y/focusScope.ts", "mtimeMs": 1759089212668.0398 },
+		{ "path": "src/lib/local/Docs.svelte", "mtimeMs": 1759167614428.4949 },
+		{ "path": "src/lib/drawer.ts", "mtimeMs": 1726714853498.089 },
+		{ "path": "src/lib/animated-details.ts", "mtimeMs": 1724710912517.951 }
+	],
+	"acceptance_targets": [
+		"Normalize controlled/uncontrolled state APIs across Dialog, Drawer, Menu, Share, AreYouSure, Accordion, Pill/Pills, and Toast.",
+		"Standardize prop and event conventions: 'open' prop with 'on:openChange' where applicable; 'close' event with reason payload; 'select'/'change' events emit consistent detail shapes.",
+		"Unify focus/escape/scroll locking behavior via a11y helpers; ensure consistent modal semantics and ARIA attributes.",
+		"Toast store/events harmonized: create/show/update/dismiss by id; consistent event names and payloads.",
+		"Update local docs in src/lib/local/Docs.svelte to reflect unified patterns and event names."
+	],
+	"VERIFY_OK": true
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { animatedDetails } from './animated-details';
+	import { animatedDetails } from './animated-details.js';
 
 	let {
 		children,

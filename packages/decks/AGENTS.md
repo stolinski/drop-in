@@ -1,0 +1,21 @@
+AGENTS — Repo Guidance for Agents
+
+- Package manager: pnpm workspace; use `-F @drop-in/decks` to target.
+- Build: `pnpm -F @drop-in/decks build`; preview: `pnpm -F @drop-in/decks preview`.
+- Dev server: `pnpm -F @drop-in/decks dev`.
+- Type-check: `pnpm -F @drop-in/decks check` (svelte-check, strict TS).
+- Lint: `pnpm -F @drop-in/decks lint`; format: `pnpm -F @drop-in/decks format`.
+- Tests: repository uses Vitest (see `packages/pass`); run all: `pnpm -F @drop-in/pass test`.
+- Single test file: `pnpm -F @drop-in/pass vitest run src/login.test.ts`.
+- Single test name: `pnpm -F @drop-in/pass vitest run src/login.test.ts -t "name"`.
+- Formatting: Prettier + plugin-svelte; tabs, width 100, single quotes, no trailing commas.
+- ESLint: flat config with `@eslint/js`, `typescript-eslint`, `eslint-plugin-svelte`, `eslint-config-prettier`; ignores `build/ .svelte-kit/ dist/`.
+- Imports: ESM (NodeNext); prefer type-only imports (`import type {...}`); group external→internal; avoid circular deps; use explicit `.js` extensions in relative imports under NodeNext.
+- Types: TS strict; avoid `any`; use `unknown`/narrowing; annotate public APIs; use `satisfies` for literal types.
+- Naming: Components/types PascalCase (`Pill.svelte`, `ToastSlice.svelte`); funcs/vars camelCase; files: components PascalCase, utils lowercase (e.g., `pannable.ts`).
+- Exports: Prefer named exports via `src/lib/index.ts` barrel; avoid default exports.
+- Error handling: Do not swallow; throw `Error` with clear message or return `Result`-like unions; no `console.*` in library code.
+- Svelte: Keep accessibility (focus/scroll lock helpers) and web-standards-first patterns; avoid heavy dependencies.
+- Copilot: Obey `.github/copilot-instructions.md` at repo root (do not contravene these).
+- Cursor: Cursor rules present in `examples/zero-survey/.cursorrules`; follow if working there.
+- Node: Require Node >20.11.1; use workspace linking; do not change engines.

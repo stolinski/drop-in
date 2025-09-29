@@ -12,6 +12,12 @@ Disclaimer: These are under active development. I encourage you to try them and 
 
 If you would like css, you can install and import `@drop-in/graffiti`. See https://github.com/stolinski/drop-in/tree/main/packages/graffiti
 
+## Accessibility
+
+- See the repo-wide Accessibility Checklist at `planning/a11y-checklist.md`. This checklist guides roles/ARIA, keyboard support, focus trap/restore, Escape handling and overlay stacking, inert/scroll lock, and reduced-motion behavior across all components.
+
+- Components under development are audited against this checklist; progress is tracked in `planning/phases/phase_1.md`.
+
 ## Current Elements
 
 - Menu (Popover based)

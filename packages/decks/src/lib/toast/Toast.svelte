@@ -17,7 +17,7 @@
 	} = $props();
 
 	let inline = position.inline === 'center' ? 'inset-inline' : `inset-inline-${position.inline}`;
-	let block = position.block === 'center' ? 'inset-block' : `inset-block-${position.inline}`;
+	let block = position.block === 'center' ? 'inset-block' : `inset-block-${position.block}`;
 
 	$effect(() => {
 		if (toaster.status === 'ON') {
@@ -26,6 +26,13 @@
 			popover?.hidePopover();
 		}
 	});
+
+	function onToastKeydown(e: KeyboardEvent, id: string) {
+		if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+			e.preventDefault();
+			toaster.remove(id);
+		}
+	}
 </script>
 
 <div
@@ -37,7 +44,10 @@
 >
 	{#each toaster.toasts as message (message.id)}
 		<div
+			role="button"
+			tabindex="0"
 			onclick={() => toaster.remove(message.id)}
+			onkeydown={(e) => onToastKeydown(e, message.id)}
 			in:fly={{ opacity: 0, x: 100 }}
 			out:fade
 			animate:flip

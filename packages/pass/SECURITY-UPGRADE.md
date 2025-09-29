@@ -6,8 +6,8 @@ This upgrade implements a more secure authentication pattern using HttpOnly cook
 
 ### 🔒 **Security Improvements**
 - **JWT is now HttpOnly**: Access tokens can no longer be read by client-side JavaScript, preventing XSS token theft
-- **Shorter JWT expiry**: Access tokens now expire in 15 minutes (was 7 days) 
-- **Longer refresh tokens**: Refresh tokens now last 30 days (was 60 days) as requested
+- **Extended JWT expiry**: Access tokens now expire in 90 days (was 15 minutes previously) 
+- **Longer refresh tokens**: Refresh tokens now last 90 days (was 30 days)
 - **Fixed logout cookie clearing**: Now properly sets separate Set-Cookie headers
 
 ### 📡 **API Changes**

@@ -1,5 +1,22 @@
 # @drop-in/pass
 
+## 0.5.0
+
+### Minor Changes
+
+- Improve session stability by invoking the full auth/refresh flow in the session handle and extend default token lifetimes.
+
+  - Fix: `create_session_handle(db)` now uses the full authentication flow (via `authenticate_user`) so SSR requests seamlessly refresh tokens and populate `event.locals.user`. This prevents users from appearing “logged out” when the access token expires.
+  - Change: Increase default lifetimes to prioritize “stay signed in” behavior while keeping HttpOnly security and refresh rotation:
+    - Access token JWT cookie: 90 days (was 15 minutes)
+    - Refresh token cookie: 90 days (was 30 days)
+  - Docs: Update README and SECURITY-UPGRADE to reflect the new defaults and clarify handle order and credentials requirements.
+
+  Notes:
+
+  - Keep `create_session_handle(db)` before `create_pass_routes(db)` in `sequence(...)`.
+  - Ensure client requests include `credentials: 'include'` and that production uses HTTPS for secure cookies.
+
 ## 0.4.1
 
 ### Patch Changes
