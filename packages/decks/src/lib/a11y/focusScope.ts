@@ -25,15 +25,22 @@ export type FocusScopeController = {
 	deactivate: () => void;
 };
 
+// Keep a simple stack of active focus containers so only the topmost traps
+const focusStack: HTMLElement[] = [];
+
 export function createFocusScope(
 	container: HTMLElement,
 	initial?: HTMLElement | null
 ): FocusScopeController {
-	let lastFocused: HTMLElement | null = null;
+	let previouslyFocused: HTMLElement | null = null;
 	let active = false;
 
+	function isTopMost() {
+		return focusStack[focusStack.length - 1] === container;
+	}
+
 	function handleKeydown(event: KeyboardEvent) {
-		if (!active || event.key !== 'Tab') return;
+		if (!active || !isTopMost() || event.key !== 'Tab') return;
 		const focusables = Array.from(container.querySelectorAll<HTMLElement>('*')).filter(isFocusable);
 		if (focusables.length === 0) return;
 		const first = focusables[0];
@@ -53,8 +60,7 @@ export function createFocusScope(
 	}
 
 	function handleFocusIn(e: FocusEvent) {
-		if (!active) return;
-		lastFocused = e.target as HTMLElement;
+		if (!active || !isTopMost()) return;
 		if (!container.contains(e.target as Node)) {
 			const focusables = Array.from(container.querySelectorAll<HTMLElement>('*')).filter(
 				isFocusable
@@ -66,7 +72,8 @@ export function createFocusScope(
 	function activate() {
 		if (active) return;
 		active = true;
-		lastFocused = (document.activeElement as HTMLElement) ?? null;
+		previouslyFocused = (document.activeElement as HTMLElement) ?? null;
+		focusStack.push(container);
 		container.addEventListener('keydown', handleKeydown);
 		document.addEventListener('focusin', handleFocusIn, true);
 		// focus initial or first
@@ -84,7 +91,10 @@ export function createFocusScope(
 		active = false;
 		container.removeEventListener('keydown', handleKeydown);
 		document.removeEventListener('focusin', handleFocusIn, true);
-		lastFocused?.focus();
+		// remove from stack regardless of position
+		const idx = focusStack.lastIndexOf(container);
+		if (idx !== -1) focusStack.splice(idx, 1);
+		previouslyFocused?.focus();
 	}
 
 	return { activate, deactivate };

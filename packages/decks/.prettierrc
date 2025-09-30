@@ -1,5 +1,4 @@
 {
-	"ignoreFiles": ["package.json"],
 	"overrides": [
 		{
 			"files": "*.svelte",

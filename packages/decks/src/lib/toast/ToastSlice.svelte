@@ -2,9 +2,10 @@
 	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { toaster } from './toaster.svelte';
+	import { isReducedMotion } from '../motion.js';
 	export let message;
 
-	let progress = tweened(100, { duration: message.duration });
+	let progress = tweened(100, { duration: isReducedMotion() ? 0 : message.duration });
 
 	onMount(async () => {
 		progress.set(0).then(() => {

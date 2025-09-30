@@ -3,3 +3,6 @@ package.json
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Local planning/cache files are not part of the package lint surface
+planning/

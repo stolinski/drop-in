@@ -3,7 +3,7 @@
 	import { toaster } from './toast/toaster.svelte.js';
 
 	let {
-		modal: dialog = $bindable(),
+		modal: _dialog = $bindable(),
 		url,
 		title,
 		text,
@@ -21,26 +21,6 @@
 		active?: boolean;
 	} = $props();
 
-	async function share() {
-		const is_possibly_mobile =
-			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-		if (is_possibly_mobile && navigator?.share) {
-			try {
-				await navigator.share({
-					url,
-					text,
-					title
-				});
-			} catch (err) {
-				// This is here because navigator throws AbortError if the user cancels the share
-				return;
-			}
-		} else {
-			dialog?.showModal();
-		}
-	}
-
 	function copy() {
 		navigator.clipboard.writeText(decodeURIComponent(url));
 		toaster.info('Copied to clipboard');
@@ -54,7 +34,7 @@
 		<a
 			class="button di-share-button di-share-share--x"
 			target="_blank"
-			href="https://twitter.com/intent/tweet?url={url}&text={title}&via={twitter_account}"
+			href="https://twitter.com/intent/tweet?url={url}&text={text}&via={twitter_account}"
 		>
 			X</a
 		>

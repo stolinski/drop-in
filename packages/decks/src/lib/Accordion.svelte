@@ -19,6 +19,14 @@
 </details>
 
 <style>
+	@media (prefers-reduced-motion: reduce) {
+		/* When reduced motion, animatedDetails will set duration 0 via JS tokens; ensure no CSS transitions linger */
+		.di-accordion,
+		.di-accordion * {
+			transition: none !important;
+		}
+	}
+
 	details {
 		overflow: hidden;
 	}

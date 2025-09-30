@@ -1,10 +1,11 @@
 // CODE FROM
 //https://github.com/AndrewLester/svelte-animated-details/blob/main/src/routes/%2Bpage.svelte
 import type { Action } from 'svelte/action';
+import { durationOrZero, motion } from './motion.js';
 
 const defaultOptions: KeyframeAnimationOptions = {
-	duration: 400,
-	easing: 'ease-out'
+	duration: motion.durations.base,
+	easing: motion.easing.out
 };
 
 export const animatedDetails: Action<HTMLDetailsElement, KeyframeAnimationOptions | undefined> = (
@@ -42,11 +43,18 @@ export const animatedDetails: Action<HTMLDetailsElement, KeyframeAnimationOption
 			blockSizeKeyframes.reverse();
 		}
 
+		const localOptions: KeyframeAnimationOptions = {
+			...options,
+			duration: durationOrZero(
+				typeof options.duration === 'number' ? options.duration : motion.durations.base
+			)
+		};
+
 		const animation = element.animate(
 			{
 				blockSize: blockSizeKeyframes
 			},
-			options
+			localOptions
 		);
 
 		animation.oncancel =

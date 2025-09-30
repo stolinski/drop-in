@@ -48,9 +48,32 @@
 			tabindex="0"
 			onclick={() => toaster.remove(message.id)}
 			onkeydown={(e) => onToastKeydown(e, message.id)}
-			in:fly={{ opacity: 0, x: 100 }}
-			out:fade
-			animate:flip
+			in:fly|local={{
+				opacity: 0,
+				x: 100,
+				duration:
+					typeof window !== 'undefined' &&
+					window.matchMedia &&
+					window.matchMedia('(prefers-reduced-motion: reduce)').matches
+						? 0
+						: 200
+			}}
+			out:fade|local={{
+				duration:
+					typeof window !== 'undefined' &&
+					window.matchMedia &&
+					window.matchMedia('(prefers-reduced-motion: reduce)').matches
+						? 0
+						: 150
+			}}
+			animate:flip={{
+				duration:
+					typeof window !== 'undefined' &&
+					window.matchMedia &&
+					window.matchMedia('(prefers-reduced-motion: reduce)').matches
+						? 0
+						: 200
+			}}
 			style="margin-top: var(--vs-s);"
 		>
 			<ToastSlice {message} />
@@ -64,12 +87,26 @@
 		opacity: 0;
 		transition-behavior: allow-discrete;
 		transition-property: opacity, display;
-		transition-duration: 0.25s;
+		transition-duration: var(--di-motion-duration-enter, var(--di-motion-duration, 200ms));
 		border: none;
 		overflow: visible;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.di-toast {
+			transition: none !important;
+		}
+	}
+
 	[popover]:popover-open {
 		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		/* disable flip/fly/fade timing via CSS hook; Svelte transitions are local but CSS vars drive their duration where possible */
+		[popover],
+		[popover]:popover-open {
+			transition: none !important;
+		}
 	}
 </style>

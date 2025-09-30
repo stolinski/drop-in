@@ -1,1 +1,5 @@
-{ "task_id": "p1-3", "phase": 1, "completed_at": "2025-09-29T00:00:00.000Z" }
+{
+  "task_id": "p1-12",
+  "phase": 1,
+  "completed_at": "2025-09-29"
+}

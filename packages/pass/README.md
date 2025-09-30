@@ -12,7 +12,7 @@ A secure, modern authentication library for SvelteKit applications with HttpOnly
 - 🌐 **Runtime agnostic** - Works in Node.js, Cloudflare Workers, Deno, Bun, and other environments
 - 🏗️ **SvelteKit optimized** - Native hooks integration and SSR support
 - 📊 **Session management** - Server-side user context and authentication state
-- 🧪 **Well tested** - 86+ tests covering all core functionality
+- 🧪 **Well tested** - 86 tests covering all core functionality
 - 📝 **TypeScript first** - Full type safety throughout
 
 ## 🚀 Quick Start
@@ -109,9 +109,11 @@ Notes:
 
 ### Email Configuration
 
-Password reset links are generated using `create_password_link(email)` and include query params: `email`, `key` (token), and `expire` (timestamp). The default expiration is 24 hours. The reset endpoint expects these parameters.
+Email verification and password reset links are generated with these query params:
+- **Verification:** `token`, `email`, `expire` (24 hour expiration)
+- **Password reset:** `email`, `key` (token), `expire` (24 hour expiration)
 
-Configure your email provider in `drop-in.config.js`:
+Configure your email provider in `drop-in.config.js` at the root of your project:
 
 ```javascript
 // For Cloudflare Workers with Resend
@@ -145,15 +147,15 @@ export default {
 
 **Supported email providers:**
 - **Resend** - Modern email API, perfect for Cloudflare Workers
-- **MailChannels** - Free email sending for Cloudflare Workers  
+- **MailChannels** - Free email sending for Cloudflare Workers
 - **SendGrid** - Reliable email delivery service
-- **SMTP** - Traditional email with `@drop-in/beeper` for Node.js
+- **Custom fetch-based solutions** - Any API that works with `fetch()`
 
-See [Email Configuration Guide](https://your-docs-url/pass/email-setup) for detailed examples.
+**Note:** If no `sendEmail` callback is configured, emails are logged to console in development.
 
 ### Basic Setup
 
-Note: Signing up (`POST /api/auth/register`) automatically triggers a verification email in the background. The response is not delayed by email sending; failures are logged and do not block signup.
+**Note:** Signup (`POST /api/auth/register`) automatically sends a verification email in the background (fire-and-forget). Email failures are logged but don't block the signup response.
 
 1. **Configure your hooks** (`src/hooks.server.ts`):
 
@@ -267,9 +269,9 @@ export async function GET({ cookies }) {
 - **Automatic token refresh** happens transparently
 
 ### Password Security
-- **bcrypt hashing** with salt rounds (configurable, default: 10)
-- **Backward compatibility** for password hash migration
-- **Minimum password requirements** (6+ characters, configurable)
+- **bcrypt hashing** with salt rounds (default: 10)
+- **Backward compatibility** for legacy SHA-256+bcrypt password migration
+- **Automatic rehashing** on login for old password format users
 
 ### Session Management
 - **Database-stored refresh tokens** with automatic cleanup
@@ -354,8 +356,10 @@ The library automatically handles these routes when using `create_pass_routes(db
 
 ### Cookie Settings
 
+All cookies are configured for 90-day sessions in `src/cookies.ts`:
+
 ```typescript
-// Refresh token settings (src/cookies.ts)
+// Refresh token cookie
 export const cookie_options = {
   httpOnly: true,
   secure: true,
@@ -364,7 +368,7 @@ export const cookie_options = {
   maxAge: 60 * 60 * 24 * 90, // 90 days
 };
 
-// JWT settings
+// JWT access token cookie
 export const jwt_cookie_options = {
   path: '/',
   maxAge: 60 * 60 * 24 * 90, // 90 days
@@ -378,20 +382,19 @@ export const jwt_cookie_options = {
 
 ```bash
 # Required
-DATABASE_URL="postgresql://..."
-JWT_SECRET="your-jwt-secret"
+JWT_SECRET="your-jwt-secret-at-least-32-chars"
 
-# Optional email API keys (choose one based on your provider)
+# Database (managed by your app, not by @drop-in/pass)
+DATABASE_URL="postgresql://..."
+
+# Optional email API keys (used in your drop-in.config.js sendEmail callback)
 RESEND_API_KEY="re_your_api_key"           # For Resend
 SENDGRID_API_KEY="SG.your_api_key"         # For SendGrid
-# MailChannels requires no API key for Cloudflare Workers
+# Or any other email service credentials
 
-# Legacy SMTP settings (if using @drop-in/beeper)
-EMAIL_HOST="smtp.gmail.com"
-EMAIL_PORT="587"
-EMAIL_SECURE="true"
-EMAIL_USER="your-email@gmail.com"
-EMAIL_PASSWORD="your-app-password"
+# Optional debug logging
+PASS_DEBUG="true"                          # Enable detailed auth logs
+DEBUG="drop-in:*"                          # General debug flag
 ```
 
 ## 🧪 Testing
@@ -453,14 +456,20 @@ declare global {
 # Install dependencies
 npm install
 
-# Run tests
+# Run tests once
 npm test
 
-# Build the package
+# Run tests in watch mode
+npm run test:watch
+
+# Build the package (compile TypeScript)
 npm run build
 
-# Development mode
+# Development mode (watch mode compilation)
 npm run dev
+
+# Package for publishing
+npm run package
 ```
 
 ## 🐛 Troubleshooting
@@ -484,15 +493,17 @@ npm run dev
 - Verify your email provider configuration is correct
 
 **Runtime compatibility issues**
-- Ensure your email implementation uses only Web APIs (fetch, etc.) for Cloudflare Workers
-- For Node.js SMTP, use `@drop-in/beeper` as your email callback
-- Avoid Node.js-specific modules in Cloudflare Workers environments
+- Ensure your email implementation uses only Web APIs (`fetch`, etc.) for Cloudflare Workers
+- Avoid Node.js-specific modules (`nodemailer`, `fs`, etc.) in edge runtime environments
+- For Node.js SMTP, implement your own callback using `nodemailer` or similar
 
 ### Debug Mode
 
-Enable debug logging:
+Enable debug logging with environment variables:
 
 ```bash
+PASS_DEBUG=true npm run dev
+# or
 DEBUG=drop-in:* npm run dev
 ```
 

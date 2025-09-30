@@ -1,0 +1,31 @@
+{
+	"task_id": "p1-12",
+	"phase": 1,
+	"prepared_at": "2025-09-29T00:00:00.000Z",
+	"files": [
+		{ "path": "src/lib/local/Docs.svelte", "mtimeMs": 1759174274788.3416 },
+		{ "path": "src/routes/+page.svelte", "mtimeMs": 1759117426348.4917 },
+		{ "path": "src/lib/index.ts", "mtimeMs": 1759089241497.14 },
+		{ "path": "src/lib/Accordion.svelte", "mtimeMs": 1759156951002.022 },
+		{ "path": "src/lib/AreYouSure.svelte", "mtimeMs": 1759174252668.6982 },
+		{ "path": "src/lib/Dialog.svelte", "mtimeMs": 1759174245255.2783 },
+		{ "path": "src/lib/Drawer.svelte", "mtimeMs": 1759174136522.0564 },
+		{ "path": "src/lib/Menu.svelte", "mtimeMs": 1759172529905.6243 },
+		{ "path": "src/lib/Pill.svelte", "mtimeMs": 1745612292974.0115 },
+		{ "path": "src/lib/Pills.svelte", "mtimeMs": 1759174604438.0642 },
+		{ "path": "src/lib/Share.svelte", "mtimeMs": 1759174721945.02 },
+		{ "path": "src/lib/toast/Toast.svelte", "mtimeMs": 1759167184336.0889 },
+		{ "path": "src/lib/toast/ToastSlice.svelte", "mtimeMs": 1745612301529.1895 },
+		{ "path": "src/lib/toast/toaster.svelte.ts", "mtimeMs": 1726255080160.2412 },
+		{ "path": "src/lib/toast/index.ts", "mtimeMs": 1759174741339.9473 },
+		{ "path": "planning/a11y-checklist.md", "mtimeMs": 1759117277881.2844 },
+		{ "path": "planning/phases/phase_1.md", "mtimeMs": 1759175855788.2075 }
+	],
+	"acceptance_targets": [
+		"Each listed component has a minimal usage example with a11y notes and API summary.",
+		"Examples are runnable locally and linked from the docs entry point (src/routes/+page.svelte -> src/lib/local/Docs.svelte).",
+		"Docs include links/references to the a11y checklist and Phase 1 plan."
+	],
+	"last_completed": { "task_id": "p1-3", "phase": 1, "completed_at": "2025-09-29T00:00:00.000Z" },
+	"VERIFY_OK": true
+}

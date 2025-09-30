@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
+	import { isReducedMotion } from './motion.js';
 
 	let {
 		attempts = 2,
 		text = 'Are you sure?',
-		inline_warning = true,
+		inline_warning: _inline_warning = true,
+
 		action_class = 'warning-btn',
 		class: _class,
-		confirm,
+		onconfirm,
 		...rest
 	}: {
 		attempts?: number;
@@ -15,16 +17,19 @@
 		inline_warning?: boolean;
 		action_class?: string;
 		class?: string;
-		confirm?: () => void;
+		onconfirm?: () => void;
 	} = $props();
+	// mark as used to preserve prop while unused internally
+	void _inline_warning;
 
 	let attempt_count = $state(0);
 	let remaining = $derived(attempts - attempt_count);
 	let one_more_left = $derived(remaining === 1);
+	const reduced = isReducedMotion();
 
 	function attempt() {
 		if (one_more_left) {
-			confirm?.();
+			onconfirm?.();
 			attempt_count = 0;
 		} else {
 			attempt_count += 1;
@@ -35,7 +40,7 @@
 <div class="di-are-you-sure class={_class}">
 	<button {...rest} onclick={attempt} class={one_more_left ? action_class : ''}>{text}</button>
 	{#if attempt_count !== 0}
-		<span transition:fade>
+		<span transition:fade|local={{ duration: reduced ? 0 : 150 }}>
 			Press {remaining} more time{one_more_left ? '' : 's'}.
 		</span>
 	{/if}

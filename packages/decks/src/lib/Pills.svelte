@@ -4,7 +4,7 @@
 	let { content }: { content: { text: string; link?: string }[] | string[] } = $props();
 </script>
 
-{#each content as pill}
+{#each content as pill, i (i)}
 	{#if typeof pill === 'string'}
 		<Pill>{pill}</Pill>
 	{:else}
