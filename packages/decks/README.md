@@ -20,11 +20,24 @@ If you would like css, you can install and import `@drop-in/graffiti`. See https
 
 ## Current Elements
 
+### Components
 - Menu (Popover based)
 - Pills
 - Share
 - Are You Sure - Confirm Button
 - Accordion (Details based)
+- Toggle - Two-state toggle button
+- ToggleGroup - View switcher using Toggle
+- Dialog - Modal dialog with focus trap
+- Drawer - Slide-out panel with gestures
+- Toast - Notification system
+
+### Utilities
+- `createFocusScope` - Focus trapping for overlays
+- `onEscape` - Escape key handling with stacking
+- `lockScroll`/`unlockScroll` - Background scroll lock
+- `createDismissable`/`dismissable` - Dismissable overlay utility (composes focus trap, scroll lock, Escape, outside-click)
+- Motion utilities (`motion`, `isReducedMotion`, `durationOrZero`)
 
 ## Overlay Callbacks (Svelte 5 style)
 
@@ -79,8 +92,83 @@ Examples
 <AreYouSure onconfirm={() => doTheThing()} />
 ```
 
+- Toggle
+
+```svelte
+<script>
+	import { Toggle } from '@drop-in/decks';
+	let view = $state('left');
+</script>
+
+<Toggle
+	bind:value={view}
+	left_label="Grid"
+	right_label="List"
+	onchange={(value) => console.log('view changed to:', value)}
+/>
+
+{#if view === 'left'}
+	<!-- Grid view -->
+{:else}
+	<!-- List view -->
+{/if}
+```
+
+- ToggleGroup
+
+```svelte
+<script>
+	import { ToggleGroup } from '@drop-in/decks';
+	let view = $state('left');
+</script>
+
+<ToggleGroup bind:value={view} left_label="Grid" right_label="List">
+	{#snippet left()}
+		<div class="grid">
+			<!-- Grid view content -->
+		</div>
+	{/snippet}
+	{#snippet right()}
+		<div class="list">
+			<!-- List view content -->
+		</div>
+	{/snippet}
+</ToggleGroup>
+```
+
+## Utilities
+
+Components prioritize native HTML features (e.g., `<dialog>` provides focus trap, Escape, top layer). Utilities only add what native elements don't provide:
+
+### Core utilities
+
+- `lockScroll()` / `unlockScroll()` - Prevent body scroll (native dialog doesn't always lock scroll)
+- `onEscape(callback)` - Escape key with stacking (for non-dialog overlays)
+- `createFocusScope(element)` - Focus trap (for non-dialog overlays)
+
+### Dismissable (convenience wrapper)
+
+For custom overlays, `createDismissable()` composes the above:
+
+```typescript
+import { createDismissable } from '@drop-in/decks';
+
+const controller = createDismissable(element, {
+  onDismiss: () => { /* handle dismiss */ },
+  enableEscape: true,
+  enableOutsideClick: true,
+  enableFocusTrap: true,
+  enableScrollLock: true
+});
+controller.activate();
+// later: controller.deactivate()
+```
+
+**Note:** Dialog uses native `<dialog>` features and only adds scroll lock. Drawer/Menu use these utilities since they don't use `<dialog>`.
+
 Notes
 
 - Callbacks are post-action notifications; they do not prevent default behavior. To close overlays programmatically, update `bind:active` or call the relevant API on the element (e.g., `dialog.close()`).
 - Escape handling and backdrop clicks trigger `oncancel` when enabled.
 - Focus trapping and scroll locking are handled internally while overlays are active.
+- The `dismissable` utility composes `createFocusScope`, `onEscape`, `lockScroll`, and outside-click detection into a single, reusable API for custom overlays.

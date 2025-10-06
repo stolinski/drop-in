@@ -30,7 +30,7 @@
 
 <Dialog button_text="Share" show_button={true} buttons={false} title="Share" {active}>
 	<section aria-label="Share Window" class="share-window">
-		<button class="button di-share-button" onclick={copy}>Link</button>
+		<button type="button" class="button di-share-button" onclick={copy}>Link</button>
 		<a
 			class="button di-share-button di-share-share--x"
 			target="_blank"

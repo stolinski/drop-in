@@ -94,7 +94,7 @@ export function createFocusScope(
 		// remove from stack regardless of position
 		const idx = focusStack.lastIndexOf(container);
 		if (idx !== -1) focusStack.splice(idx, 1);
-		previouslyFocused?.focus();
+		previouslyFocused?.focus({ preventScroll: true });
 	}
 
 	return { activate, deactivate };

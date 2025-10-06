@@ -2,9 +2,6 @@
 	import { tick, type Snippet } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { pannable } from './pannable.js';
-	import { createFocusScope } from './a11y/focusScope.js';
-	import type { FocusScopeController } from './a11y/focusScope.js';
-	import { onEscape } from './a11y/escape.js';
 	import { lockScroll, unlockScroll } from './a11y/scrollLock.js';
 	import { isReducedMotion, motion } from './motion.js';
 
@@ -15,6 +12,8 @@
 		button_text = 'Open',
 		show_button = $bindable(false),
 		disable_escape = false,
+		dismiss_threshold = 0.3,
+		velocity_threshold = 0.5,
 		title,
 		onopen,
 		onclose,
@@ -26,6 +25,8 @@
 		show_button?: boolean;
 		button_text?: string;
 		disable_escape?: boolean;
+		dismiss_threshold?: number;
+		velocity_threshold?: number;
 		title?: string;
 		onopen?: () => void;
 		onclose?: () => void;
@@ -40,9 +41,6 @@
 		}
 	);
 
-	let focus_controller: FocusScopeController | null = null;
-	let remove_escape: null | (() => void) = null;
-
 	function handlePanStart() {
 		coords.stiffness = coords.damping = 1;
 	}
@@ -54,7 +52,7 @@
 		}));
 	}
 
-	function handlePanEnd() {
+	function handlePanEnd(event: CustomEvent<{ x: number; y: number; dx: number; dy: number; velocityY: number }>) {
 		if (isReducedMotion()) {
 			coords.stiffness = 1;
 			coords.damping = 1;
@@ -62,7 +60,20 @@
 			coords.stiffness = 0.2;
 			coords.damping = 0.4;
 		}
-		coords.set({ x: 0, y: 0 });
+
+		// Check dismissal criteria
+		const threshold = window.innerHeight * dismiss_threshold;
+		const velocity = event.detail.velocityY;
+		const currentY = $coords.y;
+		const shouldDismiss = currentY > threshold || velocity > velocity_threshold;
+
+		if (shouldDismiss) {
+			// User dragged far enough or fast enough - dismiss drawer
+			active = false;
+		} else {
+			// Snap back to open position
+			coords.set({ x: 0, y: 0 });
+		}
 	}
 
 	function closeDialog() {
@@ -70,10 +81,13 @@
 		const exit_ms = isReducedMotion() ? 0 : motion.durations.base;
 		setTimeout(() => {
 			dialog?.close();
+			// Cleanup scroll lock after animation completes
+			if (typeof document !== 'undefined') unlockScroll();
 		}, exit_ms);
 	}
 
 	function openDialog() {
+		// Native dialog.showModal() provides focus trap automatically
 		dialog.showModal();
 		void tick();
 		coords.set({ x: 0, y: 0 });
@@ -99,8 +113,13 @@
 	}
 
 	function onDialogCanceled(e: Event) {
-		// prevent native Escape handling; onEscape stack will handle if enabled
-		e.preventDefault();
+		if (disable_escape) {
+			// User wants to disable Escape - prevent native behavior
+			e.preventDefault();
+		} else {
+			// Use native Escape - just trigger our cancel callback
+			handleCancel();
+		}
 	}
 
 	function onBackdropClick(e: MouseEvent) {
@@ -114,7 +133,7 @@
 		const onStart = () => handlePanStart();
 		const onMove = (e: Event) =>
 			handlePanMove(e as CustomEvent<{ x: number; y: number; dx: number; dy: number }>);
-		const onEnd = () => handlePanEnd();
+		const onEnd = (e: Event) => handlePanEnd(e as CustomEvent<{ x: number; y: number; dx: number; dy: number; velocityY: number }>);
 		dialog.addEventListener('panstart', onStart);
 		dialog.addEventListener('panmove', onMove);
 		dialog.addEventListener('panend', onEnd);
@@ -123,29 +142,11 @@
 		dialog.addEventListener('click', onBackdropClick);
 		if (active) {
 			openDialog();
-			// lock scroll and trap focus
+			// Only add what native dialog doesn't provide:
+			// Scroll lock (native dialog doesn't reliably prevent body scroll)
 			if (typeof document !== 'undefined') lockScroll();
-			if (!focus_controller) focus_controller = createFocusScope(dialog);
-			focus_controller.activate();
-			// Escape handling only when enabled
-			if (!disable_escape) {
-				if (!remove_escape) {
-					remove_escape = onEscape(() => {
-						handleCancel();
-					});
-				}
-			} else if (remove_escape) {
-				remove_escape();
-				remove_escape = null;
-			}
 		} else {
 			closeDialog();
-			focus_controller?.deactivate();
-			if (remove_escape) {
-				remove_escape();
-				remove_escape = null;
-			}
-			if (typeof document !== 'undefined') unlockScroll();
 		}
 		return () => {
 			dialog?.removeEventListener('panstart', onStart);
@@ -154,18 +155,14 @@
 			dialog?.removeEventListener('close', onDialogClosed);
 			dialog?.removeEventListener('cancel', onDialogCanceled);
 			dialog?.removeEventListener('click', onBackdropClick);
-			// cleanup
-			focus_controller?.deactivate();
-			if (remove_escape) remove_escape();
+			// Cleanup scroll lock if dialog is destroyed while open
 			if (typeof document !== 'undefined') unlockScroll();
 		};
 	});
 </script>
 
-<!-- TODO make drawer close on drag -->
-
 {#if show_button}
-	<button class="di-drawer-open-button" onclick={toggle}>{button_text}</button>
+	<button type="button" class="di-drawer-open-button" onclick={toggle}>{button_text}</button>
 {/if}
 
 <dialog
@@ -179,7 +176,7 @@
 	aria-label={title ? undefined : 'Drawer'}
 >
 	<div class="di-drawer-handle"></div>
-	<button class="di-drawer-close-button" onclick={handleCancel}>×</button>
+	<button type="button" class="di-drawer-close-button" onclick={handleCancel}>×</button>
 	<div class="form_drawer_container">
 		{#if title}
 			<h2 id="di-drawer-title" class="di-drawer-title">{title}</h2>

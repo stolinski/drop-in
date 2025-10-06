@@ -9,9 +9,13 @@
 	import Drawer from '$lib/Drawer.svelte';
 	import Pill from '$lib/Pill.svelte';
 	import Pills from '$lib/Pills.svelte';
+	import Toggle from '$lib/Toggle.svelte';
+	import ToggleGroup from '$lib/ToggleGroup.svelte';
 
 	let drawer_open = $state(false);
 	let dialog_open = $state(false);
+	let toggle_value = $state<'left' | 'right'>('left');
+	let toggle_group_value = $state<'left' | 'right'>('left');
 </script>
 
 <div class="layout">
@@ -120,7 +124,7 @@
 							<button type="submit">Submit</button>
 						</form>
 					</Dialog>
-					<button onclick={() => (dialog_open = true)}>Dialog show_button false</button>
+					<button type="button" onclick={() => (dialog_open = true)}>Dialog show_button false</button>
 					<Dialog title="This is a fake form" show_button={false} bind:active={dialog_open}>
 						<form onsubmit={(e) => e.preventDefault()}>
 							<label for="email1">Email</label>
@@ -137,7 +141,7 @@
 						Enter/Space to activate buttons. Focus is trapped within the drawer and restored on close.
 						Supports swipe/drag gestures.
 					</p>
-					<button onclick={() => (drawer_open = true)}>Open Drawer from Outside</button>
+					<button type="button" onclick={() => (drawer_open = true)}>Open Drawer from Outside</button>
 					<Drawer
 						show_button={true}
 						button_text="Open Drawer"
@@ -151,7 +155,7 @@
 							<input type="email" name="email" />
 							<button type="submit">Submit</button>
 						</form>
-						<button onclick={() => (drawer_open = false)}>Close from outside Drawer</button>
+						<button type="button" onclick={() => (drawer_open = false)}>Close from outside Drawer</button>
 					</Drawer>
 				</div>
 
@@ -168,6 +172,86 @@
 						remaining attempts. Resets after timeout.
 					</p>
 					<AreYouSure onconfirm={() => alert('Doing whatever')} />
+				</div>
+
+				<div class="row">
+					<h2 class="fs-l">Toggle</h2>
+					<p class="api-summary">
+						<strong>API:</strong> <code>bind:value</code> ('left' | 'right', bindable),
+						<code>left_label</code>
+						(string, default: 'Left'), <code>right_label</code> (string, default: 'Right'),
+						<code>onchange</code>
+						(function, optional). Two-state toggle button for view switching.
+					</p>
+					<p class="a11y-note">
+						<strong>Keyboard:</strong> Enter/Space to activate, Tab to focus. Uses
+						<code>aria-pressed</code> for state announcement and proper focus indicators.
+					</p>
+					<Toggle
+						bind:value={toggle_value}
+						left_label="Grid View"
+						right_label="List View"
+						onchange={(value) => console.log('Toggle changed to:', value)}
+					/>
+					<p style="margin-top: 12px;">Current value: <strong>{toggle_value}</strong></p>
+				</div>
+
+				<div class="row">
+					<h2 class="fs-l">ToggleGroup</h2>
+					<p class="api-summary">
+						<strong>API:</strong> <code>bind:value</code> ('left' | 'right', bindable),
+						<code>left_label</code>
+						(string, default: 'Left'), <code>right_label</code> (string, default: 'Right'),
+						<code>left</code>
+						(snippet, required), <code>right</code> (snippet, required), <code>onchange</code>
+						(function, optional). Combines Toggle with view switching.
+					</p>
+					<p class="a11y-note">
+						<strong>Keyboard:</strong> Same as Toggle. Content changes based on selection.
+					</p>
+					<ToggleGroup
+						bind:value={toggle_group_value}
+						left_label="Card View"
+						right_label="Table View"
+					>
+						{#snippet left()}
+							<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+								<div style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;">
+									Card 1
+								</div>
+								<div style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;">
+									Card 2
+								</div>
+								<div style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;">
+									Card 3
+								</div>
+							</div>
+						{/snippet}
+						{#snippet right()}
+							<table style="width: 100%; border-collapse: collapse;">
+								<thead>
+									<tr>
+										<th style="border: 1px solid var(--c-border, #ccc); padding: 8px; text-align: left;"
+											>Name</th
+										>
+										<th style="border: 1px solid var(--c-border, #ccc); padding: 8px; text-align: left;"
+											>Status</th
+										>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="border: 1px solid var(--c-border, #ccc); padding: 8px;">Item 1</td>
+										<td style="border: 1px solid var(--c-border, #ccc); padding: 8px;">Active</td>
+									</tr>
+									<tr>
+										<td style="border: 1px solid var(--c-border, #ccc); padding: 8px;">Item 2</td>
+										<td style="border: 1px solid var(--c-border, #ccc); padding: 8px;">Pending</td>
+									</tr>
+								</tbody>
+							</table>
+						{/snippet}
+					</ToggleGroup>
 				</div>
 
 				<div class="row">
@@ -208,11 +292,11 @@
 						Uses ARIA live region for screen reader announcements.
 					</p>
 
-					<button onclick={() => toaster.send('Hi from toast')}>Click me</button>
-					<button onclick={() => toaster.send('Hi from toast', { type: 'SUCCESS' })}>Success</button
+					<button type="button" onclick={() => toaster.send('Hi from toast')}>Click me</button>
+					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'SUCCESS' })}>Success</button
 					>
-					<button onclick={() => toaster.send('Hi from toast', { type: 'ERROR' })}>Error</button>
-					<button onclick={() => toaster.send('Hi from toast', { type: 'WARNING' })}>Warning</button
+					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'ERROR' })}>Error</button>
+					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'WARNING' })}>Warning</button
 					>
 				</div>
 			</div>
@@ -221,3 +305,16 @@
 </div>
 
 <Toast position={{ inline: 'end', block: 'end' }} offset={{ inline: '20px', block: '20px' }} />
+
+<style>
+	.a11y-note {
+		font-size: 0.875rem;
+		color: var(--c-text-secondary, #666);
+		margin: 8px 0;
+	}
+
+	.api-summary {
+		font-size: 0.875rem;
+		margin: 8px 0;
+	}
+</style>

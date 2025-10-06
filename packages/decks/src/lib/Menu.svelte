@@ -1,9 +1,5 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { createFocusScope } from './a11y/focusScope.js';
-	import type { FocusScopeController } from './a11y/focusScope.js';
-	import { onEscape } from './a11y/escape.js';
-	import { lockScroll, unlockScroll } from './a11y/scrollLock.js';
 
 	const {
 		children,
@@ -12,7 +8,6 @@
 		vert = 'BOTTOM',
 		horizontal = 'LEFT',
 		button_class = 'di-menu-button',
-		modal = true,
 		disable_escape = false
 	}: {
 		children: Snippet;
@@ -21,14 +16,11 @@
 		horizontal?: 'LEFT' | 'RIGHT';
 		name: string;
 		button_class?: string;
-		modal?: boolean;
 		disable_escape?: boolean;
 	} = $props();
 
 	let menu: null | HTMLElement = $state(null);
 	let trigger: null | HTMLElement = $state(null);
-	let focus_controller: FocusScopeController | null = null;
-	let remove_escape: null | (() => void) = null;
 	let is_open = $state(false);
 
 	// roving tabindex state
@@ -109,29 +101,12 @@
 	function handle_open() {
 		if (!menu) return;
 		is_open = true;
-		// collect items and focus first
+		// collect items for roving tabindex
 		queueMicrotask(() => collect_items());
-		if (modal) {
-			if (!focus_controller) focus_controller = createFocusScope(menu);
-			focus_controller.activate();
-			if (typeof document !== 'undefined') lockScroll();
-			if (!remove_escape) {
-				remove_escape = onEscape(() => {
-					if (disable_escape) return;
-					menu?.hidePopover();
-				});
-			}
-		}
 	}
 
 	function handle_close() {
 		is_open = false;
-		focus_controller?.deactivate();
-		if (remove_escape) {
-			remove_escape();
-			remove_escape = null;
-		}
-		if (modal && typeof document !== 'undefined') unlockScroll();
 	}
 
 	$effect(() => {
@@ -162,17 +137,14 @@
 	function onMenuKeydown(e: KeyboardEvent) {
 		if (!menu) return;
 		const key = e.key;
-		if (key === 'Escape') {
-			menu.hidePopover();
+		// Native popover handles Escape automatically unless disabled
+		if (key === 'Escape' && disable_escape) {
+			e.preventDefault();
 			return;
 		}
 		if (key === 'Tab') {
-			// close and move focus out
-			e.stopImmediatePropagation();
-			e.preventDefault();
-			focus_controller?.deactivate();
+			// Tab closes menu and moves focus - let native behavior work
 			menu.hidePopover();
-			trigger?.focus();
 			return;
 		}
 		if (key === 'Enter' || key === ' ') {
@@ -215,18 +187,6 @@
 					break;
 				}
 			}
-		}
-	}
-
-	function onMenuKeydownCapture(e: KeyboardEvent) {
-		// Allow Tab/Shift+Tab to move focus out while closing the menu
-		if (e.key === 'Tab') {
-			// stop bubbling so focusScope doesn't trap
-			e.stopPropagation();
-			// deactivate trap before closing to allow natural tab flow
-			focus_controller?.deactivate();
-			menu?.hidePopover();
-			// do not preventDefault so browser moves focus naturally
 		}
 	}
 </script>

@@ -1,8 +1,5 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { createFocusScope } from './a11y/focusScope.js';
-	import type { FocusScopeController } from './a11y/focusScope.js';
-	import { onEscape } from './a11y/escape.js';
 	import { lockScroll, unlockScroll } from './a11y/scrollLock.js';
 
 	let {
@@ -46,13 +43,11 @@
 		onconfirm?: () => void;
 	} = $props();
 
-	let focus_controller: FocusScopeController | null = null;
-	let remove_escape: null | (() => void) = null;
-
 	function handleCancel() {
 		oncancel?.();
 		dialog?.close();
 	}
+
 	function handleConfirm() {
 		onconfirm?.();
 		dialog?.close();
@@ -64,14 +59,19 @@
 	}
 
 	function onDialogCanceled(e: Event) {
-		// prevent native Escape handling; onEscape stack will handle if enabled
-		e.preventDefault();
+		if (disable_escape) {
+			// User wants to disable Escape - prevent native behavior
+			e.preventDefault();
+		} else {
+			// Use native Escape - just trigger our cancel callback
+			handleCancel();
+		}
 	}
 
 	function onBackdropClick(e: MouseEvent) {
 		if (!backdrop_click) return;
 		if (e.target === dialog) {
-			// clicking the backdrop should behave like cancel
+			// Clicking backdrop closes dialog (not native, we add this)
 			handleCancel();
 		}
 	}
@@ -82,41 +82,25 @@
 		dialog.addEventListener('close', onDialogClosed);
 		dialog.addEventListener('cancel', onCancelListener);
 		dialog.addEventListener('click', onBackdropClick);
+
 		if (active) {
-			if (!dialog.open) dialog.showModal();
+			if (!dialog.open) dialog.showModal(); // Native: opens dialog, traps focus, adds to top layer
 			onopen?.();
-			// lock scroll and trap focus
+
+			// Only add what native dialog doesn't provide:
+			// Scroll lock (native dialog doesn't reliably prevent body scroll)
 			if (typeof document !== 'undefined') lockScroll();
-			if (!focus_controller) focus_controller = createFocusScope(dialog);
-			focus_controller.activate();
-			// Escape handling only when enabled
-			if (!disable_escape) {
-				if (!remove_escape) {
-					remove_escape = onEscape(() => {
-						handleCancel();
-					});
-				}
-			} else if (remove_escape) {
-				remove_escape();
-				remove_escape = null;
-			}
 		} else {
 			if (dialog.open) dialog.close();
-			// release focus and scroll
-			focus_controller?.deactivate();
-			if (remove_escape) {
-				remove_escape();
-				remove_escape = null;
-			}
+			// Unlock scroll
 			if (typeof document !== 'undefined') unlockScroll();
 		}
+
 		return () => {
 			dialog?.removeEventListener('close', onDialogClosed);
 			dialog?.removeEventListener('cancel', onCancelListener);
 			dialog?.removeEventListener('click', onBackdropClick);
-			// cleanup in case component is destroyed while open
-			focus_controller?.deactivate();
-			if (remove_escape) remove_escape();
+			// Cleanup scroll lock if dialog is destroyed while open
 			if (typeof document !== 'undefined') unlockScroll();
 		};
 	});

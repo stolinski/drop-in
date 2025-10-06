@@ -38,7 +38,7 @@
 </script>
 
 <div class="di-are-you-sure class={_class}">
-	<button {...rest} onclick={attempt} class={one_more_left ? action_class : ''}>{text}</button>
+	<button type="button" {...rest} onclick={attempt} class={one_more_left ? action_class : ''}>{text}</button>
 	{#if attempt_count !== 0}
 		<span transition:fade|local={{ duration: reduced ? 0 : 150 }}>
 			Press {remaining} more time{one_more_left ? '' : 's'}.
