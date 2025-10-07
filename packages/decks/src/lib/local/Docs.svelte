@@ -15,12 +15,24 @@
 	import TabList from '$lib/TabList.svelte';
 	import Tab from '$lib/Tab.svelte';
 	import TabPanel from '$lib/TabPanel.svelte';
+	import Combobox from '$lib/Combobox.svelte';
 
 	let drawer_open = $state(false);
 	let dialog_open = $state(false);
 	let toggle_value = $state<'left' | 'right'>('left');
 	let toggle_group_value = $state<'left' | 'right'>('left');
 	let active_tab = $state('tab1');
+	let combobox_value = $state('');
+	let combobox_items = [
+		'Apple',
+		'Banana',
+		'Cherry',
+		'Date',
+		'Elderberry',
+		'Fig',
+		'Grape',
+		'Honeydew'
+	];
 </script>
 
 <div class="layout">
@@ -318,6 +330,37 @@
 				</div>
 
 				<div class="row">
+					<h2 class="fs-l">Combobox</h2>
+					<p class="api-summary">
+						<strong>API:</strong> <code>bind:value</code> (string, bindable),
+						<code>items</code>
+						(string[] | object[], required), <code>label</code> (string, optional),
+						<code>placeholder</code>
+						(string, optional), <code>autocomplete</code> ('none' | 'inline' | 'list' | 'both',
+						default: 'both'), <code>onchange</code> (function, optional), <code>onselect</code>
+						(function, optional), <code>children</code> (snippet, optional for custom option rendering).
+					</p>
+					<p class="a11y-note">
+						<strong>Keyboard:</strong> Arrow Up/Down to navigate options, Home/End to jump to
+						first/last, Enter to select, Escape to close listbox or clear input, Tab to close and
+						move focus. Full ARIA 1.2 combobox pattern with <code>role="combobox"</code>,
+						<code>aria-autocomplete</code>, <code>aria-controls</code>, <code>aria-expanded</code>,
+						and <code>aria-activedescendant</code> for screen reader support. Disabled options are skipped
+						during keyboard navigation.
+					</p>
+					<Combobox
+						bind:value={combobox_value}
+						items={combobox_items}
+						label="Choose a fruit"
+						placeholder="Type to filter..."
+						onselect={(value) => console.log('Selected:', value)}
+					/>
+					<p style="margin-top: 12px;">
+						Selected value: <strong>{combobox_value || 'none'}</strong>
+					</p>
+				</div>
+
+				<div class="row">
 					<h2 class="fs-l">Share</h2>
 					<p class="api-summary">
 						<strong>API:</strong> <code>url</code> (string, optional), <code>title</code>
@@ -383,5 +426,9 @@
 	.api-summary {
 		font-size: 0.875rem;
 		margin: 8px 0;
+	}
+
+	.layout {
+		--di-bg: #000;
 	}
 </style>

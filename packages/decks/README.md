@@ -44,6 +44,8 @@ If you would like css, you can install and import `@drop-in/graffiti`. See https
 - Accordion (Details based)
 - Toggle - Two-state toggle button
 - ToggleGroup - View switcher using Toggle
+- Tabs - Accessible tab navigation with ARIA support
+- Combobox - Autocomplete input with ARIA 1.2 pattern
 - Dialog - Modal dialog with focus trap
 - Drawer - Slide-out panel with gestures
 - Toast - Notification system
