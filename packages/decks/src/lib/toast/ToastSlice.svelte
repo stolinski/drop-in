@@ -1,27 +1,27 @@
 <script>
-	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { toaster } from './toaster.svelte';
 	import { isReducedMotion } from '../motion.js';
-	export let message;
+
+	let { message } = $props();
 
 	let progress = tweened(100, { duration: isReducedMotion() ? 0 : message.duration });
 
-	onMount(async () => {
+	$effect(() => {
 		progress.set(0).then(() => {
 			toaster.remove(message.id);
 		});
 	});
 
-	let icon = 'ℹ️';
-
-	if (message.type === 'SUCCESS') {
-		icon = '✅';
-	} else if (message.type === 'WARNING') {
-		icon = '⚠️';
-	} else if (message.type === 'ERROR') {
-		icon = '❌';
-	}
+	const icon = $derived(
+		message.type === 'SUCCESS'
+			? '✅'
+			: message.type === 'WARNING'
+				? '⚠️'
+				: message.type === 'ERROR'
+					? '❌'
+					: 'ℹ️'
+	);
 </script>
 
 <div class="di-toast-slice">

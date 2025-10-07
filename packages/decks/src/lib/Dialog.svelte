@@ -107,7 +107,7 @@
 </script>
 
 {#if show_button}
-	<button class="share" type="button" onclick={() => (active = true)}>{button_text}</button>
+	<button type="button" onclick={() => (active = true)}>{button_text}</button>
 {/if}
 
 <dialog
@@ -135,6 +135,9 @@
 <style>
 	/* Motion baseline tokens via CSS variables */
 	.di-dialog {
+		position: fixed;
+		inset: 0;
+		margin: auto;
 		opacity: 0;
 		translate: 0 10px;
 		transition-property: opacity, translate, display;

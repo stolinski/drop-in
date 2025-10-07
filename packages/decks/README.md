@@ -51,11 +51,21 @@ If you would like css, you can install and import `@drop-in/graffiti`. See https
 - Toast - Notification system
 
 ### Utilities
+
+**Accessibility Utilities:**
 - `createFocusScope` - Focus trapping for overlays
 - `onEscape` - Escape key handling with stacking
 - `lockScroll`/`unlockScroll` - Background scroll lock
 - `createDismissable`/`dismissable` - Dismissable overlay utility (composes focus trap, scroll lock, Escape, outside-click)
-- Motion utilities (`motion`, `isReducedMotion`, `durationOrZero`)
+
+**Gesture Utilities:**
+- `pannable` - Pan/drag gesture support (touch/mouse/pen unified via Pointer Events)
+
+**Motion Utilities:**
+- `motion` - Duration and easing tokens
+- `isReducedMotion` - Check prefers-reduced-motion preference
+- `durationOrZero` - Return duration or 0 based on motion preference
+- `createSpring` - Svelte 5 runes-based spring animation (replaces deprecated svelte/motion spring)
 
 ## Overlay Callbacks (Svelte 5 style)
 
@@ -183,6 +193,65 @@ controller.activate();
 ```
 
 **Note:** Dialog uses native `<dialog>` features and only adds scroll lock. Drawer/Menu use these utilities since they don't use `<dialog>`. All overlay components prioritize native browser features (top layer via `<dialog>` or `popover` attribute) over custom JavaScript.
+
+### Pannable (gesture utility)
+
+The `pannable` attachment provides pan/drag gesture support with modern Pointer Events:
+
+```svelte
+<script>
+  import { pannable } from '@drop-in/decks';
+
+  let x = $state(0);
+  let y = $state(0);
+  let element = $state<HTMLDivElement | null>(null);
+
+  $effect(() => {
+    if (!element) return;
+
+    function handlePanMove(e: Event) {
+      const detail = (e as CustomEvent).detail;
+      x += detail.dx;
+      y += detail.dy;
+    }
+
+    function handlePanEnd(e: Event) {
+      const detail = (e as CustomEvent).detail;
+      // Check velocity for dismiss gesture
+      if (detail.velocityX > 0.5) {
+        // Fast swipe - dismiss
+      }
+    }
+
+    element.addEventListener('panmove', handlePanMove);
+    element.addEventListener('panend', handlePanEnd);
+
+    return () => {
+      element?.removeEventListener('panmove', handlePanMove);
+      element?.removeEventListener('panend', handlePanEnd);
+    };
+  });
+</script>
+
+<div bind:this={element} {@attach pannable} style="transform: translate({x}px, {y}px)">
+  Drag me!
+</div>
+```
+
+**Features:**
+- Unified touch/mouse/pen input via Pointer Events API
+- Pointer capture for smooth tracking
+- Cancellation on scroll or Escape key
+- Velocity calculation (X and Y)
+- Type-safe event payloads (`PanStartDetail`, `PanMoveDetail`, `PanEndDetail`)
+
+**Events:**
+- `panstart` - Pan begins (detail: `{ x, y }`)
+- `panmove` - Pan in progress (detail: `{ x, y, dx, dy }`)
+- `panend` - Pan completes (detail: `{ x, y, dx, dy, velocityX, velocityY }`)
+- `pancancel` - Pan canceled (scroll/escape)
+
+See `Drawer` component for a real-world example using `pannable` for pan-to-dismiss.
 
 Notes
 

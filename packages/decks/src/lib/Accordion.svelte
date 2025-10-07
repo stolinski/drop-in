@@ -9,7 +9,7 @@
 	}: { children: Snippet; summary: string; class?: string } = $props();
 </script>
 
-<details use:animatedDetails class="di-accordion class={_class}">
+<details {@attach animatedDetails} class="di-accordion {_class}">
 	<summary>
 		{summary}
 	</summary>

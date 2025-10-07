@@ -1,53 +1,125 @@
+/**
+ * Pannable gesture utility - Refined for Phase 2
+ *
+ * Features:
+ * - Modern pointer events (touch/mouse/pen unified)
+ * - Passive listeners for scroll performance
+ * - Cancellation on scroll/escape key
+ * - Type-safe event payloads
+ * - Velocity calculation (X and Y)
+ *
+ * @example
+ * ```svelte
+ * <div {@attach pannable}
+ *      onpanstart={(e) => console.log('start', e.detail)}
+ *      onpanmove={(e) => console.log('move', e.detail.dx, e.detail.dy)}
+ *      onpanend={(e) => console.log('end', e.detail.velocityX, e.detail.velocityY)}
+ *      onpancancel={() => console.log('canceled')}>
+ *   Drag me
+ * </div>
+ * ```
+ */
+
+/**
+ * Event detail for panstart event
+ */
+export interface PanStartDetail {
+	/** Initial X position in viewport coordinates */
+	x: number;
+	/** Initial Y position in viewport coordinates */
+	y: number;
+}
+
+/**
+ * Event detail for panmove event
+ */
+export interface PanMoveDetail {
+	/** Current X position in viewport coordinates */
+	x: number;
+	/** Current Y position in viewport coordinates */
+	y: number;
+	/** Delta X since last move event */
+	dx: number;
+	/** Delta Y since last move event */
+	dy: number;
+}
+
+/**
+ * Event detail for panend event
+ */
+export interface PanEndDetail {
+	/** Final X position in viewport coordinates */
+	x: number;
+	/** Final Y position in viewport coordinates */
+	y: number;
+	/** Total delta X since panstart */
+	dx: number;
+	/** Total delta Y since panstart */
+	dy: number;
+	/** Horizontal velocity in pixels per millisecond */
+	velocityX: number;
+	/** Vertical velocity in pixels per millisecond */
+	velocityY: number;
+}
+
 interface PositionHistory {
 	x: number;
 	y: number;
 	timestamp: number;
 }
 
-export function pannable(node: HTMLElement) {
+/**
+ * Pannable attachment - adds pan gesture support to an element
+ *
+ * Emits custom events:
+ * - panstart: when pan begins
+ * - panmove: during pan movement
+ * - panend: when pan completes normally
+ * - pancancel: when pan is canceled (scroll/escape)
+ */
+export function pannable(node: HTMLElement): { destroy: () => void } {
+	let startX: number;
+	let startY: number;
 	let x: number;
 	let y: number;
 	const history: PositionHistory[] = [];
 	const MAX_HISTORY = 5;
+	let isPanning = false;
+	let pointerId: number | null = null;
 
-	function handleStart(event: MouseEvent | TouchEvent) {
-		if (event.type === 'touchstart') {
-			const touch = (event as TouchEvent).touches[0];
-			x = touch.clientX;
-			y = touch.clientY;
-		} else {
-			x = (event as MouseEvent).clientX;
-			y = (event as MouseEvent).clientY;
-		}
+	function handleStart(event: PointerEvent) {
+		// Only track primary pointer (first touch or left mouse button)
+		if (isPanning || (event.pointerType === 'mouse' && event.button !== 0)) return;
+
+		isPanning = true;
+		pointerId = event.pointerId;
+		startX = x = event.clientX;
+		startY = y = event.clientY;
 
 		// Reset history on new pan
 		history.length = 0;
 		history.push({ x, y, timestamp: Date.now() });
 
+		// Capture pointer to receive move/up events even if pointer leaves element
+		node.setPointerCapture(event.pointerId);
+
 		node.dispatchEvent(
-			new CustomEvent('panstart', {
+			new CustomEvent<PanStartDetail>('panstart', {
 				detail: { x, y }
 			})
 		);
 
-		window.addEventListener('mousemove', handleMove);
-		window.addEventListener('touchmove', handleMove, { passive: false });
-		window.addEventListener('mouseup', handleEnd);
-		window.addEventListener('touchend', handleEnd);
-		window.addEventListener('touchcancel', handleEnd);
+		// Listen for cancel conditions
+		window.addEventListener('keydown', handleEscape);
+		window.addEventListener('scroll', handleScroll, { passive: true, capture: true });
 	}
 
-	function handleMove(event: MouseEvent | TouchEvent) {
-		let clientX: number, clientY: number;
+	function handleMove(event: PointerEvent) {
+		// Only track the pointer we started with
+		if (!isPanning || event.pointerId !== pointerId) return;
 
-		if (event.type === 'touchmove') {
-			const touch = (event as TouchEvent).touches[0];
-			clientX = touch.clientX;
-			clientY = touch.clientY;
-		} else {
-			clientX = (event as MouseEvent).clientX;
-			clientY = (event as MouseEvent).clientY;
-		}
+		const clientX = event.clientX;
+		const clientY = event.clientY;
 
 		const dx = clientX - x;
 		const dy = clientY - y;
@@ -61,59 +133,93 @@ export function pannable(node: HTMLElement) {
 		}
 
 		node.dispatchEvent(
-			new CustomEvent('panmove', {
+			new CustomEvent<PanMoveDetail>('panmove', {
 				detail: { x, y, dx, dy }
 			})
 		);
 	}
 
-	function handleEnd(event: MouseEvent | TouchEvent) {
-		let clientX: number, clientY: number;
+	function handleEnd(event: PointerEvent) {
+		// Only handle the pointer we started with
+		if (!isPanning || event.pointerId !== pointerId) return;
 
-		if (event.type === 'touchend' || event.type === 'touchcancel') {
-			const touch = (event as TouchEvent).changedTouches[0];
-			clientX = touch.clientX;
-			clientY = touch.clientY;
-		} else {
-			clientX = (event as MouseEvent).clientX;
-			clientY = (event as MouseEvent).clientY;
-		}
+		cleanup();
 
-		const dx = clientX - x;
-		const dy = clientY - y;
+		const clientX = event.clientX;
+		const clientY = event.clientY;
+
+		const dx = clientX - startX;
+		const dy = clientY - startY;
 
 		// Calculate velocity from position history
+		let velocityX = 0;
 		let velocityY = 0;
 		if (history.length >= 2) {
 			const oldest = history[0];
 			const newest = history[history.length - 1];
+			const deltaX = newest.x - oldest.x;
 			const deltaY = newest.y - oldest.y;
 			const deltaTime = newest.timestamp - oldest.timestamp;
 			if (deltaTime > 0) {
+				velocityX = Math.abs(deltaX / deltaTime); // px per ms
 				velocityY = Math.abs(deltaY / deltaTime); // px per ms
 			}
 		}
 
 		node.dispatchEvent(
-			new CustomEvent('panend', {
-				detail: { x: clientX, y: clientY, dx, dy, velocityY }
+			new CustomEvent<PanEndDetail>('panend', {
+				detail: { x: clientX, y: clientY, dx, dy, velocityX, velocityY }
 			})
 		);
-
-		window.removeEventListener('mousemove', handleMove);
-		window.removeEventListener('touchmove', handleMove);
-		window.removeEventListener('mouseup', handleEnd);
-		window.removeEventListener('touchend', handleEnd);
-		window.removeEventListener('touchcancel', handleEnd);
 	}
 
-	node.addEventListener('mousedown', handleStart);
-	node.addEventListener('touchstart', handleStart, { passive: false });
+	function handleCancel() {
+		if (!isPanning) return;
+
+		cleanup();
+
+		node.dispatchEvent(new CustomEvent('pancancel'));
+	}
+
+	function handleEscape(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			handleCancel();
+		}
+	}
+
+	function handleScroll() {
+		// Cancel pan if user scrolls
+		handleCancel();
+	}
+
+	function cleanup() {
+		isPanning = false;
+		if (pointerId !== null) {
+			try {
+				node.releasePointerCapture(pointerId);
+			} catch {
+				// Ignore errors if pointer capture already released
+			}
+			pointerId = null;
+		}
+		history.length = 0;
+		window.removeEventListener('keydown', handleEscape);
+		window.removeEventListener('scroll', handleScroll, { capture: true });
+	}
+
+	// Use pointer events for unified touch/mouse/pen handling
+	node.addEventListener('pointerdown', handleStart);
+	node.addEventListener('pointermove', handleMove);
+	node.addEventListener('pointerup', handleEnd);
+	node.addEventListener('pointercancel', handleCancel);
 
 	return {
 		destroy() {
-			node.removeEventListener('mousedown', handleStart);
-			node.removeEventListener('touchstart', handleStart);
+			cleanup();
+			node.removeEventListener('pointerdown', handleStart);
+			node.removeEventListener('pointermove', handleMove);
+			node.removeEventListener('pointerup', handleEnd);
+			node.removeEventListener('pointercancel', handleCancel);
 		}
 	};
 }

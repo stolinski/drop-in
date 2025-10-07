@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte';
-	import { spring } from 'svelte/motion';
-	import { pannable } from './pannable.js';
+	import { Spring } from 'svelte/motion';
+	import { pannable, type PanMoveDetail, type PanEndDetail } from './pannable.js';
 	import { lockScroll, unlockScroll } from './a11y/scrollLock.js';
 	import { isReducedMotion, motion } from './motion.js';
 
@@ -33,7 +33,7 @@
 		oncancel?: () => void;
 	}>();
 
-	const coords = spring(
+	const coords = new Spring(
 		{ x: 0, y: 600 },
 		{
 			stiffness: isReducedMotion() ? 1 : 0.2,
@@ -45,14 +45,14 @@
 		coords.stiffness = coords.damping = 1;
 	}
 
-	function handlePanMove(event: CustomEvent<{ x: number; y: number; dx: number; dy: number }>) {
-		coords.update(($coords) => ({
-			x: $coords.x + event.detail.dx,
-			y: $coords.y + event.detail.dy
-		}));
+	function handlePanMove(event: CustomEvent<PanMoveDetail>) {
+		coords.target = {
+			x: coords.current.x + event.detail.dx,
+			y: coords.current.y + event.detail.dy
+		};
 	}
 
-	function handlePanEnd(event: CustomEvent<{ x: number; y: number; dx: number; dy: number; velocityY: number }>) {
+	function handlePanEnd(event: CustomEvent<PanEndDetail>) {
 		if (isReducedMotion()) {
 			coords.stiffness = 1;
 			coords.damping = 1;
@@ -64,7 +64,7 @@
 		// Check dismissal criteria
 		const threshold = window.innerHeight * dismiss_threshold;
 		const velocity = event.detail.velocityY;
-		const currentY = $coords.y;
+		const currentY = coords.current.y;
 		const shouldDismiss = currentY > threshold || velocity > velocity_threshold;
 
 		if (shouldDismiss) {
@@ -131,9 +131,8 @@
 	$effect(() => {
 		if (!dialog) return;
 		const onStart = () => handlePanStart();
-		const onMove = (e: Event) =>
-			handlePanMove(e as CustomEvent<{ x: number; y: number; dx: number; dy: number }>);
-		const onEnd = (e: Event) => handlePanEnd(e as CustomEvent<{ x: number; y: number; dx: number; dy: number; velocityY: number }>);
+		const onMove = (e: Event) => handlePanMove(e as CustomEvent<PanMoveDetail>);
+		const onEnd = (e: Event) => handlePanEnd(e as CustomEvent<PanEndDetail>);
 		dialog.addEventListener('panstart', onStart);
 		dialog.addEventListener('panmove', onMove);
 		dialog.addEventListener('panend', onEnd);
@@ -167,9 +166,9 @@
 
 <dialog
 	style="translate:
-	0px {$coords.y}px;"
+	0px {coords.current.y}px;"
 	bind:this={dialog}
-	use:pannable
+	{@attach pannable}
 	class="di-drawer"
 	aria-modal="true"
 	aria-labelledby={title ? 'di-drawer-title' : undefined}

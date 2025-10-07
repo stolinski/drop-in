@@ -16,6 +16,7 @@
 	import Tab from '$lib/Tab.svelte';
 	import TabPanel from '$lib/TabPanel.svelte';
 	import Combobox from '$lib/Combobox.svelte';
+	import { pannable, type PanMoveDetail, type PanEndDetail } from '$lib/pannable.js';
 
 	let drawer_open = $state(false);
 	let dialog_open = $state(false);
@@ -33,6 +34,60 @@
 		'Grape',
 		'Honeydew'
 	];
+	let pan_x = $state(0);
+	let pan_y = $state(0);
+	let pan_dismissed = $state(false);
+	let pan_element = $state<HTMLDivElement | null>(null);
+
+	$effect(() => {
+		if (!pan_element) return;
+
+		function handlePanStart() {
+			pan_dismissed = false;
+		}
+
+		function handlePanMove(e: Event) {
+			const detail = (e as CustomEvent<PanMoveDetail>).detail;
+			pan_x += detail.dx;
+			pan_y += detail.dy;
+		}
+
+		function handlePanEnd(e: Event) {
+			const detail = (e as CustomEvent<PanEndDetail>).detail;
+			// Dismiss if dragged > 150px right or velocity > 0.5px/ms
+			if (Math.abs(pan_x) > 150 || detail.velocityX > 0.5) {
+				pan_dismissed = true;
+			} else {
+				// Snap back
+				pan_x = 0;
+				pan_y = 0;
+			}
+		}
+
+		function handlePanCancel() {
+			// Reset on cancel (scroll/escape)
+			pan_x = 0;
+			pan_y = 0;
+		}
+
+		pan_element.addEventListener('panstart', handlePanStart);
+		pan_element.addEventListener('panmove', handlePanMove);
+		pan_element.addEventListener('panend', handlePanEnd);
+		pan_element.addEventListener('pancancel', handlePanCancel);
+
+		return () => {
+			pan_element?.removeEventListener('panstart', handlePanStart);
+			pan_element?.removeEventListener('panmove', handlePanMove);
+			pan_element?.removeEventListener('panend', handlePanEnd);
+			pan_element?.removeEventListener('pancancel', handlePanCancel);
+		};
+	});
+
+	function resetPanDemo() {
+		pan_x = 0;
+		pan_y = 0;
+		pan_dismissed = false;
+	}
 </script>
 
 <div class="layout">
@@ -384,6 +439,39 @@
 				</div>
 
 				<div class="row">
+					<h2 class="fs-l">Pannable Gesture Utility</h2>
+					<p class="api-summary">
+						<strong>API:</strong> <code>{@attach pannable}</code> attachment. Emits <code>panstart</code>,
+						<code>panmove</code>, <code>panend</code>, <code>pancancel</code> events. Works with
+						touch/mouse/pen. Cancels on scroll or Escape key.
+					</p>
+					<p class="a11y-note">
+						<strong>Keyboard:</strong> Escape to cancel pan gesture. Uses modern Pointer Events API
+						for unified touch/mouse/pen handling. Passive listeners for scroll performance.
+					</p>
+
+					{#if !pan_dismissed}
+						<div
+							bind:this={pan_element}
+							{@attach pannable}
+							class="pan-demo"
+							style="transform: translate({pan_x}px, {pan_y}px)"
+						>
+							<p><strong>Drag me!</strong></p>
+							<p style="font-size: 0.875rem; opacity: 0.8;">
+								Swipe right &gt;150px or fast to dismiss<br />
+								Scroll or press Escape to cancel
+							</p>
+						</div>
+					{:else}
+						<div class="pan-dismissed">
+							<p>Dismissed! 👋</p>
+							<button type="button" onclick={resetPanDemo}>Reset</button>
+						</div>
+					{/if}
+				</div>
+
+				<div class="row">
 					<h2 class="fs-l">Toast</h2>
 					<p class="api-summary">
 						<strong>API:</strong> <code>position</code> (object: inline/block, default: end/end),
@@ -430,5 +518,36 @@
 
 	.layout {
 		--di-bg: #000;
+	}
+
+	.pan-demo {
+		padding: 20px;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		border-radius: 8px;
+		cursor: grab;
+		user-select: none;
+		touch-action: none;
+		max-width: 300px;
+		text-align: center;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		transition: box-shadow 0.2s;
+	}
+
+	.pan-demo:active {
+		cursor: grabbing;
+		box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+	}
+
+	.pan-dismissed {
+		padding: 20px;
+		background: #e0e0e0;
+		border-radius: 8px;
+		text-align: center;
+		max-width: 300px;
+	}
+
+	.pan-dismissed button {
+		margin-top: 10px;
 	}
 </style>

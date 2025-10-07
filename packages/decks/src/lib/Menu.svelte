@@ -179,11 +179,7 @@
 		bind:this={menu}
 		id={name}
 		class="di-menu"
-		style="
-			position-anchor: --{name}-anchor;
-			{vert === 'BOTTOM' ? 'top: anchor(bottom);' : 'bottom: anchor(top);'}
-			{horizontal === 'LEFT' ? 'left: anchor(left);' : 'right: anchor(right);'}
-		"
+		style="position-anchor: --{name}-anchor; {vert === 'BOTTOM' ? 'top: anchor(bottom);' : 'bottom: anchor(top);'} {horizontal === 'LEFT' ? 'left: anchor(left);' : 'right: anchor(right);'}"
 		role="menu"
 		aria-labelledby={`${name}-trigger`}
 		tabindex="-1"
@@ -198,6 +194,7 @@
 
 <style>
 	.di-menu {
+		margin: 0;
 		translate: 0 10px;
 		transition-timing-function: var(--di-motion-ease-in, cubic-bezier(0.2, 0, 0, 1));
 		transition:
@@ -206,7 +203,7 @@
 		transition-behavior: allow-discrete;
 	}
 
-	.menu-inner {
+	.di-menu-inner {
 		flex-direction: column;
 		display: flex;
 		align-items: flex-start;

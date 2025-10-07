@@ -1,6 +1,5 @@
 // CODE FROM
 //https://github.com/AndrewLester/svelte-animated-details/blob/main/src/routes/%2Bpage.svelte
-import type { Action } from 'svelte/action';
 import { durationOrZero, motion } from './motion.js';
 
 const defaultOptions: KeyframeAnimationOptions = {
@@ -8,12 +7,12 @@ const defaultOptions: KeyframeAnimationOptions = {
 	easing: motion.easing.out
 };
 
-export const animatedDetails: Action<HTMLDetailsElement, KeyframeAnimationOptions | undefined> = (
+export function animatedDetails(
 	element: HTMLDetailsElement,
-	options = defaultOptions
-) => {
+	options: KeyframeAnimationOptions = defaultOptions
+): { destroy: () => void; update?: (newOptions: KeyframeAnimationOptions) => void } {
 	const summary = element.querySelector('summary');
-	if (!summary) return {};
+	if (!summary) return { destroy: () => {} };
 
 	options = {
 		...defaultOptions,
@@ -105,5 +104,5 @@ export const animatedDetails: Action<HTMLDetailsElement, KeyframeAnimationOption
 			};
 		}
 	};
-};
+}
 export default animatedDetails;

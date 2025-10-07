@@ -25,3 +25,7 @@ export type { DismissableOptions, DismissableController } from './a11y/dismissab
 
 // motion utilities and tokens
 export { motion, isReducedMotion, durationOrZero } from './motion.js';
+
+// gesture utilities
+export { pannable } from './pannable.js';
+export type { PanStartDetail, PanMoveDetail, PanEndDetail } from './pannable.js';
