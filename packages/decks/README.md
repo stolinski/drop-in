@@ -8,7 +8,23 @@ Disclaimer: These are under active development. I encourage you to try them and 
 
 `npm install @drop-in/decks`
 
-`import { Share } from '@drop-in/decks'`
+## Setup
+
+Import polyfills once in your app's entry point (e.g., root `+layout.svelte` in SvelteKit):
+
+```ts
+import '@drop-in/decks/polyfills';
+```
+
+This initializes:
+- **Popover API** polyfill (@oddbird/popover-polyfill) - For browsers without native `popover` attribute
+- **CSS Anchor Positioning** polyfill (@oddbird/css-anchor-positioning) - For browsers without native `anchor-name` / `position-anchor` support
+
+Then import components as needed:
+
+```svelte
+import { Dialog, Menu, Toast } from '@drop-in/decks';
+```
 
 If you would like css, you can install and import `@drop-in/graffiti`. See https://github.com/stolinski/drop-in/tree/main/packages/graffiti
 
@@ -164,7 +180,7 @@ controller.activate();
 // later: controller.deactivate()
 ```
 
-**Note:** Dialog uses native `<dialog>` features and only adds scroll lock. Drawer/Menu use these utilities since they don't use `<dialog>`.
+**Note:** Dialog uses native `<dialog>` features and only adds scroll lock. Drawer/Menu use these utilities since they don't use `<dialog>`. All overlay components prioritize native browser features (top layer via `<dialog>` or `popover` attribute) over custom JavaScript.
 
 Notes
 

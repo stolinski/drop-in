@@ -4,7 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-@drop-in/decks is a Svelte 5 UI component library focused on web standards, browser APIs, and accessibility. Components are dependency-light (only @oddbird/popover-polyfill) and designed to work with or without CSS frameworks. This is a SvelteKit library package within a pnpm workspace monorepo.
+@drop-in/decks is a Svelte 5 UI component library focused on web standards, browser APIs, and accessibility. Components are dependency-light (only @oddbird/popover-polyfill and @oddbird/css-anchor-positioning polyfills) and designed to work with or without CSS frameworks. This is a SvelteKit library package within a pnpm workspace monorepo.
+
+## Polyfills
+
+The library includes polyfills for modern browser features:
+- **Popover API** (@oddbird/popover-polyfill) - Native `popover` attribute support
+- **CSS Anchor Positioning** (@oddbird/css-anchor-positioning) - Native `anchor-name`, `position-anchor`, and `anchor()` function support
+
+Users import once: `import '@drop-in/decks/polyfills';` in their app entry point.
 
 ## Commands
 
@@ -37,10 +45,11 @@ Utilities that add what native HTML doesn't provide:
 - **`scrollLock.ts`**: `lockScroll()`/`unlockScroll()` prevent background scrolling when overlays are open (native dialog doesn't reliably lock scroll)
 - **`escape.ts`**: `onEscape()` registers Escape key handlers with overlay stacking support (for non-dialog overlays like Drawer, Menu)
 - **`focusScope.ts`**: `createFocusScope()` traps focus within a container (for non-dialog overlays; native `<dialog>` provides this automatically)
-- **`dismissable.ts`**: `createDismissable()` composes the above utilities for custom overlays
+- **`dismissable.ts`**: `createDismissable()` composes focus/escape/scroll utilities for custom overlays
 
 **Dialog** uses native `<dialog>` focus trap and Escape handling, only adding scroll lock.
 **Drawer/Menu** use these utilities since they don't use `<dialog>`.
+**All overlay components** prioritize native browser features (top layer via `<dialog>` or `popover` attribute) over custom JavaScript.
 
 ### Event Handling Pattern (Svelte 5)
 
@@ -59,8 +68,8 @@ Components use lowercase `on*` callback props (not dispatched events):
 ### Module Exports (`src/lib/index.ts`)
 
 Public API uses named exports via barrel file:
-- Components: Dialog, Drawer, Menu, Pill, Pills, Share, Accordion, AreYouSure, Toast (from toast/index.js)
-- A11y utilities: createFocusScope, onEscape, lockScroll, unlockScroll
+- Components: Dialog, Drawer, Menu, Pill, Pills, Share, Accordion, AreYouSure, Toggle, ToggleGroup, Toast (from toast/index.js)
+- A11y utilities: createFocusScope, onEscape, lockScroll, unlockScroll, createDismissable, dismissable
 - Motion utilities: motion, isReducedMotion, durationOrZero
 
 Secondary export `./docs` provides Docs.svelte component.

@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"@oddbird/css-anchor-positioning": "^0.6.1",
 		"@oddbird/popover-polyfill": "^0.5.2"
 	},
 	"devDependencies": {
@@ -34,6 +35,10 @@
 		"./docs": {
 			"types": "./dist/local/Docs.svelte.d.ts",
 			"svelte": "./dist/local/Docs.svelte"
+		},
+		"./polyfills": {
+			"types": "./dist/polyfills.d.ts",
+			"default": "./dist/polyfills.js"
 		}
 	},
 	"files": [

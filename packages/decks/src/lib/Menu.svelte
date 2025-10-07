@@ -20,7 +20,6 @@
 	} = $props();
 
 	let menu: null | HTMLElement = $state(null);
-	let trigger: null | HTMLElement = $state(null);
 	let is_open = $state(false);
 
 	// roving tabindex state
@@ -79,25 +78,6 @@
 		setActive(active_index, { focus: true });
 	}
 
-	function update_position() {
-		if (trigger && menu) {
-			const trigger_position = trigger.getBoundingClientRect();
-
-			const menu_position = menu.getBoundingClientRect();
-			menu.style.inset = 'unset';
-			if (vert === 'BOTTOM') {
-				menu.style.top = trigger_position.bottom + 'px';
-			} else {
-				menu.style.top = trigger_position.top + 'px';
-			}
-			if (horizontal === 'LEFT') {
-				menu.style.left = trigger_position.left + 'px';
-			} else {
-				menu.style.left = trigger_position.right - menu_position.width + 'px';
-			}
-		}
-	}
-
 	function handle_open() {
 		if (!menu) return;
 		is_open = true;
@@ -111,12 +91,6 @@
 
 	$effect(() => {
 		if (menu) {
-			const resizeObserver = new ResizeObserver(update_position);
-			resizeObserver.observe(menu);
-			const onResize = () => update_position();
-			const onScroll = () => update_position();
-			window.addEventListener('resize', onResize);
-			window.addEventListener('scroll', onScroll);
 			const onToggle = () => {
 				const nowOpen = menu?.matches(':popover-open');
 				if (nowOpen) handle_open();
@@ -124,9 +98,6 @@
 			};
 			menu.addEventListener('toggle', onToggle);
 			return () => {
-				resizeObserver.disconnect();
-				window.removeEventListener('resize', onResize);
-				window.removeEventListener('scroll', onScroll);
 				menu?.removeEventListener('toggle', onToggle);
 				// ensure cleanup if component is destroyed while open
 				handle_close();
@@ -191,24 +162,28 @@
 	}
 </script>
 
-<div class="di-menu-container" style="position: relative;">
-	<div bind:this={trigger}>
-		<button
-			id={`${name}-trigger`}
-			class={button_class}
-			popovertarget={name}
-			aria-haspopup="menu"
-			aria-controls={name}
-			aria-expanded={is_open ? 'true' : 'false'}
-		>
-			{@render button()}
-		</button>
-	</div>
+<div class="di-menu-container">
+	<button
+		id={`${name}-trigger`}
+		class={button_class}
+		style="anchor-name: --{name}-anchor;"
+		popovertarget={name}
+		aria-haspopup="menu"
+		aria-controls={name}
+		aria-expanded={is_open ? 'true' : 'false'}
+	>
+		{@render button()}
+	</button>
 	<div
 		popover="auto"
 		bind:this={menu}
 		id={name}
 		class="di-menu"
+		style="
+			position-anchor: --{name}-anchor;
+			{vert === 'BOTTOM' ? 'top: anchor(bottom);' : 'bottom: anchor(top);'}
+			{horizontal === 'LEFT' ? 'left: anchor(left);' : 'right: anchor(right);'}
+		"
 		role="menu"
 		aria-labelledby={`${name}-trigger`}
 		tabindex="-1"

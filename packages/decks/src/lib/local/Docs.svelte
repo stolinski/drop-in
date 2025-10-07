@@ -11,11 +11,16 @@
 	import Pills from '$lib/Pills.svelte';
 	import Toggle from '$lib/Toggle.svelte';
 	import ToggleGroup from '$lib/ToggleGroup.svelte';
+	import Tabs from '$lib/Tabs.svelte';
+	import TabList from '$lib/TabList.svelte';
+	import Tab from '$lib/Tab.svelte';
+	import TabPanel from '$lib/TabPanel.svelte';
 
 	let drawer_open = $state(false);
 	let dialog_open = $state(false);
 	let toggle_value = $state<'left' | 'right'>('left');
 	let toggle_group_value = $state<'left' | 'right'>('left');
+	let active_tab = $state('tab1');
 </script>
 
 <div class="layout">
@@ -124,7 +129,9 @@
 							<button type="submit">Submit</button>
 						</form>
 					</Dialog>
-					<button type="button" onclick={() => (dialog_open = true)}>Dialog show_button false</button>
+					<button type="button" onclick={() => (dialog_open = true)}
+						>Dialog show_button false</button
+					>
 					<Dialog title="This is a fake form" show_button={false} bind:active={dialog_open}>
 						<form onsubmit={(e) => e.preventDefault()}>
 							<label for="email1">Email</label>
@@ -141,7 +148,9 @@
 						Enter/Space to activate buttons. Focus is trapped within the drawer and restored on close.
 						Supports swipe/drag gestures.
 					</p>
-					<button type="button" onclick={() => (drawer_open = true)}>Open Drawer from Outside</button>
+					<button type="button" onclick={() => (drawer_open = true)}
+						>Open Drawer from Outside</button
+					>
 					<Drawer
 						show_button={true}
 						button_text="Open Drawer"
@@ -155,7 +164,9 @@
 							<input type="email" name="email" />
 							<button type="submit">Submit</button>
 						</form>
-						<button type="button" onclick={() => (drawer_open = false)}>Close from outside Drawer</button>
+						<button type="button" onclick={() => (drawer_open = false)}
+							>Close from outside Drawer</button
+						>
 					</Drawer>
 				</div>
 
@@ -216,13 +227,19 @@
 					>
 						{#snippet left()}
 							<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-								<div style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;">
+								<div
+									style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;"
+								>
 									Card 1
 								</div>
-								<div style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;">
+								<div
+									style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;"
+								>
 									Card 2
 								</div>
-								<div style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;">
+								<div
+									style="border: 1px solid var(--c-border, #ccc); padding: 12px; border-radius: 6px;"
+								>
 									Card 3
 								</div>
 							</div>
@@ -231,10 +248,12 @@
 							<table style="width: 100%; border-collapse: collapse;">
 								<thead>
 									<tr>
-										<th style="border: 1px solid var(--c-border, #ccc); padding: 8px; text-align: left;"
+										<th
+											style="border: 1px solid var(--c-border, #ccc); padding: 8px; text-align: left;"
 											>Name</th
 										>
-										<th style="border: 1px solid var(--c-border, #ccc); padding: 8px; text-align: left;"
+										<th
+											style="border: 1px solid var(--c-border, #ccc); padding: 8px; text-align: left;"
 											>Status</th
 										>
 									</tr>
@@ -252,6 +271,50 @@
 							</table>
 						{/snippet}
 					</ToggleGroup>
+				</div>
+
+				<div class="row">
+					<h2 class="fs-l">Tabs</h2>
+					<p class="api-summary">
+						<strong>API:</strong> <code>bind:value</code> (string, bindable),
+						<code>orientation</code>
+						('horizontal' | 'vertical', default: 'horizontal'), <code>onchange</code>
+						(function, optional). Tab components use <code>TabList</code> for the tab buttons,
+						<code>Tab</code>
+						for individual tabs, and <code>TabPanel</code> for content.
+					</p>
+					<p class="a11y-note">
+						<strong>Keyboard:</strong> Left/Right arrows (horizontal) or Up/Down arrows (vertical)
+						to navigate tabs, Home/End to jump to first/last tab, Tab to move focus out of tablist.
+						Uses roving tabindex (only active tab is focusable). Full ARIA support with
+						<code>role="tab"</code>, <code>role="tablist"</code>, <code>role="tabpanel"</code>,
+						<code>aria-selected</code>, and <code>aria-controls</code>.
+					</p>
+					<Tabs bind:value={active_tab} orientation="horizontal">
+						<TabList>
+							<Tab value="tab1">Profile</Tab>
+							<Tab value="tab2">Settings</Tab>
+							<Tab value="tab3">Notifications</Tab>
+							<Tab value="tab4" disabled>Disabled</Tab>
+						</TabList>
+						<TabPanel value="tab1">
+							<h3>Profile</h3>
+							<p>Manage your profile information and preferences.</p>
+						</TabPanel>
+						<TabPanel value="tab2">
+							<h3>Settings</h3>
+							<p>Configure your account settings and privacy options.</p>
+						</TabPanel>
+						<TabPanel value="tab3">
+							<h3>Notifications</h3>
+							<p>Control how and when you receive notifications.</p>
+						</TabPanel>
+						<TabPanel value="tab4">
+							<h3>Disabled</h3>
+							<p>This tab is disabled and cannot be selected.</p>
+						</TabPanel>
+					</Tabs>
+					<p style="margin-top: 12px;">Current tab: <strong>{active_tab}</strong></p>
 				</div>
 
 				<div class="row">
@@ -293,10 +356,14 @@
 					</p>
 
 					<button type="button" onclick={() => toaster.send('Hi from toast')}>Click me</button>
-					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'SUCCESS' })}>Success</button
+					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'SUCCESS' })}
+						>Success</button
 					>
-					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'ERROR' })}>Error</button>
-					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'WARNING' })}>Warning</button
+					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'ERROR' })}
+						>Error</button
+					>
+					<button type="button" onclick={() => toaster.send('Hi from toast', { type: 'WARNING' })}
+						>Warning</button
 					>
 				</div>
 			</div>

@@ -9,6 +9,10 @@ export { default as Accordion } from './Accordion.svelte';
 export { default as AreYouSure } from './AreYouSure.svelte';
 export { default as Toggle } from './Toggle.svelte';
 export { default as ToggleGroup } from './ToggleGroup.svelte';
+export { default as Tabs } from './Tabs.svelte';
+export { default as TabList } from './TabList.svelte';
+export { default as Tab } from './Tab.svelte';
+export { default as TabPanel } from './TabPanel.svelte';
 export * from './toast/index.js';
 
 // a11y utilities
